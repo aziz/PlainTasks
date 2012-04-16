@@ -1,0 +1,7 @@
+[
+  { "keys": ["ctrl+d"], "command": "complete","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },
+  { "keys": ["ctrl+enter"], "command": "new","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },
+  { "keys": ["ctrl+i"], "command": "new","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },
+  { "keys": ["ctrl+shift+a"], "command": "archive","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] }
+]
+

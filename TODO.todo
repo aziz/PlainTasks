@@ -1,0 +1,43 @@
+Sublime Tasks:
+ ☐ BUG: repeating Archive put empty like sometimes
+ ☐ BUG: command+enter on project name line
+--- ✄ -----------------------
+ ☐ add feature for separator like above @cool
+ ☐ always show the folding icons
+ ☐ add to package manager
+ ☐ BUG: do not move the position of cursor when pressing cmd+D
+ ☐ FEATURE: accept multiple bullet types at the same time
+ ☐ fade the line above archive
+ ☐ FEATURE: in archive list prefix task with project name, add specific scope for project prefixes
+ ☐ FEATURE: foldable notes
+ ☐ FEATURE: refactor code
+ ☐ FEATURE: open tutorial after install
+ ☐ FEATURE: write better readme
+ ☐ publish custom icon files
+_____________________________
+Archive:
+ ✔ temporary fold with -------------- @done (2012-04-15 20:36)
+ ✔ BUG: when no bullet detected after inseting bullet text should be deselected @done (2012-04-15 20:33)
+ ✔ BUG: foldable projects @alaki @fine @done (2012-04-15 20:06)
+ ✔ auto indent by one space to get folable projects @done (2012-04-15 20:05)
+ ✔ FEATURE: support tags @tag @important @something @done (2012-04-15 19:54)
+ ✔ Style normal tags @done (2012-04-15 19:54)
+ ✔ BUG: keybindings should only work in todo context @done (2012-04-15 15:05)
+ ✔ Platform Specific Settings @done (2012-03-29 09:17)
+ ✔ FEATURE: activate project lists for cmd+R @done (2012-03-29 00:04)
+ ✔ BUG: test it on windows (with default font and consolas) @done (2012-03-28 23:36)
+ ✔ BUG: add shortcut keys for other systems @done (2012-03-28 18:28)
+ ✔ BUG: include notebook.theme in the plugin @done (2012-03-28 00:08)
+ ✔ BUG: indent task to have project folding @done (2012-03-27 17:08)
+ ✔ escape bullet for regex to allow + @done (2012-03-27 17:05)
+ ✔ have both command+i and command+enter for new @done (2012-03-27 16:57)
+ ✔ have command+shift+A for archive @done (2012-03-27 16:57)
+ ✔ Archive done tasks at the end of the file make it fold by defalt @done (2012-03-27 01:01)
+ ✔ add archive section if it does not exists @done (2012-03-27 01:14)
+ ✔ TODO: make line bulleted if it's not on cmd+I (take care of done and indent) @done (2012-03-26 14:48)
+ ✔ TODO: customizeble bullets through settings @done (2012-03-25 20:57)
+ ✔ TODO: add emdash and endash to the list of bullets – — @done (2012-03-25 20:34)
+ ✔ TODO: add filetypes: .taskpaper , .tasks @done (2012-03-25 19:56)
+ ✔ TODO: Allow custom filetypese types to be added @done (2012-03-25 03:34)
+ ✔ TODO: Allow custom bullet punctuations @done (2012-03-25 11:10)
+ ✔ TODO: Respect indentations @done (2012-03-25 03:34)

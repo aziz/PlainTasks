@@ -1,0 +1,25 @@
+{
+  "open_tasks_bullet": "☐", // options: - | ❍ | ❑ | ■ | □ | ☐ | ▪ | ▫ | – | — ≡ → ›
+  "done_tasks_bullet": "✔", // options: + | ✓ | ✔
+  "color_scheme": "Packages/Tasks/tasks.tmTheme",
+  "font_size": 11, // for windows 11
+  "font_face": "Consolas",
+  "font_options": [ "subpixel_antialias", "no_round", "directwrite"],
+  "draw_indent_guides": false,
+  "line_numbers": false,
+  "gutter": true,
+  "margin": 2,
+  "word_wrap": false,
+  "tab_size": 2,
+  "translate_tabs_to_spaces": true,
+  "use_tab_stops": false,
+  "match_brackets": false,
+  "extensions":
+  [
+    "TODO",
+    "todo",
+    "todolist",
+    "taskpaper",
+    "tasks"
+  ]
+}
