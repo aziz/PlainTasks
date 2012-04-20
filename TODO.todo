@@ -1,9 +1,10 @@
 Sublime Tasks:
- ☐ BUG: repeating Archive put empty like sometimes
- ☐ BUG: command+enter on project name line
+ ☐ BUG: can not archive if there is no empty line at the end of todo list @IMP
+ ☐ BUG: repeating Archive put empty like sometimes @IMP
+ ☐ BUG: command+enter on project name line @IMP
 --- ✄ -----------------------
  ☐ add feature for separator like above @cool
- ☐ always show the folding icons
+ ☐ always show the folding icons (or force to show folding icons) @imp
  ☐ add to package manager
  ☐ BUG: do not move the position of cursor when pressing cmd+D
  ☐ FEATURE: accept multiple bullet types at the same time
@@ -13,9 +14,12 @@ Sublime Tasks:
  ☐ FEATURE: refactor code
  ☐ FEATURE: open tutorial after install
  ☐ FEATURE: write better readme
- ☐ publish custom icon files
-_____________________________
+ ☐ add to settings menu
+
+＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ publish custom icon files @done (2012-04-20 22:50)
+ ✔ use this full width low line (＿) for separator @done (2012-04-20 22:49)
  ✔ temporary fold with -------------- @done (2012-04-15 20:36)
  ✔ BUG: when no bullet detected after inseting bullet text should be deselected @done (2012-04-15 20:33)
  ✔ BUG: foldable projects @alaki @fine @done (2012-04-15 20:06)

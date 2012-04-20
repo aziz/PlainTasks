@@ -98,7 +98,7 @@ class ArchiveCommand(SublimeTasksBase):
             line = self.view.line(archive_pos)
             line_content = self.view.substr(line)
         else:
-            self.view.insert(edit, self.view.size(), "\n\n_________________________\nArchive:")
+            self.view.insert(edit, self.view.size(), u"\n\n＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿\nArchive:")
             line = self.view.line(self.view.size())
             line_content = self.view.substr(line)
 
