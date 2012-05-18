@@ -13,7 +13,7 @@ Clone source code to Sublime Text 2 packages folder, eg.
 
 ## Custom file-type icons
 
-## Inspiraton
+## Inspiration
 - Thanks to Chagel for the iTodo plugin (https://github.com/chagel/itodo).  
 - Thanks to Taskmate for TextMate (https://github.com/svenfuchs/taskmate).
 - Thanks to TaskPaper Mac application from hogbaysoftware.com
