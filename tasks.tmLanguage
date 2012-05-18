@@ -65,10 +65,17 @@
 		</dict>
 		<dict>
 			<key>match</key>
-			<string>(_________________________\nArchive:)</string>
+			<string>^＿+$</string>
+			<key>name</key>
+			<string>meta.punctuation.archive.todo</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>^\s*---.{3,5}---+$</string>
 			<key>name</key>
 			<string>meta.punctuation.separator.todo</string>
 		</dict>
+
 		<dict>
 			<key>match</key>
 			<string>(?&lt;=\s)\@done \([\d\.:\-/ ].+\)\s?</string>

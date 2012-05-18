@@ -1,0 +1,92 @@
+How to Use Sublime Tasks:
+
+Projects:
+ ☐ Anything with colon at the end of the line is a project title
+ ✔ You can nest projects inside each other @done (2012-05-12 13:03)
+ ✔ You can fold projects (a built-in editor feature) @done (2012-05-12 13:03)
+
+Tasks:
+  You can write plain text as notes or descriptions wherever you want,
+  it's totally fine!
+  New:
+   ☐ Press ⌘+enter to add a new task.
+   ☐ You can also use ⌘+i to add new task
+   ☐ If you're on a new line SublimeTasks will create a new task on the current line
+   ☐ If you're on a line with a task pressing new task shortcut will add a task after it
+   ☐ If you're on a line with some normal text pressing new task shortcut will convert it to a task
+   ☐ New tasks will be nested as much as the task on the previous line
+  Done:
+   ☐ Pressing ⌘+D mark a task as done
+  Tagging:
+   ☐ Adding tag using @, like this @tag
+
+  Archiving:
+   ☐ Pressing ⌘+shift+A will archive the done task. by removing them from you list and appending them to the bottom of the file under Archive project. The archive project is separated from the other list of projects with a line.
+
+FileType Support:
+ Sublime Tasks support these file types out of the box
+ ☐ TODO
+ ☐ *.todo
+ ☐ *.todolist
+ ☐ *.taskpaper
+ ☐ *.tasks
+
+Customization:
+ ☐ You can customize new and done bullets
+ ☐ List of file-types that should be considered todo lists
+ ☐ Key-bindings if you don't like the default ones
+
+Editor Useful Tools:
+ ☐ Use ⌘+control+up/down to move tasks up and down. It's actually called Swap line up/down in the editor
+
+＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
+Archive:
+ ✔ learned how to use SublimeTask, now time to rock and roll! @done (2012-04-21 00:06)
+
+
+
+
+
+
+
+
+
+——✿—✿—✿—✿—✿—✿—✿—✿—✿—✿—✿—✿—✿—✿—✿—✿—✿—✿—✿—✿—✿—✿—✿—✿——
+
+Welcome, and thanks for trying out TaskPaper. If you are already familiar with
+TaskPaper you can just delete this text and start your own lists.
+
+Get Started:
+TaskPaper knows about four things: projects, tasks, notes, and tags.
+As you type, these items are auto-formatted so that your lists are easier to read.
+
+  - To create a task, type a line starting with a dash followed by a space.
+  - To create a project, type a line ending with a colon.
+  - Any line that isn't a task or project is a note.
+  - To create a tag, type '@' followed by a name anywhere in a project, task, or note.
+
+You use these basic parts in any way that you like. TaskPaper doesn't force a particular
+system on you; it provides the basic to-do list elements and then you use them as you see fit.
+Here are a few more tips and tricks...
+
+  - To mark a task as done click on the dash handle in front of the task and a "@done" tag will be added.
+  - To filter on a single project click the arrow handle next to the project name.
+  - To drag and drop tasks click and drag on the handle in front of the entry.
+  - To show an overview list of your projects choose the menu item "View > Show Projects List".
+  - To quickly enter a task in a project that's not visible use the "Quick Entry Window".
+  - To associate a value with a tag, add it in parentheses after the tag. For example @priority(1)
+  - To change fonts and colors use the "Theme Options" popup in Preferences.
+
+Surprisingly Adept:
+TaskPaper isn't the right answer for everyone, also check out OmniFocus or Things.
+But give TaskPaper a try. It has a simple "text" user interface, but in some ways
+(Searching, AppleScript support, Themes, ...) it's more powerful and flexible than
+those bigger programs, and many people find that they are more productive with TaskPaper
+than they would be with a more complex tool.
+
+Learn More:
+Please take 10 minutes to watch the TaskPaper screencast by choosing Help > Web Page & Screencast.
+To learn more please read the user guide and checkout the Wiki
+http://www.hogbaysoftware.com/wiki/TaskPaper.
+If you have questions, or just want to chat with other TaskPaper users visit TaskPaper's
+online user forum. http://www.hogbaysoftware.com/forums

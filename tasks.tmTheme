@@ -103,15 +103,27 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Punctuation</string>
+			<string>Archive Separator</string>
+			<key>scope</key>
+			<string>meta.punctuation.archive.todo</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#00000099</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Separator</string>
 			<key>scope</key>
 			<string>meta.punctuation.separator.todo</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#ff0000</string>
+				<string>#00000044</string>
 			</dict>
 		</dict>
+
 		<!-- ======================================== -->
 
 

@@ -1,23 +1,26 @@
 Sublime Tasks:
+ ☐ Seirous BUG: having single qoutes or > in task do not allow archiving
+ ☐ add to package manager
+ ☐ write better readme
+ ☐ add to settings menu
+ ☐ write a short and simple tutorial.todo
+ ☐ open tutorial after install
  ☐ BUG: can not archive if there is no empty line at the end of todo list @IMP
  ☐ BUG: repeating Archive put empty like sometimes @IMP
  ☐ BUG: command+enter on project name line @IMP
 --- ✄ -----------------------
- ☐ add feature for separator like above @cool
  ☐ always show the folding icons (or force to show folding icons) @imp
- ☐ add to package manager
+ ☐ add feature for separator like above @cool
  ☐ BUG: do not move the position of cursor when pressing cmd+D
- ☐ FEATURE: accept multiple bullet types at the same time
- ☐ fade the line above archive
- ☐ FEATURE: in archive list prefix task with project name, add specific scope for project prefixes
- ☐ FEATURE: foldable notes
- ☐ FEATURE: refactor code
- ☐ FEATURE: open tutorial after install
- ☐ FEATURE: write better readme
- ☐ add to settings menu
+ ☐ accept multiple bullet types at the same time
+ ☐ in archive list prefix task with project name, add specific scope for project prefixes
+ ☐ foldable notes
+ ☐ refactor code @later
+ ☐ more tests on linux and windows @later
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ fade the line above archive @done (2012-04-26 00:55)
  ✔ publish custom icon files @done (2012-04-20 22:50)
  ✔ use this full width low line (＿) for separator @done (2012-04-20 22:49)
  ✔ temporary fold with -------------- @done (2012-04-15 20:36)
