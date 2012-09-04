@@ -81,11 +81,11 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#00723e</string>
+				<string>#00000066</string>
 				<key>fontStyle</key>
-				<string></string>				
+				<string></string>
 			</dict>
-		</dict>		
+		</dict>
 		<dict>
 			<key>name</key>
 			<string>Done meta info</string>

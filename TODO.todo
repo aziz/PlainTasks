@@ -1,13 +1,15 @@
 Sublime Tasks:
- ☐ Seirous BUG: having single qoutes or > in task do not allow archiving
+ ☐ BUG: having single qoutes (') or > in task do not allow archiving @IMP
+ ☐ BUG: can not archive if there is no empty line at the end of todo list @IMP
+ ☐ BUG: repeating Archive put empty like sometimes @IMP
+ ☐ BUG: command+enter on project name line @IMP
+ ☐ BUG: archiving when there's no done item cause an empty line on top of Archive section
+ ☐ document "new task doc" command in readme and tutorial
  ☐ add to package manager
  ☐ write better readme
  ☐ add to settings menu
  ☐ write a short and simple tutorial.todo
  ☐ open tutorial after install
- ☐ BUG: can not archive if there is no empty line at the end of todo list @IMP
- ☐ BUG: repeating Archive put empty like sometimes @IMP
- ☐ BUG: command+enter on project name line @IMP
 --- ✄ -----------------------
  ☐ always show the folding icons (or force to show folding icons) @imp
  ☐ add feature for separator like above @cool
