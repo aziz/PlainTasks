@@ -75,6 +75,19 @@
 		</dict>
 		<dict>
 			<key>name</key>
+			<string>Pending bullet</string>
+			<key>scope</key>
+			<string>punctuation.definition.bullet.pending</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#00723e</string>
+				<key>fontStyle</key>
+				<string></string>				
+			</dict>
+		</dict>		
+		<dict>
+			<key>name</key>
 			<string>Done meta info</string>
 			<key>scope</key>
 			<string>meta.tag.todo.completed</string>

@@ -9,21 +9,20 @@ from datetime import datetime
 
 class SublimeTasksBase(sublime_plugin.TextCommand):
     def run(self, edit):
+        self.open_tasks_bullet = self.view.settings().get('open_tasks_bullet')
+        self.done_tasks_bullet = self.view.settings().get('done_tasks_bullet')
         self.runCommand(edit)
 
 
 class NewCommand(SublimeTasksBase):
     def runCommand(self, edit):
-        self.settings = sublime.load_settings("tasks.sublime-settings")
-        open_tasks_bullet = self.settings.get('open_tasks_bullet')
-        done_tasks_bullet = self.settings.get('done_tasks_bullet')
         for region in self.view.sel():
             line = self.view.line(region)
             line_contents = self.view.substr(line).rstrip()
-            has_bullet = re.match('^(\s*)[' + re.escape(open_tasks_bullet) + re.escape(done_tasks_bullet) + ']', self.view.substr(line))
+            has_bullet = re.match('^(\s*)[' + re.escape(self.open_tasks_bullet) + re.escape(self.done_tasks_bullet) + ']', self.view.substr(line))
             if has_bullet:
                 grps = has_bullet.groups()
-                line_contents = self.view.substr(line) + '\n' + grps[0] + open_tasks_bullet + ' '
+                line_contents = self.view.substr(line) + '\n' + grps[0] + self.open_tasks_bullet + ' '
                 self.view.replace(edit, line, line_contents)
             else:
                 has_space = re.match('^(\s+)(.*)', self.view.substr(line))
@@ -32,10 +31,10 @@ class NewCommand(SublimeTasksBase):
                 if has_space:
                     grps = has_space.groups()
                     spaces = grps[0]
-                    line_contents = spaces + open_tasks_bullet + ' ' + grps[1]
+                    line_contents = spaces + self.open_tasks_bullet + ' ' + grps[1]
                     self.view.replace(edit, line, line_contents)
                 else:
-                    line_contents = ' ' + open_tasks_bullet + ' ' + self.view.substr(line)
+                    line_contents = ' ' + self.open_tasks_bullet + ' ' + self.view.substr(line)
                     self.view.replace(edit, line, line_contents)
                     end = self.view.sel()[0].b
                     pt = sublime.Region(end, end)
@@ -45,25 +44,21 @@ class NewCommand(SublimeTasksBase):
 
 class CompleteCommand(SublimeTasksBase):
     def runCommand(self, edit):
-        self.settings = sublime.load_settings("tasks.sublime-settings")
-
         for region in self.view.sel():
             line = self.view.line(region)
             line_contents = self.view.substr(line).rstrip()
-            open_tasks_bullet = self.settings.get('open_tasks_bullet')
-            done_tasks_bullet = self.settings.get('done_tasks_bullet')
-            rom = '^(\s*)' + re.escape(open_tasks_bullet) + '\s*(.*)$'
-            rdm = '^(\s*)' + re.escape(done_tasks_bullet) + '\s*([^\b]*)\s*@done(.)+\)$'
+            rom = '^(\s*)' + re.escape(self.open_tasks_bullet) + '\s*(.*)$'
+            rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '\s*([^\b]*)\s*@done(.)+\)$'
             open_matches = re.match(rom, line_contents)
             done_matches = re.match(rdm, line_contents)
             if open_matches:
                 grps = open_matches.groups()
                 self.view.insert(edit, line.end(), " @done (%s)" % datetime.now().strftime("%Y-%m-%d %H:%M"))
-                replacement = u'%s%s %s' % (grps[0], done_tasks_bullet, grps[1].rstrip())
+                replacement = u'%s%s %s' % (grps[0], self.done_tasks_bullet, grps[1].rstrip())
                 self.view.replace(edit, line, replacement)
             elif done_matches:
                 grps = done_matches.groups()
-                replacement = u'%s%s %s' % (grps[0], open_tasks_bullet, grps[1].rstrip())
+                replacement = u'%s%s %s' % (grps[0], self.open_tasks_bullet, grps[1].rstrip())
                 self.view.replace(edit, line, replacement)
 
 
@@ -71,11 +66,9 @@ class ArchiveCommand(SublimeTasksBase):
     def runCommand(self, edit):
         #print "========================================================================"
 
-        self.settings = sublime.load_settings("tasks.sublime-settings")
-        done_tasks_bullet = self.settings.get('done_tasks_bullet')
         file_content = self.view.substr(sublime.Region(0, self.view.size()))
         done_tasks = []
-        rdm = '^(\s*)' + re.escape(done_tasks_bullet) + '\s*([^\b]*)\s*@done(.)+\)$'
+        rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '\s*([^\b]*)\s*@done(.)+\)$'
         # finding done tasks
         for line in file_content.split("\n"):
             if line == "Archive:":
@@ -84,12 +77,11 @@ class ArchiveCommand(SublimeTasksBase):
             if done_matches:
                 done_tasks.append(line)
 
-        print done_tasks
+        # print done_tasks
 
         # deleting done tasks
         for task in done_tasks:
             region = self.view.find(re.escape(task + "\n"), 0)
-            print region
             self.view.erase(edit, region)
 
         # finding archive section
@@ -111,16 +103,7 @@ class ArchiveCommand(SublimeTasksBase):
         # x = sublime.active_window().active_view()
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+class NewTaskDocCommand(sublime_plugin.WindowCommand):
+    def run(self):
+        view = self.window.new_file()
+        view.set_syntax_file('Packages/Tasks/tasks.tmLanguage')
