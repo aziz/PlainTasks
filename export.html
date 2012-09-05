@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Export</title>
+<style type="text/css">
+ * {
+  margin:0; padding:0;
+ }
+
+ body {
+  background-color: #efe9b7;
+ }
+
+ pre {
+  margin: 30px;
+  font-family: "Consolas", "Monaco", monospace;
+  font-size: 15px;
+  font-style: italic;
+  line-height: 20px;
+ }
+
+ .bullet-pending {
+  font-style: normal;
+  font-weight: bold;
+  color: rgba(0,0,0,.6);
+ }
+
+ .bullet-done {
+  font-style: normal;
+  font-weight: bold;
+  color: #00723e;
+ }
+ .sep {
+  font-style: normal;
+  color: rgba(0,0,0,.44);
+ }
+ .sep-archive {
+  font-style: normal;
+  color: rgba(0,0,0,.44);
+ }
+ .header {
+  font-weight: bold;
+  font-style: normal;
+  color: #bc644a;
+  background-color: rgba(0,0,0,.05);
+  display: inline-block;
+  width: 100%;
+ }
+ .tag {
+  font-weight: bold;
+  color: #C37763;
+ }
+ .tag-done {
+  font-style: normal;
+  color:#A49F85;
+ }
+ .done {
+  color: #66654F;
+ }
+</style>
+</head>
+<body>
+<pre>
+<span class="header">Sublime Tasks:</span>
+ <span class='bullet-pending'>☐</span> BUG: having single qoutes (') or > in task do not allow archiving <span class="tag">@IMP</span>
+ <span class='bullet-pending'>☐</span> BUG: repeating Archive put empty like sometimes <span class="tag">@IMP</span>
+ <span class='bullet-pending'>☐</span> BUG: command+enter on project name line <span class="tag">@IMP</span>
+ <span class="done"><span class="bullet-done">✔</span> BUG: archiving when there's no done item cause an empty line on top of Archive section</span>
+ <span class='bullet-pending'>☐</span> document "new task doc" command in readme and tutorial
+ <span class='bullet-pending'>☐</span> add to package manager
+ <span class='bullet-pending'>☐</span> write better readme
+ <span class='bullet-pending'>☐</span> add to settings menu
+ <span class='bullet-pending'>☐</span> write a short and simple tutorial.todo
+ <span class='bullet-pending'>☐</span> open tutorial after install
+<span class="sep">--- ✄ -----------------------</span>
+ <span class='bullet-pending'>☐</span> always show the folding icons (or force to show folding icons) <span class="tag">@imp</span>
+ <span class='bullet-pending'>☐</span> add feature for separator like above <span class="tag">@cool</span>
+ <span class='bullet-pending'>☐</span> BUG: do not move the position of cursor when pressing cmd+D
+ <span class='bullet-pending'>☐</span> accept multiple bullet types at the same time
+ <span class='bullet-pending'>☐</span> in archive list prefix task with project name, add specific scope for project prefixes
+ <span class='bullet-pending'>☐</span> foldable notes
+ <span class='bullet-pending'>☐</span> refactor code <span class="tag">@later</span>
+ <span class='bullet-pending'>☐</span> more tests on linux and windows <span class="tag">@later</span>
+ <span class='bullet-pending'>☐</span> being able to work with done tasks with no @done and date at the end
+ <span class='bullet-pending'>☐</span> export to html/ preview in browser
+
+<span class="sep-archive">＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</span>
+<span class="header">Archive:</span>
+ <span class="done"><span class="bullet-done">✔</span> can not archive if there is no empty line at the end of todo list <span class="tag">@IMP</span> <span class="tag-done">@done (2012-09-04 19:33)</span></span>
+ <span class="done"><span class="bullet-done">✔</span> fade the line above archive <span class="tag-done">@done (2012-04-26 00:55)</span></span>
+ <span class="done"><span class="bullet-done">✔</span> publish custom icon files <span class="tag-done">@done (2012-04-20 22:50)</span></span>
+ <span class="done"><span class="bullet-done">✔</span> use this full width low line (＿) for separator <span class="tag-done">@done (2012-04-20 22:49)</span></span>
+ <span class="done"><span class="bullet-done">✔</span> temporary fold with -------------- <span class="tag-done">@done (2012-04-15 20:36)</span></span>
+ <span class="done"><span class="bullet-done">✔</span> BUG: when no bullet detected after inseting bullet text should be deselected <span class="tag-done">@done (2012-04-15 20:33)</span></span>
+ <span class="done"><span class="bullet-done">✔</span> BUG: foldable projects <span class="tag">@alaki</span> <span class="tag">@fine</span> <span class="tag-done">@done (2012-04-15 20:06)</span></span>
+ <span class="done"><span class="bullet-done">✔</span> auto indent by one space to get folable projects <span class="tag-done">@done (2012-04-15 20:05)</span></span>
+ <span class="done"><span class="bullet-done">✔</span> FEATURE: support tags <span class="tag">@tag</span> <span class="tag">@important</span> <span class="tag">@something</span> <span class="tag-done">@done (2012-04-15 19:54)</span></span>
+ <span class="done"><span class="bullet-done">✔</span> Style normal tags <span class="tag-done">@done (2012-04-15 19:54)</span></span>
+ <span class="done"><span class="bullet-done">✔</span> BUG: keybindings should only work in todo context <span class="tag-done">@done (2012-04-15 15:05)</span></span>
+ <span class="done"><span class="bullet-done">✔</span> Platform Specific Settings <span class="tag-done">@done (2012-03-29 09:17)</span></span>
+ <span class="done"><span class="bullet-done">✔</span> FEATURE: activate project lists for cmd+R <span class="tag-done">@done (2012-03-29 00:04)</span></span>
+ <span class="done"><span class="bullet-done">✔</span> BUG: test it on windows (with default font and consolas) <span class="tag-done">@done (2012-03-28 23:36)</span></span>
+ <span class="done"><span class="bullet-done">✔</span> BUG: add shortcut keys for other systems <span class="tag-done">@done (2012-03-28 18:28)</span></span>
+ <span class="done"><span class="bullet-done">✔</span> BUG: include notebook.theme in the plugin <span class="tag-done">@done (2012-03-28 00:08)</span></span>
+ <span class="done"><span class="bullet-done">✔</span> BUG: indent task to have project folding <span class="tag-done">@done (2012-03-27 17:08)</span></span>
+ <span class="done"><span class="bullet-done">✔</span> escape bullet for regex to allow + <span class="tag-done">@done (2012-03-27 17:05)</span></span>
+ <span class="done"><span class="bullet-done">✔</span> have both command+i and command+enter for new <span class="tag-done">@done (2012-03-27 16:57)</span></span>
+ <span class="done"><span class="bullet-done">✔</span> have command+shift+A for archive <span class="tag-done">@done (2012-03-27 16:57)</span></span>
+ <span class="done"><span class="bullet-done">✔</span> Archive done tasks at the end of the file make it fold by defalt <span class="tag-done">@done (2012-03-27 01:01)</span></span>
+ <span class="done"><span class="bullet-done">✔</span> add archive section if it does not exists <span class="tag-done">@done (2012-03-27 01:14)</span></span>
+ <span class="done"><span class="bullet-done">✔</span> TODO: make line bulleted if it's not on cmd+I (take care of done and indent) <span class="tag-done">@done (2012-03-26 14:48)</span></span>
+ <span class="done"><span class="bullet-done">✔</span> TODO: customizeble bullets through settings <span class="tag-done">@done (2012-03-25 20:57)</span></span>
+ <span class="done"><span class="bullet-done">✔</span> TODO: add emdash and endash to the list of bullets – — <span class="tag-done">@done (2012-03-25 20:34)</span></span>
+ <span class="done"><span class="bullet-done">✔</span> TODO: add filetypes: .taskpaper , .tasks <span class="tag-done">@done (2012-03-25 19:56)</span></span>
+ <span class="done"><span class="bullet-done">✔</span> TODO: Allow custom filetypese types to be added <span class="tag-done">@done (2012-03-25 03:34)</span></span>
+ <span class="done"><span class="bullet-done">✔</span> TODO: Allow custom bullet punctuations <span class="tag-done">@done (2012-03-25 11:10)</span></span>
+ <span class="done"><span class="bullet-done">✔</span> TODO: Respect indentations <span class="tag-done">@done (2012-03-25 03:34)</span></pre></span>
+</body>
+</html>

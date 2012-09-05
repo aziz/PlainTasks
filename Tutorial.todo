@@ -2,11 +2,11 @@ How to Use Sublime Tasks:
 
 Projects:
  ☐ Anything with colon at the end of the line is a project title
- ✔ You can nest projects inside each other @done (2012-05-12 13:03)
- ✔ You can fold projects (a built-in editor feature) @done (2012-05-12 13:03)
+ ☐ You can nest projects inside each other
+ ☐ You can fold projects (a built-in editor feature)
 
 Tasks:
-  You can write plain text as notes or descriptions wherever you want,
+  You can write plain text as notes or descriptions wherever you want;
   it's totally fine!
   New:
    ☐ Press ⌘+enter to add a new task.
@@ -38,6 +38,7 @@ Customization:
 
 Editor Useful Tools:
  ☐ Use ⌘+control+up/down to move tasks up and down. It's actually called Swap line up/down in the editor
+ ☐ Use ⌘+R to see a list of projects and quickly jump between them
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:

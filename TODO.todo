@@ -1,29 +1,38 @@
 Sublime Tasks:
  ☐ BUG: having single qoutes (') or > in task do not allow archiving @IMP
- ☐ BUG: can not archive if there is no empty line at the end of todo list @IMP
- ☐ BUG: repeating Archive put empty like sometimes @IMP
  ☐ BUG: command+enter on project name line @IMP
- ☐ BUG: archiving when there's no done item cause an empty line on top of Archive section
- ☐ document "new task doc" command in readme and tutorial
- ☐ add to package manager
- ☐ write better readme
- ☐ add to settings menu
- ☐ write a short and simple tutorial.todo
- ☐ open tutorial after install
---- ✄ -----------------------
- ☐ always show the folding icons (or force to show folding icons) @imp
- ☐ add feature for separator like above @cool
- ☐ BUG: do not move the position of cursor when pressing cmd+D
- ☐ accept multiple bullet types at the same time
- ☐ in archive list prefix task with project name, add specific scope for project prefixes
- ☐ foldable notes
- ☐ refactor code @later
+
+ ☐ add feature for separator like above @feature
+
+ ☐ open tutorial after install @improvement
+ ☐ do not move the position of cursor when pressing cmd+D @improvement
+ ☐ being able to work with done tasks with no @done and date at the end @improvement
+ ☐ accept multiple bullet types at the same time @feature
+ ☐ in archive list prefix task with project name, add specific scope for project prefixes @feature
+ ☐ notes + make them foldable @feature
+ ☐ export to html/ preview in browser @feature
  ☐ more tests on linux and windows @later
- ☐ being able to work with done tasks with no @done and date at the end
- ☐ export to html/ preview in browser
+
+Documentation:
+ ☐ document "new task doc" command in readme and tutorial
+ ☐ improve tutorial.todo
+ ☐ write better readme
+
+Marketing:
+ ☐ rename to PlainTasks
+ ☐ add to package manager
+ ☐ hackernews
+ ☐ reddit
+ ☐ lifehacker
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ add to settings menu @feature @done (2012-09-05 03:55)
+ ✔ always show the folding icons (or force to show folding icons) @improvement @done (2012-09-05 03:43)
+ ✔ refactor code @later @done (2012-09-05 03:26)
+ ✔ BUG: archiving when there is no done item cause an empty line on top of Archive section @done (2012-09-05 03:23)
+ ✔ BUG: repeating Archive put empty line sometimes @IMP @done (2012-09-05 03:22)
+ ✔ can not archive if there is no empty line at the end of todo list @IMP @done (2012-09-04 19:33)
  ✔ fade the line above archive @done (2012-04-26 00:55)
  ✔ publish custom icon files @done (2012-04-20 22:50)
  ✔ use this full width low line (＿) for separator @done (2012-04-20 22:49)

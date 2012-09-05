@@ -13,6 +13,8 @@
   "translate_tabs_to_spaces": true,
   "use_tab_stops": false,
   "match_brackets": false,
+  "fold_buttons": true,
+  "fade_fold_buttons": false,
   "extensions":
   [
     "TODO",

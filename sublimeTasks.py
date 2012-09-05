@@ -95,7 +95,8 @@ class ArchiveCommand(SublimeTasksBase):
             line_content = self.view.substr(line)
 
         # adding done tasks to archive section
-        self.view.replace(edit, line, line_content + "\n" + "\n".join(done_tasks))
+        if done_tasks:
+            self.view.replace(edit, line, line_content + "\n" + "\n".join(done_tasks))
 
         # if no archive section add one at the end of file
         # manipulate each done task and prefix it with project name
