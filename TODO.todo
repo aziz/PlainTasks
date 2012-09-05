@@ -1,15 +1,14 @@
 Sublime Tasks:
- ☐ BUG: having single qoutes (') or > in task do not allow archiving @IMP
- ☐ do not move the position of cursor when pressing cmd+D @improvement
  ☐ being able to work with done tasks with no @done and date at the end @improvement
  ☐ accept multiple bullet types at the same time @feature
  ☐ in archive list prefix task with project name, add specific scope for project prefixes @feature
  ☐ export to html/ preview in browser (look at markdown preview) @feature
- ☐ make date formating configurable @feature
  ☐ make date labling optional @feature
  ☐ make @done tag optional @feature
  ☐ more tests on linux and windows @later
  ☐ add ico format for windows @later
+ ☐ BUG: having single qoutes (') or > in task do not allow archiving @IMP
+ ☐ do not move the position of cursor when pressing cmd+D @improvement
 
 Documentation:
  ☐ document "new task doc" command in readme and tutorial
@@ -26,6 +25,7 @@ Marketing:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ make date formating configurable @feature @done (2012-09-05 xxxxx 05:28)
  ✔ notes + make them foldable @feature @done (2012-09-05 05:19)
  ✔ add separator @feature @done (2012-09-05 05:11)
  ✔ BUG: command+enter on project name line @IMP @done (2012-09-05 04:49)

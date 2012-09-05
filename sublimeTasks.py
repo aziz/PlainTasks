@@ -11,6 +11,7 @@ class SublimeTasksBase(sublime_plugin.TextCommand):
     def run(self, edit):
         self.open_tasks_bullet = self.view.settings().get('open_tasks_bullet')
         self.done_tasks_bullet = self.view.settings().get('done_tasks_bullet')
+        self.date_format = self.view.settings().get('date_format')
         self.runCommand(edit)
 
 
@@ -60,7 +61,7 @@ class CompleteCommand(SublimeTasksBase):
             done_matches = re.match(rdm, line_contents)
             if open_matches:
                 grps = open_matches.groups()
-                self.view.insert(edit, line.end(), " @done (%s)" % datetime.now().strftime("%Y-%m-%d %H:%M"))
+                self.view.insert(edit, line.end(), " @done %s" % datetime.now().strftime(self.date_format))
                 replacement = u'%s%s %s' % (grps[0], self.done_tasks_bullet, grps[1].rstrip())
                 self.view.replace(edit, line, replacement)
             elif done_matches:
