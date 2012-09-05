@@ -1,16 +1,12 @@
 Sublime Tasks:
  ☐ BUG: having single qoutes (') or > in task do not allow archiving @IMP
- ☐ BUG: command+enter on project name line @IMP
-
- ☐ add feature for separator like above @feature
-
- ☐ open tutorial after install @improvement
+ ☐ add separator @feature
  ☐ do not move the position of cursor when pressing cmd+D @improvement
  ☐ being able to work with done tasks with no @done and date at the end @improvement
  ☐ accept multiple bullet types at the same time @feature
  ☐ in archive list prefix task with project name, add specific scope for project prefixes @feature
  ☐ notes + make them foldable @feature
- ☐ export to html/ preview in browser @feature
+ ☐ export to html/ preview in browser (look at markdown preview) @feature
  ☐ more tests on linux and windows @later
 
 Documentation:
@@ -21,12 +17,14 @@ Documentation:
 Marketing:
  ☐ rename to PlainTasks
  ☐ add to package manager
+ ☐ open tutorial after install @improvement
  ☐ hackernews
  ☐ reddit
  ☐ lifehacker
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ BUG: command+enter on project name line @IMP @done (2012-09-05 04:49)
  ✔ add to settings menu @feature @done (2012-09-05 03:55)
  ✔ always show the folding icons (or force to show folding icons) @improvement @done (2012-09-05 03:43)
  ✔ refactor code @later @done (2012-09-05 03:26)
