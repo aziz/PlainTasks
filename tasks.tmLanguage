@@ -39,6 +39,12 @@
 			<string>meta.item.todo.completed</string>
 		</dict>
 		<dict>
+		  <key>match</key>
+		  <string>^\s*((?!-|\+|✓|✔|❍|❑|■|□|☐|▪|▫|–|—|＿)\S).*((?!:\s*).\s*)$</string>
+		  <key>name</key>
+		  <string>notes.todo</string>
+		</dict>
+		<dict>
 			<key>captures</key>
 			<dict>
 				<key>1</key>

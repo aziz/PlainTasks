@@ -21,7 +21,9 @@ Tasks:
    ☐ Adding tag using @, like this @tag
 
   Archiving:
-   ☐ Pressing ⌘+shift+A will archive the done task. by removing them from you list and appending them to the bottom of the file under Archive project. The archive project is separated from the other list of projects with a line.
+   ☐ Pressing ⌘+shift+A will archive the done task.
+      by removing them from you list and appending them to the bottom of the file under Archive project.
+      The archive project is separated from the other list of projects with a line.
 
 FileType Support:
  Sublime Tasks support these file types out of the box

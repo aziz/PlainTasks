@@ -51,6 +51,17 @@
 		</dict>
 		<dict>
 			<key>name</key>
+			<string>Notes</string>
+			<key>scope</key>
+			<string>notes.todo</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#858266</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
 			<string>Meta</string>
 			<key>scope</key>
 			<string>meta</string>

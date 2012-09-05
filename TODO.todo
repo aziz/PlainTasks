@@ -4,7 +4,6 @@ Sublime Tasks:
  ☐ being able to work with done tasks with no @done and date at the end @improvement
  ☐ accept multiple bullet types at the same time @feature
  ☐ in archive list prefix task with project name, add specific scope for project prefixes @feature
- ☐ notes + make them foldable @feature
  ☐ export to html/ preview in browser (look at markdown preview) @feature
  ☐ make date formating configurable @feature
  ☐ make date labling optional @feature
@@ -27,6 +26,7 @@ Marketing:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ notes + make them foldable @feature @done (2012-09-05 05:19)
  ✔ add separator @feature @done (2012-09-05 05:11)
  ✔ BUG: command+enter on project name line @IMP @done (2012-09-05 04:49)
  ✔ add to settings menu @feature @done (2012-09-05 03:55)
