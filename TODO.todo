@@ -1,13 +1,13 @@
 TODO:
- ☐ accept multiple bullet types at the same time @feature
- ☐ in archive list prefix task with project name, add specific scope for project prefixes @feature
- ☐ export to html/ preview in browser (look at markdown preview) @feature
  ☐ being able to work with done tasks with no @done and date at the end @improvement
+ ☐ now that date format is optional: just @done at the end should be fine
  ☐ make date labling optional @feature
  ☐ make @done tag optional @feature
- ☐ now that date format is optional: just @done at the end should be fine
+ ☐ in archive list, prefix task with project name, add specific scope for project prefixes @feature
+ ☐ in archive list, add date in front of done tasks (e.g. 2012-09-06 14:41 Ξ some task) @feature
+ ☐ export to html/ preview in browser (look at markdown preview) @feature
+ ☐ accept multiple bullet types at the same time @feature
  ☐ more tests on linux and windows @later
- ☐ add ico format for windows @later
  ☐ do not move the position of cursor when pressing cmd+D @improvement
 
 Documentation:
@@ -25,6 +25,7 @@ Marketing:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ add ico format for windows @later @done (2012-09-06 15:02)
  ✔ BUG: having single qoutes (') or > in task do not allow archiving @IMP @done (2012-09-06 14:22)
  ✔ make date formating configurable @feature @done (2012-09-05 xxxxx 05:28)
  ✔ notes + make them foldable @feature @done (2012-09-05 05:19)

@@ -17,13 +17,14 @@ Tasks:
    ☐ New tasks will be nested as much as the task on the previous line
   Done:
    ☐ Pressing ⌘+D mark a task as done
+   ☐ Pressing ⌘+D again will put it back in pending mode
   Tagging:
-   ☐ Adding tag using @, like this @tag
+   ☐ You can add tags using @ sign, like this @tag
 
   Archiving:
    ☐ Pressing ⌘+shift+A will archive the done task.
       by removing them from you list and appending them to the bottom of the file under Archive project.
-      The archive project is separated from the other list of projects with a line.
+      The archive project is separated from the other list of projects with a line. see bottom of this file.
 
 FileType Support:
  Sublime Tasks support these file types out of the box
@@ -34,7 +35,7 @@ FileType Support:
  ☐ *.tasks
 
 Customization:
- ☐ You can customize new and done bullets
+ ☐ You can customize new and done bullets (HOW?)
  ☐ List of file-types that should be considered todo lists
  ☐ Key-bindings if you don't like the default ones
 
