@@ -1,10 +1,11 @@
-Sublime Tasks:
- ☐ being able to work with done tasks with no @done and date at the end @improvement
+TODO:
  ☐ accept multiple bullet types at the same time @feature
  ☐ in archive list prefix task with project name, add specific scope for project prefixes @feature
  ☐ export to html/ preview in browser (look at markdown preview) @feature
+ ☐ being able to work with done tasks with no @done and date at the end @improvement
  ☐ make date labling optional @feature
  ☐ make @done tag optional @feature
+ ☐ now that date format is optional: just @done at the end should be fine
  ☐ more tests on linux and windows @later
  ☐ add ico format for windows @later
  ☐ BUG: having single qoutes (') or > in task do not allow archiving @IMP

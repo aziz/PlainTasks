@@ -22,7 +22,6 @@ class NewCommand(SublimeTasksBase):
             line_contents = self.view.substr(line).rstrip()
             has_bullet = re.match('^(\s*)[' + re.escape(self.open_tasks_bullet) + re.escape(self.done_tasks_bullet) + ']', self.view.substr(line))
             current_scope = self.view.scope_name(self.view.sel()[0].b)
-            # print current_scope
             if has_bullet:
                 grps = has_bullet.groups()
                 line_contents = self.view.substr(line) + '\n' + grps[0] + self.open_tasks_bullet + ' '
@@ -34,8 +33,6 @@ class NewCommand(SublimeTasksBase):
                 self.view.replace(edit, line, line_contents)
             else:
                 has_space = re.match('^(\s+)(.*)', self.view.substr(line))
-                # is_heading = self.view.score_selector(line, "keyword.control.header.todo") == 0
-                # print is_heading
                 if has_space:
                     grps = has_space.groups()
                     spaces = grps[0]
@@ -72,11 +69,10 @@ class CompleteCommand(SublimeTasksBase):
 
 class ArchiveCommand(SublimeTasksBase):
     def runCommand(self, edit):
-        #print "========================================================================"
-
         file_content = self.view.substr(sublime.Region(0, self.view.size()))
         done_tasks = []
         rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '\s*([^\b]*)\s*@done(.)+\)$'
+
         # finding done tasks
         for line in file_content.split("\n"):
             if line == "Archive:":
@@ -105,11 +101,6 @@ class ArchiveCommand(SublimeTasksBase):
         # adding done tasks to archive section
         if done_tasks:
             self.view.replace(edit, line, line_content + "\n" + "\n".join(done_tasks))
-
-        # if no archive section add one at the end of file
-        # manipulate each done task and prefix it with project name
-
-        # x = sublime.active_window().active_view()
 
 
 class NewTaskDocCommand(sublime_plugin.WindowCommand):
