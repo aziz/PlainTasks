@@ -26,7 +26,7 @@ class NewCommand(SublimeTasksBase):
                 grps = has_bullet.groups()
                 line_contents = self.view.substr(line) + '\n' + grps[0] + self.open_tasks_bullet + ' '
                 self.view.replace(edit, line, line_contents)
-            elif "header" in current_scope:
+            elif 'header' in current_scope:
                 header = re.match('^(\s*)\S+', self.view.substr(line))
                 grps = header.groups()
                 line_contents = self.view.substr(line) + '\n' + grps[0] + ' ' + self.open_tasks_bullet + ' '
@@ -53,12 +53,12 @@ class CompleteCommand(SublimeTasksBase):
             line = self.view.line(region)
             line_contents = self.view.substr(line).rstrip()
             rom = '^(\s*)' + re.escape(self.open_tasks_bullet) + '\s*(.*)$'
-            rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '\s*([^\b]*)\s*@done(.)+\)$'
+            rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '\s*([^\b]*?)\s*@done(.)+?\)$'
             open_matches = re.match(rom, line_contents)
             done_matches = re.match(rdm, line_contents)
             if open_matches:
                 grps = open_matches.groups()
-                self.view.insert(edit, line.end(), " @done %s" % datetime.now().strftime(self.date_format))
+                self.view.insert(edit, line.end(), ' @done %s' % datetime.now().strftime(self.date_format))
                 replacement = u'%s%s %s' % (grps[0], self.done_tasks_bullet, grps[1].rstrip())
                 self.view.replace(edit, line, replacement)
             elif done_matches:
@@ -69,38 +69,29 @@ class CompleteCommand(SublimeTasksBase):
 
 class ArchiveCommand(SublimeTasksBase):
     def runCommand(self, edit):
-        file_content = self.view.substr(sublime.Region(0, self.view.size()))
-        done_tasks = []
-        rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '\s*([^\b]*)\s*@done(.)+\)$'
-
-        # finding done tasks
-        for line in file_content.split("\n"):
-            if line == "Archive:":
-                break
-            done_matches = re.match(rdm, line)
-            if done_matches:
-                done_tasks.append(line)
-
-        # print done_tasks
-
-        # deleting done tasks
-        for task in done_tasks:
-            region = self.view.find(re.escape(task + "\n"), 0)
-            self.view.erase(edit, region)
+        rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '\s*([^\b]*?)\s*@done(.)+?\)$'
 
         # finding archive section
-        archive_pos = self.view.find("Archive:", 0)
-        if archive_pos:
-            line = self.view.line(archive_pos)
-            line_content = self.view.substr(line)
-        else:
-            self.view.insert(edit, self.view.size(), u"\n\n＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿\nArchive:")
-            line = self.view.line(self.view.size())
-            line_content = self.view.substr(line)
+        archive_pos = self.view.find('Archive:', 0, sublime.LITERAL)
 
-        # adding done tasks to archive section
+        done_tasks = []
+        done_task = self.view.find(rdm, 0)
+        while done_task and (not archive_pos or done_task < archive_pos):
+            done_tasks.append(done_task)
+            done_task = self.view.find(rdm, done_task.end() + 1)
+
         if done_tasks:
-            self.view.replace(edit, line, line_content + "\n" + "\n".join(done_tasks))
+            if archive_pos:
+                line = self.view.full_line(archive_pos).end()
+            else:
+                self.view.insert(edit, self.view.size(), u'\n\n＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿\nArchive:\n')
+                line = self.view.size()
+
+            # adding done tasks to archive section
+            self.view.insert(edit, line, '\n'.join(self.view.substr(done_task) for done_task in done_tasks) + '\n')
+            # remove moved tasks (starting from the last one otherwise it screw up regions after the first delete)
+            for done_task in reversed(done_tasks):
+                self.view.erase(edit, self.view.full_line(done_task))
 
 
 class NewTaskDocCommand(sublime_plugin.WindowCommand):

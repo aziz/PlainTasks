@@ -8,7 +8,6 @@ TODO:
  ☐ now that date format is optional: just @done at the end should be fine
  ☐ more tests on linux and windows @later
  ☐ add ico format for windows @later
- ☐ BUG: having single qoutes (') or > in task do not allow archiving @IMP
  ☐ do not move the position of cursor when pressing cmd+D @improvement
 
 Documentation:
@@ -26,6 +25,7 @@ Marketing:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ BUG: having single qoutes (') or > in task do not allow archiving @IMP @done (2012-09-06 14:22)
  ✔ make date formating configurable @feature @done (2012-09-05 xxxxx 05:28)
  ✔ notes + make them foldable @feature @done (2012-09-05 05:19)
  ✔ add separator @feature @done (2012-09-05 05:11)
