@@ -11,9 +11,9 @@ TODO:
  ☐ do not move the position of cursor when pressing cmd+D @improvement
 
 Documentation:
- ☐ document "new task doc" command in readme and tutorial
- ☐ improve tutorial.todo
  ☐ write better readme
+ ☐ improve tutorial.todo
+ ☐ document new task document, notes, cofigurable date format, separator snippet
 
 Marketing:
  ☐ rename to PlainTasks
