@@ -12,6 +12,10 @@ class SublimeTasksBase(sublime_plugin.TextCommand):
         self.open_tasks_bullet = self.view.settings().get('open_tasks_bullet')
         self.done_tasks_bullet = self.view.settings().get('done_tasks_bullet')
         self.date_format = self.view.settings().get('date_format')
+        if self.view.settings().get('done_tag'):
+            self.done_tag = "@done"
+        else:
+            self.done_tag = ""
         self.runCommand(edit)
 
 
@@ -53,12 +57,13 @@ class CompleteCommand(SublimeTasksBase):
             line = self.view.line(region)
             line_contents = self.view.substr(line).rstrip()
             rom = '^(\s*)' + re.escape(self.open_tasks_bullet) + '\s*(.*)$'
-            rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '\s*([^\b]*?)\s*@done(.)+?\)$'
+            rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '\s*([^\b]*?)\s*(%s)?[\(\)\d\.:\-/ ]*\s*$' % self.done_tag
             open_matches = re.match(rom, line_contents)
             done_matches = re.match(rdm, line_contents)
             if open_matches:
                 grps = open_matches.groups()
-                self.view.insert(edit, line.end(), ' @done %s' % datetime.now().strftime(self.date_format))
+                print grps
+                self.view.insert(edit, line.end(), ' %s %s' % (self.done_tag, datetime.now().strftime(self.date_format)))
                 replacement = u'%s%s %s' % (grps[0], self.done_tasks_bullet, grps[1].rstrip())
                 self.view.replace(edit, line, replacement)
             elif done_matches:

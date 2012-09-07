@@ -13,12 +13,14 @@
 	<string>Tasks</string>
 	<key>patterns</key>
 	<array>
+
 		<dict>
 			<key>match</key>
 			<string>^\s*(\w+.+:\s*$\n?)</string>
 			<key>name</key>
 			<string>keyword.control.header.todo</string>
 		</dict>
+
 		<dict>
 			<key>captures</key>
 			<dict>
@@ -38,12 +40,14 @@
 			<key>name</key>
 			<string>meta.item.todo.completed</string>
 		</dict>
+
 		<dict>
 		  <key>match</key>
 		  <string>^\s*((?!-|\+|✓|✔|❍|❑|■|□|☐|▪|▫|–|—|＿)\S).*((?!:\s*).\s*)$</string>
 		  <key>name</key>
 		  <string>notes.todo</string>
 		</dict>
+
 		<dict>
 			<key>captures</key>
 			<dict>
@@ -63,18 +67,21 @@
 			<key>name</key>
 			<string>meta.item.todo.pending</string>
 		</dict>
+
 		<dict>
 			<key>match</key>
-			<string>(?&lt;=\s)\@(?!today|completed|done)[\w\d\-!?]+\s?</string>
+			<string>(?&lt;=\s)\@(?!today|completed|done)[\w\d\-!?]+\s*\n</string>
 			<key>name</key>
 			<string>meta.tag.todo</string>
 		</dict>
+
 		<dict>
 			<key>match</key>
 			<string>^＿+$</string>
 			<key>name</key>
 			<string>meta.punctuation.archive.todo</string>
 		</dict>
+
 		<dict>
 			<key>match</key>
 			<string>^\s*---.{3,5}---+$</string>
@@ -84,16 +91,18 @@
 
 		<dict>
 			<key>match</key>
-			<string>(?&lt;=\s)\@done \([\d\.:\-/ ].+\)\s?</string>
+			<string>(?&lt;=\s)(\@done)[\(\)\d\.:\-/\s]*\s*\n</string>
 			<key>name</key>
 			<string>meta.tag.todo.completed</string>
 		</dict>
+
 		<dict>
 			<key>match</key>
-			<string>(?&lt;=\s)\@today\s?</string>
+			<string>(?&lt;=\s)\@today|✭ᴛᴏᴅᴀʏ</string>
 			<key>name</key>
 			<string>string.other.tag.todo.today</string>
 		</dict>
+
 	</array>
 	<key>scopeName</key>
 	<string>text.todo</string>

@@ -1,19 +1,20 @@
 TODO:
- ☐ being able to work with done tasks with no @done and date at the end @improvement
- ☐ now that date format is optional: just @done at the end should be fine
- ☐ make date labling optional @feature
- ☐ make @done tag optional @feature
+ ☐ in archive list, test done_tag none and date none and different date format
+ ☐ in archive list, indented task should be unindented @bug
  ☐ in archive list, prefix task with project name, add specific scope for project prefixes @feature
  ☐ in archive list, add date in front of done tasks (e.g. 2012-09-06 14:41 Ξ some task) @feature
+ ☐ in archive list, make sure there's a line break at the end of list @improvement
  ☐ export to html/ preview in browser (look at markdown preview) @feature
  ☐ accept multiple bullet types at the same time @feature
- ☐ more tests on linux and windows @later
  ☐ do not move the position of cursor when pressing cmd+D @improvement
+ ☐ @today ✭ᴛᴏᴅᴀʏ is not a bad idea @feature
+
 
 Documentation:
  ☐ write better readme
  ☐ improve tutorial.todo
  ☐ document new task document, notes, cofigurable date format, separator snippet
+ ☐ document setting multiple tasks as done at the same time
 
 Marketing:
  ☐ rename to PlainTasks
@@ -25,9 +26,15 @@ Marketing:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ more tests on linux and windows @later @done (12-09-07 22:05)
+ ✔ tags should not be italic @bug @done (12-09-07 22:05)
+ ✔ make @done tag optional @feature  (12-09-07 15:54)
+ ✔ make date labling optional @feature @done (12-09-07 14:56)
+ ✔ now that date format is optional: just @done should be suffice @bug @done (12-09-07 14:56)
+ ✔ being able to work with done tasks with no @done and date at the end @improvement @done (12-09-07 14:56)
  ✔ add ico format for windows @later @done (2012-09-06 15:02)
  ✔ BUG: having single qoutes (') or > in task do not allow archiving @IMP @done (2012-09-06 14:22)
- ✔ make date formating configurable @feature @done (2012-09-05 xxxxx 05:28)
+ ✔ make date formating configurable @feature @done (2012-09-05 05:28)
  ✔ notes + make them foldable @feature @done (2012-09-05 05:19)
  ✔ add separator @feature @done (2012-09-05 05:11)
  ✔ BUG: command+enter on project name line @IMP @done (2012-09-05 04:49)

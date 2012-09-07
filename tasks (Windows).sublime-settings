@@ -1,7 +1,8 @@
 {
   "open_tasks_bullet": "☐", // options: - | ❍ | ❑ | ■ | □ | ☐ | ▪ | ▫ | – | — ≡ → ›
   "done_tasks_bullet": "✔", // options: + | ✓ | ✔
-  "date_format": "(%Y-%m-%d %H:%M)",
+  "date_format": "(%y-%m-%d %H:%M)",
+  "done_tag": true,
   "color_scheme": "Packages/Tasks/tasks.hidden-tmTheme",
   "font_size": 11, // for windows 11
   "font_face": "Consolas",
