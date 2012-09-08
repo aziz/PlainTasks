@@ -404,6 +404,8 @@
 				<string>#EADD4E</string>
 				<key>foreground</key>
 				<string>#000000</string>
+				<key>fontStyle</key>
+				<string>bold</string>
 			</dict>
 		</dict>
 	</array>

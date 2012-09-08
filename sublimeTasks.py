@@ -74,7 +74,7 @@ class CompleteCommand(SublimeTasksBase):
 
 class ArchiveCommand(SublimeTasksBase):
     def runCommand(self, edit):
-        rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '\s*([^\b]*?)\s*@done(.)+?\)$'
+        rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '\s*([^\b]*?)\s*(%s)?[\(\)\d\.:\-/ ]*\s*$' % self.done_tag
 
         # finding archive section
         archive_pos = self.view.find('Archive:', 0, sublime.LITERAL)
@@ -93,7 +93,7 @@ class ArchiveCommand(SublimeTasksBase):
                 line = self.view.size()
 
             # adding done tasks to archive section
-            self.view.insert(edit, line, '\n'.join(self.view.substr(done_task) for done_task in done_tasks) + '\n')
+            self.view.insert(edit, line, '\n'.join(' ' + self.view.substr(done_task).lstrip() for done_task in done_tasks) + '\n')
             # remove moved tasks (starting from the last one otherwise it screw up regions after the first delete)
             for done_task in reversed(done_tasks):
                 self.view.erase(edit, self.view.full_line(done_task))

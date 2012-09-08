@@ -1,20 +1,17 @@
 TODO:
- ☐ in archive list, test done_tag none and date none and different date format
- ☐ in archive list, indented task should be unindented @bug
  ☐ in archive list, prefix task with project name, add specific scope for project prefixes @feature
  ☐ in archive list, add date in front of done tasks (e.g. 2012-09-06 14:41 Ξ some task) @feature
- ☐ in archive list, make sure there's a line break at the end of list @improvement
  ☐ export to html/ preview in browser (look at markdown preview) @feature
  ☐ accept multiple bullet types at the same time @feature
+ ☐ @today ✭ᴛᴏᴅᴀʏ tags @feature
  ☐ do not move the position of cursor when pressing cmd+D @improvement
- ☐ @today ✭ᴛᴏᴅᴀʏ is not a bad idea @feature
-
 
 Documentation:
  ☐ write better readme
  ☐ improve tutorial.todo
  ☐ document new task document, notes, cofigurable date format, separator snippet
  ☐ document setting multiple tasks as done at the same time
+ ☐ document today tag
 
 Marketing:
  ☐ rename to PlainTasks
@@ -26,6 +23,10 @@ Marketing:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ archiving with custom/none date format @bug @done (12-09-08 10:54)
+ ✔ archiving with done tag false @bug @done (12-09-08 10:54)
+ ✔ in archive list, make sure there's a line break at the end of list @improvement @done (12-09-08 10:42)
+ ✔ in archive list, indented task should be unindented @bug @done (12-09-08 08:25)
  ✔ more tests on linux and windows @later @done (12-09-07 22:05)
  ✔ tags should not be italic @bug @done (12-09-07 22:05)
  ✔ make @done tag optional @feature  (12-09-07 15:54)
