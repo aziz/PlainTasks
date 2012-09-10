@@ -16,7 +16,6 @@ Documentation:
  ☐ document today tag
 
 Marketing:
- ☐ rename to PlainTasks
  ☐ add to package manager
  ☐ open tutorial after install @improvement
  ☐ hackernews
@@ -25,6 +24,7 @@ Marketing:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ rename to PlainTasks @done (12-09-10 23:45)
  ✔ archiving with custom/none date format @bug @done (12-09-08 10:54)
  ✔ archiving with done tag false @bug @done (12-09-08 10:54)
  ✔ in archive list, make sure there's a line break at the end of list @improvement @done (12-09-08 10:42)

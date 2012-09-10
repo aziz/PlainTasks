@@ -3,7 +3,7 @@
   "done_tasks_bullet": "✔", // options: + | ✓ | ✔
   "date_format": "(%y-%m-%d %H:%M)",
   "done_tag": true,
-  "color_scheme": "Packages/Tasks/tasks.hidden-tmTheme",
+  "color_scheme": "Packages/PlainTasks/tasks.hidden-tmTheme",
   "font_size": 15, // for windows 11
   "font_face": "Consolas",
   "font_options": [ "subpixel_antialias", "no_round", "directwrite"],
