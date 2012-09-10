@@ -74,13 +74,14 @@ class CompleteCommand(SublimeTasksBase):
 
 class ArchiveCommand(SublimeTasksBase):
     def runCommand(self, edit):
-        rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '\s*([^\b]*?)\s*(%s)?[\(\)\d\.:\-/ ]*\s*$' % self.done_tag
+        rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '\s*([^\b]*?)\s*(%s)?[\(\)\d\.:\-/ ]*[ \t]*$' % self.done_tag
 
         # finding archive section
         archive_pos = self.view.find('Archive:', 0, sublime.LITERAL)
 
         done_tasks = []
         done_task = self.view.find(rdm, 0)
+        print done_task
         while done_task and (not archive_pos or done_task < archive_pos):
             done_tasks.append(done_task)
             done_task = self.view.find(rdm, done_task.end() + 1)
