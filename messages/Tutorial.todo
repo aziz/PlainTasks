@@ -23,7 +23,7 @@ Tasks:
 
   Archiving:
    ☐ Pressing ⌘+shift+A will archive the done task.
-      by removing them from you list and appending them to the bottom of the file under Archive project.
+      By removing them from your list and appending them to the bottom of the file under Archive project.
       The archive project is separated from the other list of projects with a line. see bottom of this file.
 
 FileType Support:

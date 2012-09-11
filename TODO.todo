@@ -7,12 +7,13 @@ TODO:
  ☐ do not move the position of cursor when pressing cmd+D @improvement
 
 Documentation:
- ☐ write better readme
  ☐ improve tutorial.todo
- ☐ document new task document, notes, cofigurable date format, separator snippet
- ☐ document setting multiple tasks as done at the same time
+ ☐ document new task document in tutorial
+ ☐ cofigurable date format, separator snippet
+ ☐ icon
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ write better readme @done (12-09-11 14:09)
  ✔ make an empty line gap between arhived task @bug @done (12-09-11 10:37)
  ✔ removed packages/tasks from settings and code @improvement @done (12-09-11 10:25)
  ✔ open tutorial after install @improvement @done (12-09-11 10:24)
