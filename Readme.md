@@ -16,7 +16,7 @@ Bring up the command palette (it's `⌘ + shift + p` in Mac and `ctrl + shift + 
 ## Usage
 **NOTE:** In windows or Linux use `ctrl` instead of `⌘`
 
-☐ **`⌘ + enter`** or __`⌘ + i`__: new task
+☐ __`⌘ + enter`__ or __`⌘ + i`__: new task
 
 ☐ **`⌘ + d`**: toggle task as completed
 
