@@ -4,7 +4,7 @@
   "date_format": "(%y-%m-%d %H:%M)",
   "done_tag": true,
   "color_scheme": "Packages/PlainTasks/tasks.hidden-tmTheme",
-  "font_size": 11, // for windows 11
+  "font_size": 11,
   "font_face": "Consolas",
   "font_options": [ "subpixel_antialias", "no_round", "directwrite"],
   "draw_indent_guides": false,

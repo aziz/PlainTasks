@@ -5,12 +5,6 @@ TODO:
  ☐ accept multiple bullet types at the same time @feature
  ☐ @today ✭ᴛᴏᴅᴀʏ tags @feature
  ☐ do not move the position of cursor when pressing cmd+D @improvement
-
-Documentation:
- ☐ improve tutorial.todo
- ☐ document new task document in tutorial
- ☐ cofigurable date format, separator snippet
- ☐ icon
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
  ✔ write better readme @done (12-09-11 14:09)
