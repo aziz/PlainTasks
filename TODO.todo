@@ -1,5 +1,4 @@
 TODO:
- ☐ make an empty line gap between arhived task @bug
  ☐ in archive list, prefix task with project name, add specific scope for project prefixes @feature
  ☐ in archive list, add date in front of done tasks (e.g. 2012-09-06 14:41 Ξ some task) @feature
  ☐ export to html/ preview in browser (look at markdown preview) @feature
@@ -8,19 +7,13 @@ TODO:
  ☐ do not move the position of cursor when pressing cmd+D @improvement
 
 Documentation:
- ☐ write better readmes /
+ ☐ write better readme
  ☐ improve tutorial.todo
  ☐ document new task document, notes, cofigurable date format, separator snippet
  ☐ document setting multiple tasks as done at the same time
- ☐ document today tag
-
-Marketing:
- ☐ hackernews
- ☐ reddit
- ☐ lifehacker
-
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ make an empty line gap between arhived task @bug @done (12-09-11 10:37)
  ✔ removed packages/tasks from settings and code @improvement @done (12-09-11 10:25)
  ✔ open tutorial after install @improvement @done (12-09-11 10:24)
  ✔ add to package manager @done (12-09-11 10:02)
