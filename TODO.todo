@@ -9,21 +9,21 @@ TODO:
  ☐ remove packages/tasks from settings and code @improvement
 
 Documentation:
- ☐ write better readme
+ ☐ write better readmes /
  ☐ improve tutorial.todo
  ☐ document new task document, notes, cofigurable date format, separator snippet
  ☐ document setting multiple tasks as done at the same time
  ☐ document today tag
 
 Marketing:
- ☐ add to package manager
- ☐ open tutorial after install @improvement
  ☐ hackernews
  ☐ reddit
  ☐ lifehacker
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ open tutorial after install @improvement @done (12-09-11 10:24)
+ ✔ add to package manager @done (12-09-11 10:02)
  ✔ rename to PlainTasks @done (12-09-10 23:45)
  ✔ archiving with custom/none date format @bug @done (12-09-08 10:54)
  ✔ archiving with done tag false @bug @done (12-09-08 10:54)
