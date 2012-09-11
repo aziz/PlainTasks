@@ -12,19 +12,19 @@
                 "children":
                 [
                     {
-                        "caption": "Tasks",
+                        "caption": "PlainTasks",
                         "children":
                         [
                             {
                                 "command": "open_file",
-                                "args": {"file": "${packages}/Tasks/Tutorial.todo"},
+                                "args": {"file": "${packages}/PlainTasks/messages/Tutorial.todo"},
                                 "caption": "Tutorial"
                             },
                             { "caption": "-" },
                             {
                                 "command": "open_file",
                                 "args": {
-                                    "file": "${packages}/Tasks/tasks (OSX).sublime-settings",
+                                    "file": "${packages}/PlainTasks/PlainTasks (OSX).sublime-settings",
                                     "platform": "OSX"
                                 },
                                 "caption": "Settings – Default"
@@ -32,7 +32,7 @@
                             {
                                 "command": "open_file",
                                 "args": {
-                                    "file": "${packages}/Tasks/tasks (Linux).sublime-settings",
+                                    "file": "${packages}/PlainTasks/PlainTasks (Linux).sublime-settings",
                                     "platform": "Linux"
                                 },
                                 "caption": "Settings – Default"
@@ -40,21 +40,21 @@
                             {
                                 "command": "open_file",
                                 "args": {
-                                    "file": "${packages}/Tasks/tasks (Windows).sublime-settings",
+                                    "file": "${packages}/PlainTasks/PlainTasks (Windows).sublime-settings",
                                     "platform": "Windows"
                                 },
                                 "caption": "Settings – Default"
                             },
                             {
                                 "command": "open_file",
-                                "args": {"file": "${packages}/User/tasks.sublime-settings"},
+                                "args": {"file": "${packages}/User/PlainTasks.sublime-settings"},
                                 "caption": "Settings – User"
                             },
                             { "caption": "-" },
                             {
                                 "command": "open_file",
                                 "args": {
-                                    "file": "${packages}/Tasks/Default (OSX).sublime-keymap",
+                                    "file": "${packages}/PlainTasks/Default (OSX).sublime-keymap",
                                     "platform": "OSX"
                                 },
                                 "caption": "Key Bindings – Default"
@@ -62,7 +62,7 @@
                             {
                                 "command": "open_file",
                                 "args": {
-                                    "file": "${packages}/Tasks/Default (Linux).sublime-keymap",
+                                    "file": "${packages}/PlainTasks/Default (Linux).sublime-keymap",
                                     "platform": "Linux"
                                 },
                                 "caption": "Key Bindings – Default"

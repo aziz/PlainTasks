@@ -6,7 +6,6 @@ TODO:
  ☐ accept multiple bullet types at the same time @feature
  ☐ @today ✭ᴛᴏᴅᴀʏ tags @feature
  ☐ do not move the position of cursor when pressing cmd+D @improvement
- ☐ remove packages/tasks from settings and code @improvement
 
 Documentation:
  ☐ write better readmes /
@@ -22,6 +21,7 @@ Marketing:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ removed packages/tasks from settings and code @improvement @done (12-09-11 10:25)
  ✔ open tutorial after install @improvement @done (12-09-11 10:24)
  ✔ add to package manager @done (12-09-11 10:02)
  ✔ rename to PlainTasks @done (12-09-10 23:45)
