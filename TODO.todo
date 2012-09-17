@@ -5,6 +5,10 @@ TODO:
  ☐ accept multiple bullet types at the same time @feature
  ☐ @today ✭ᴛᴏᴅᴀʏ tags @feature
  ☐ do not move the position of cursor when pressing cmd+D @improvement
+ ☐ make links clickable and highlighted @feature
+ ☐ make gif animation @docs
+ ☐ say why it's called opinionated @docs
+ ☐ mouse click support to toggle a task state @feature
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
  ✔ write better readme @done (12-09-11 14:09)
