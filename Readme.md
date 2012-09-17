@@ -9,7 +9,7 @@ To install this plugin, you have two options:
 2. If you have Package Control installed, simply search for `PlainTasks` to install.
 
 ## Start a new todo-list
-Bring up the command palette (it's `⌘ + shift + p` in Mac and `ctrl + shift + p` in Windows) and type `task` and select `Tasks: New document` command. 
+Bring up the command palette (it's `⌘ + shift + p`  in OS X and `ctrl + shift + p` in Windows) and type `task` and select `Tasks: New document` command. 
 
 **NOTE:** Save your todo files with `todo`, `todolist`, `tasks` or `taskpaper` file extensions or just name them `TODO` with no extension.
 
@@ -39,7 +39,7 @@ Bring up the command palette (it's `⌘ + shift + p` in Mac and `ctrl + shift + 
 ☐ Use **`⌘ + r`** to see a list of projects and quickly jump between them
 
 
-★ See [Tutorial](https://github.com/aziz/PlainTasks/blob/master/messages/Tutorial.todo) for more detial information.
+★ See the [Tutorial](https://github.com/aziz/PlainTasks/blob/master/messages/Tutorial.todo) for more detailed information.
 
 ## Settings
 PlainTask is an opinionated plugin, which means that it is highly configured to look in a specific way. but this does not mean that you can not customize it. If you feel that something does not look right and you want to change it, you can easily do it in your user settings file. 
