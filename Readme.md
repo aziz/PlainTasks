@@ -1,4 +1,4 @@
-## Sublime Tasks
+## PlainTasks
 An opinionated todo-list plugin for Sublime Text 2 editor
 ![](http://f.cl.ly/items/2y2m3v1i0S2V1t2m2A0e/Screen%20Shot%202012-04-21%20at%2012.27.05%20AM.png)
 
@@ -42,11 +42,11 @@ Bring up the command palette (it's `⌘ + shift + p`  in OS X and `ctrl + shift 
 ★ See the [Tutorial](https://github.com/aziz/PlainTasks/blob/master/messages/Tutorial.todo) for more detailed information.
 
 ## Settings
-PlainTask is an opinionated plugin, which means that it is highly configured to look in a specific way. but this does not mean that you can not customize it. If you feel that something does not look right and you want to change it, you can easily do it in your user settings file. 
+PlainTasks is an opinionated plugin, which means that it is highly configured to look in a specific way. but this does not mean that you can not customize it. If you feel that something does not look right and you want to change it, you can easily do it in your user settings file. 
 
 Go to `Preferences > Package Settings > PlainTasks` and open `Settings - User`, there you can override all the default settings. to get an idea you can take a look at `Settings - Default`.
 
-Here is a list of PlainTask specific settings:
+Here is a list of PlainTasks' specific settings:
 
 * **open_tasks_bullet**  
   Default: ☐  
@@ -65,7 +65,7 @@ Here is a list of PlainTask specific settings:
 
 
 ## [BONUS] Custom todo icon
-PlainTask comes with a custom todo icon that you can find in the `icons` folder. You can assign it to your todo files to give them a better look and distinguish them from other plain text files. Google and find out how to assign a custom icon to a file type in your operating system.
+PlainTasks comes with a custom todo icon that you can find in the `icons` folder. You can assign it to your todo files to give them a better look and distinguish them from other plain text files. Google and find out how to assign a custom icon to a file type in your operating system.
 
 ![](http://f.cl.ly/items/2t312B30121l2X1l0927/todo-icon.png)
 
