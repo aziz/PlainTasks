@@ -4,13 +4,13 @@ TODO:
  ☐ export to html/ preview in browser (look at markdown preview) @feature
  ☐ accept multiple bullet types at the same time @feature
  ☐ @today ✭ᴛᴏᴅᴀʏ tags @feature
- ☐ do not move the position of cursor when pressing cmd+D @improvement
  ☐ make links clickable and highlighted @feature
  ☐ make gif animation @docs
  ☐ say why it's called opinionated @docs
  ☐ mouse click support to fold a project @feature
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ do not move the position of cursor when pressing cmd+D @improvement @done (12-09-18 22:05)
  ✔ mouse click support to toggle a task state @feature @done (12-09-18 13:32)
  ✔ write better readme @done (12-09-11 14:09)
  ✔ make an empty line gap between arhived task @bug @done (12-09-11 10:37)
