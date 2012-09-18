@@ -7,14 +7,15 @@ TODO:
  ☐ make links clickable and highlighted @feature
  ☐ make gif animation @docs
  ☐ say why it's called opinionated @docs
- ☐ mouse click support to toggle a task state @feature
+ ☐ mouse click support to fold a project @feature
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
  ✔ do not move the position of cursor when pressing cmd+D @improvement @done (12-09-18 22:05)
+ ✔ mouse click support to toggle a task state @feature @done (12-09-18 13:32)
  ✔ write better readme @done (12-09-11 14:09)
  ✔ make an empty line gap between arhived task @bug @done (12-09-11 10:37)
  ✔ removed packages/tasks from settings and code @improvement @done (12-09-11 10:25)
- ✔ open tutorial after install @improvement @done (12-09-11 10:24)
+ ✔ open tutorial after install @improvement @done (12-09-18 13:28)
  ✔ add to package manager @done (12-09-11 10:02)
  ✔ rename to PlainTasks @done (12-09-10 23:45)
  ✔ archiving with custom/none date format @bug @done (12-09-08 10:54)
