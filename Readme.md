@@ -71,6 +71,7 @@ PlainTasks comes with a custom todo icon that you can find in the `icons` folder
 
 ## Contributors
 - [Dominique Wahli](https://github.com/bizoo)
+- [Jesse Robertson](https://github.com/speilberg0)
 
 ## Inspiration
 - Thanks to Chagel for the [iTodo plugin](https://github.com/chagel/itodo).  
