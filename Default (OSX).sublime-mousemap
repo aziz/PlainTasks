@@ -1,0 +1,10 @@
+[
+  {
+    "button": "button1",
+    "count": 1,
+    "press_command": "drag_select",
+    "modifiers": ["super"],
+    "command": "complete",
+    "context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }]
+  }
+]

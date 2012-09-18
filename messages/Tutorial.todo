@@ -30,6 +30,9 @@ Tasks:
    ☐ Bring up the command palette (it's ⌘+shift+p in Mac and ctrl+shift+p in Windows)
    ☐ type `task` and select `Tasks: New document` command
 
+  Using Mouse:
+   ☐ You can use you mouse to toggle a task. just hold ⌘ (ctrl on Windows) and click the task
+
 --- ✄ -----------------------
 You can use separator snippet to separate your todo lists. type -- and press tab
 
