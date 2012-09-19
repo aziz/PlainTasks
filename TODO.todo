@@ -1,4 +1,6 @@
 TODO:
+ ☐ can not add multiple tags anymore! WTF! @bug
+ ☐ tags with dot can not be highlighted @bug
  ☐ in archive list, prefix task with project name, add specific scope for project prefixes @feature
  ☐ in archive list, add date in front of done tasks (e.g. 2012-09-06 14:41 Ξ some task) @feature
  ☐ export to html/ preview in browser (look at markdown preview) @feature
@@ -8,8 +10,12 @@ TODO:
  ☐ make gif animation @docs
  ☐ say why it's called opinionated @docs
  ☐ mouse click support to fold a project @feature
+ ☐ taskpaper compatibility @improvement
+ ☐ png images for linux
+ ☐ other themes
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ removed mouse interation for now @bug @done (12-09-19 23:39)
  ✔ do not move the position of cursor when pressing cmd+D @improvement @done (12-09-18 22:05)
  ✔ mouse click support to toggle a task state @feature @done (12-09-18 13:32)
  ✔ write better readme @done (12-09-11 14:09)
