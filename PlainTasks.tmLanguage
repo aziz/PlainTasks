@@ -70,6 +70,13 @@
 
 		<dict>
 			<key>match</key>
+			<string>(?&lt;=\s)(\@[\w\d\.\-!?]+\s+)*(\@done)[\(\)\d\.:\-/\s]*\s*\n</string>
+			<key>name</key>
+			<string>meta.tag.todo.completed</string>
+		</dict>
+
+		<dict>
+			<key>match</key>
 			<string>(?&lt;=\s)\@(?!today|completed|done)[\w\d\.\-!?]+\s*</string>
 			<key>name</key>
 			<string>meta.tag.todo</string>
@@ -87,13 +94,6 @@
 			<string>^\s*---.{3,5}---+$</string>
 			<key>name</key>
 			<string>meta.punctuation.separator.todo</string>
-		</dict>
-
-		<dict>
-			<key>match</key>
-			<string>(?&lt;=\s)(\@done)[\(\)\d\.:\-/\s]*\s*\n</string>
-			<key>name</key>
-			<string>meta.tag.todo.completed</string>
 		</dict>
 
 		<dict>
