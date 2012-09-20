@@ -36,7 +36,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^\s*(\+|✓|✔)\s+((?:[^\@]|(?&lt;!\s)\@|\@(?=\s))*)</string>
+			<string>^\s*(\+|✓|✔|☑)\s+((?:[^\@]|(?&lt;!\s)\@|\@(?=\s))*)</string>
 			<key>name</key>
 			<string>meta.item.todo.completed</string>
 		</dict>
@@ -70,7 +70,7 @@
 
 		<dict>
 			<key>match</key>
-			<string>(?&lt;=\s)\@(?!today|completed|done)[\w\d\-!?]+\s*\n</string>
+			<string>(?&lt;=\s)\@(?!today|completed|done)[\w\d\.\-!?]+\s*</string>
 			<key>name</key>
 			<string>meta.tag.todo</string>
 		</dict>

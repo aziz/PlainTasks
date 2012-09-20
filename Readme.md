@@ -54,7 +54,7 @@ Here is a list of PlainTasks' specific settings:
 
 * **done_tasks_bullet**  
   Default: ✔  
-  other valid options: + ✓
+  other valid options: + ✓ ☑
 
 * **date_format**  
   Default: (%y-%m-%d %H:%M)
