@@ -14,6 +14,7 @@ TODO:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ improved support for custom date format @done (Thursday September 20, 2012 11:41 PM)
  ✔ removed the color of tags in done tasks @improvement @done (12-09-20 23:25)
  ✔ png images for linux @done (12-09-20 22:58)
  ✔ tags with dot can not be highlighted @bug @1.2 @done (12-09-20 22:58)

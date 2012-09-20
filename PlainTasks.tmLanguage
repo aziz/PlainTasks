@@ -70,7 +70,7 @@
 
 		<dict>
 			<key>match</key>
-			<string>(?&lt;=\s)(\@[\w\d\.\-!?]+\s+)*(\@done)[\(\)\d\.:\-/\s]*\s*\n</string>
+			<string>(?&lt;=\s)(\@[\w\d\.\-!?]+\s+)*(\@done)[\(\)\d\w,\.:\-/\s]*\s*\n</string>
 			<key>name</key>
 			<string>meta.tag.todo.completed</string>
 		</dict>
