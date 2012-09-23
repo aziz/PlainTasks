@@ -32,9 +32,16 @@ class NewCommand(SublimeTasksBase):
                 self.view.replace(edit, line, line_contents)
             elif 'header' in current_scope:
                 header = re.match('^(\s*)\S+', self.view.substr(line))
-                grps = header.groups()
-                line_contents = self.view.substr(line) + '\n' + grps[0] + ' ' + self.open_tasks_bullet + ' '
+                if header:
+                    grps = header.groups()
+                    line_contents = self.view.substr(line) + '\n' + grps[0] + ' ' + self.open_tasks_bullet + ' '
+                else:
+                    line_contents = ' ' + self.open_tasks_bullet + ' '
                 self.view.replace(edit, line, line_contents)
+                end = self.view.sel()[0].b
+                pt = sublime.Region(end, end)
+                self.view.sel().clear()
+                self.view.sel().add(pt)
             else:
                 has_space = re.match('^(\s+)(.*)', self.view.substr(line))
                 if has_space:

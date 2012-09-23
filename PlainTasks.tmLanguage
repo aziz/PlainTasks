@@ -77,7 +77,7 @@
 
 		<dict>
 			<key>match</key>
-			<string>(?&lt;=\s)\@(?!today|completed|done)[\w\d\.\-!?]+\s*</string>
+			<string>(?&lt;=\s)\@(?!today|completed|done)[\w\d\.\(\)\-!?]+\s*</string>
 			<key>name</key>
 			<string>meta.tag.todo</string>
 		</dict>

@@ -3,17 +3,20 @@ TODO:
  ☐ taskpaper compatibility @improvement
  ☐ in archive list, prefix task with project name, add specific scope for project prefixes @feature
  ☐ in archive list, add date in front of done tasks (e.g. 2012-09-06 14:41 Ξ some task) @feature
- ☐ export to html/ preview in browser (look at markdown preview) @feature
+ ☐ export to html/ preview in browser @feature
  ☐ accept multiple bullet types at the same time @feature
  ☐ @today ✭ᴛᴏᴅᴀʏ tags @feature
  ☐ make gif animation @docs
  ☐ say why it's called opinionated @docs
- ☐ mouse click support to fold a project @feature
- ☐ other themes
+ ☐ mouse interaction @feature
+ ☐ other themes?
  ☐ done tag off by default?
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ add link to repo @documentation @done (12-09-23 11:36)
+ ✔ tags with () @bug @done (12-09-23 11:28)
+ ✔ can not make a new task on empty line @bug @important @done (12-09-23 11:26)
  ✔ improved support for custom date format @done (Thursday September 20, 2012 11:41 PM)
  ✔ removed the color of tags in done tasks @improvement @done (12-09-20 23:25)
  ✔ png images for linux @done (12-09-20 22:58)
