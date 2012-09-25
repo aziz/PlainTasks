@@ -1,4 +1,4 @@
-How to Use Sublime Tasks:
+How to Use PlainTasks:
 
 Projects:
  ☐ Anything with colon at the end of the line is a project title
@@ -11,7 +11,7 @@ Tasks:
   New:
    ☐ Press ⌘+enter (ctrl+enter on Windows) to add a new task.
    ☐ You can also use ⌘+i (ctrl+i on Windows) to add new task
-   ☐ If you're on a new line SublimeTasks will create a new task on the current line
+   ☐ If you're on a new line PlainTasks will create a new task on the current line
    ☐ If you're on a line with a task pressing new task shortcut will add a task after it
    ☐ If you're on a line with some normal text pressing new task shortcut will convert it to a task
    ☐ New tasks will be nested as much as the task on the previous line
@@ -37,7 +37,7 @@ Tasks:
 You can use separator snippet to separate your todo lists. type -- and press tab
 
 FileType Support:
- Sublime Tasks support these file types out of the box
+ PlainTasks support these file types out of the box
  ☐ TODO
  ☐ *.todo
  ☐ *.todolist
@@ -57,4 +57,4 @@ Editor Useful Tools:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
- ✔ learn how to use SublimeTask @done (2012-09-07 07:30)
+ ✔ learn how to use PlainTasks @done (2012-09-07 07:30)
