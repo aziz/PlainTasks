@@ -1,6 +1,6 @@
 {
   "open_tasks_bullet": "☐", // options: - | ❍ | ❑ | ■ | □ | ☐ | ▪ | ▫ | – | — ≡ → ›
-  "done_tasks_bullet": "✔", // options: + | ✓ | ✔
+  "done_tasks_bullet": "✔", // options: - | + | ✓ | ✔
   "date_format": "(%y-%m-%d %H:%M)",
   "done_tag": true,
   "color_scheme": "Packages/PlainTasks/tasks.hidden-tmTheme",
