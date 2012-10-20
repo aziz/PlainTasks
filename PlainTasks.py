@@ -34,9 +34,9 @@ class NewCommand(SublimeTasksBase):
                 header = re.match('^(\s*)\S+', self.view.substr(line))
                 if header:
                     grps = header.groups()
-                    line_contents = self.view.substr(line) + '\n' + grps[0] + ' ' + self.open_tasks_bullet + ' '
+                    line_contents = self.view.substr(line) + '\n' + grps[0] + '\t' + self.open_tasks_bullet + ' '
                 else:
-                    line_contents = ' ' + self.open_tasks_bullet + ' '
+                    line_contents = '\t' + self.open_tasks_bullet + ' ' 
                 self.view.replace(edit, line, line_contents)
                 end = self.view.sel()[0].b
                 pt = sublime.Region(end, end)
@@ -50,7 +50,7 @@ class NewCommand(SublimeTasksBase):
                     line_contents = spaces + self.open_tasks_bullet + ' ' + grps[1]
                     self.view.replace(edit, line, line_contents)
                 else:
-                    line_contents = ' ' + self.open_tasks_bullet + ' ' + self.view.substr(line)
+                    line_contents = '\t' + self.open_tasks_bullet + ' ' + self.view.substr(line)
                     self.view.replace(edit, line, line_contents)
                     end = self.view.sel()[0].b
                     pt = sublime.Region(end, end)
@@ -61,25 +61,27 @@ class NewCommand(SublimeTasksBase):
 class CompleteCommand(SublimeTasksBase):
     def runCommand(self, edit):
         original = [r for r in self.view.sel()]
-        done_line_end = ' %s %s' % (self.done_tag, datetime.now().strftime(self.date_format))
+        done_line_end = ' %s%s' % (self.done_tag, datetime.now().strftime(self.date_format))
         offset = len(done_line_end)
         for region in self.view.sel():
             line = self.view.line(region)
             line_contents = self.view.substr(line).rstrip()
+
             rom = '^(\s*)' + re.escape(self.open_tasks_bullet) + '\s*(.*)$'
-            rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '\s*([^\b]*?)\s*(%s)?[\(\)\d\w,\.:\-/ ]*\s*$' % self.done_tag
+            rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '\s*([^\b]*?)\s*(%s)[\(\)\d\w,\.:\-/ ]*\s*$' % self.done_tag
+
             open_matches = re.match(rom, line_contents)
             done_matches = re.match(rdm, line_contents)
-            if open_matches:
-                grps = open_matches.groups()
-                self.view.insert(edit, line.end(), done_line_end)
-                replacement = u'%s%s %s' % (grps[0], self.done_tasks_bullet, grps[1].rstrip())
-                self.view.replace(edit, line, replacement)
-            elif done_matches:
+            if done_matches:
                 grps = done_matches.groups()
                 replacement = u'%s%s %s' % (grps[0], self.open_tasks_bullet, grps[1].rstrip())
                 self.view.replace(edit, line, replacement)
                 offset = -offset
+            elif open_matches:
+                grps = open_matches.groups()
+                self.view.insert(edit, line.end(), done_line_end)
+                replacement = u'%s%s %s' % (grps[0], self.done_tasks_bullet, grps[1].rstrip())
+                self.view.replace(edit, line, replacement)
         self.view.sel().clear()
         for ind, pt in enumerate(original):
             ofs = ind * offset
@@ -89,7 +91,7 @@ class CompleteCommand(SublimeTasksBase):
 
 class ArchiveCommand(SublimeTasksBase):
     def runCommand(self, edit):
-        rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '\s*([^\b]*?)\s*(%s)?[\(\)\d\.:\-/ ]*[ \t]*$' % self.done_tag
+        rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '\s*([^\b]*?)\s*(%s)[\(\)\d\.:\-/ ]*[ \t]*$' % self.done_tag
 
         # finding archive section
         archive_pos = self.view.find('Archive:', 0, sublime.LITERAL)
