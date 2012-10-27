@@ -70,7 +70,7 @@
                             {
                                 "command": "open_file",
                                 "args": {
-                                    "file": "${packages}/Tasks/Default (Windows).sublime-keymap",
+                                    "file": "${packages}/PlainTasks/Default (Windows).sublime-keymap",
                                     "platform": "Windows"
                                 },
                                 "caption": "Key Bindings – Default"
