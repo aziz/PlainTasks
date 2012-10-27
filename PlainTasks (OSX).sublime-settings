@@ -1,8 +1,9 @@
 {
   "open_tasks_bullet": "☐", // options: - | ❍ | ❑ | ■ | □ | ☐ | ▪ | ▫ | – | — ≡ → ›
   "done_tasks_bullet": "✔", // options: + | ✓ | ✔
+  "canc_tasks_bullet": "✘",
   "date_format": "(%y-%m-%d %H:%M)",
-  "done_tag": true,
+  "done_tag": true, // related to @cancelled as well
   "color_scheme": "Packages/PlainTasks/tasks.hidden-tmTheme",
   "font_size": 15,
   "font_face": "Consolas",
