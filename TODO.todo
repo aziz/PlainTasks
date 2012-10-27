@@ -1,4 +1,6 @@
 TODO:
+ ☐ use control+shift+A to only archive the firt level tasks (or current level of indent) @feature
+ ☐ margin before task bullet should be customizable @improvement
  ☐ make links clickable and highlighted @feature
  ☐ include in the task the date and time of creation (using a shortcut key) @feature
     Maybe after mark the task as @done calculate (the end time - start time) would be so great!
