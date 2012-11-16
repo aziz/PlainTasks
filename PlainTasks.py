@@ -12,6 +12,7 @@ class SublimeTasksBase(sublime_plugin.TextCommand):
         self.open_tasks_bullet = self.view.settings().get('open_tasks_bullet')
         self.done_tasks_bullet = self.view.settings().get('done_tasks_bullet')
         self.canc_tasks_bullet = self.view.settings().get('canc_tasks_bullet')
+        self.before_tasks_bullet_spaces = ' ' * self.view.settings().get('before_tasks_bullet_margin')
         self.date_format = self.view.settings().get('date_format')
         if self.view.settings().get('done_tag'):
             self.done_tag = "@done"
@@ -37,9 +38,9 @@ class NewCommand(SublimeTasksBase):
                 header = re.match('^(\s*)\S+', self.view.substr(line))
                 if header:
                     grps = header.groups()
-                    line_contents = self.view.substr(line) + '\n' + grps[0] + ' ' + self.open_tasks_bullet + ' '
+                    line_contents = self.view.substr(line) + '\n' + grps[0] + self.before_tasks_bullet_spaces + self.open_tasks_bullet + ' '
                 else:
-                    line_contents = ' ' + self.open_tasks_bullet + ' '
+                    line_contents = self.before_tasks_bullet_spaces + self.open_tasks_bullet + ' '
                 self.view.replace(edit, line, line_contents)
                 end = self.view.sel()[0].b
                 pt = sublime.Region(end, end)
@@ -53,7 +54,7 @@ class NewCommand(SublimeTasksBase):
                     line_contents = spaces + self.open_tasks_bullet + ' ' + grps[1]
                     self.view.replace(edit, line, line_contents)
                 else:
-                    line_contents = ' ' + self.open_tasks_bullet + ' ' + self.view.substr(line)
+                    line_contents = self.before_tasks_bullet_spaces + self.open_tasks_bullet + ' ' + self.view.substr(line)
                     self.view.replace(edit, line, line_contents)
                     end = self.view.sel()[0].b
                     pt = sublime.Region(end, end)
@@ -155,7 +156,7 @@ class ArchiveCommand(SublimeTasksBase):
                 line = self.view.size()
 
             # adding done tasks to archive section
-            self.view.insert(edit, line, '\n'.join(' ' + self.view.substr(done_task).lstrip() for done_task in done_tasks) + '\n')
+            self.view.insert(edit, line, '\n'.join(self.before_tasks_bullet_spaces + self.view.substr(done_task).lstrip() for done_task in done_tasks) + '\n')
             # remove moved tasks (starting from the last one otherwise it screw up regions after the first delete)
             for done_task in reversed(done_tasks):
                 self.view.erase(edit, self.view.full_line(done_task))
