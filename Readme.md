@@ -21,6 +21,8 @@ Bring up the command palette (it's `⌘ + shift + p`  in OS X and `ctrl + shift 
 
 ☐ **`⌘ + d`**: toggle task as completed. You can also use your mouse to mark a task a completed. just hold down `⌘` (or `ctrl` if you're on Windows or Linux) and click the task. Clicking again will toggle the task back to the pending state.
 
+☐ **`⌘ + m`**: toggle task as cancelled
+
 ☐ **`⌘ + shift + a`** will archive the done tasks, by removing them from your list and appending them to the bottom of the file under Archive project
 
 ☐ Anything with colon at the end of the line is a project title, you can also nest projects by indenting them. 
