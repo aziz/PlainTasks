@@ -142,21 +142,19 @@ class ArchiveCommand(SublimeTasksBase):
         # finding archive section
         archive_pos = self.view.find('Archive:', 0, sublime.LITERAL)
 
-        done_tasks = []
+        archivable_tasks = []
         done_task = self.view.find(rdm, 0)
-        print done_task
-        while done_task and (not archive_pos or done_task < archive_pos):
-            done_tasks.append(done_task)
-            done_task = self.view.find(rdm, done_task.end() + 1)
-
-        canc_tasks = []
         canc_task = self.view.find(rcm, 0)
-        print canc_task
-        while canc_task and (not archive_pos or canc_task < archive_pos):
-            canc_tasks.append(canc_task)
-            canc_task = self.view.find(rcm, canc_task.end() + 1)
+        next_task = done_task if done_task < canc_task else canc_task
+        while next_task and (not archive_pos or next_task < archive_pos):
+            archivable_tasks.append(next_task)
+            if done_task == next_task:
+                done_task = self.view.find(rdm, done_task.end() + 1)
+            else:
+                canc_task = self.view.find(rcm, canc_task.end() + 1)
+            next_task = done_task if done_task < canc_task else canc_task
 
-        if done_tasks or canc_tasks:
+        if archivable_tasks:
             if archive_pos:
                 line = self.view.full_line(archive_pos).end()
             else:
@@ -164,17 +162,11 @@ class ArchiveCommand(SublimeTasksBase):
                 line = self.view.size()
 
             # adding done tasks to archive section
-            self.view.insert(edit, line, '\n'.join(self.before_tasks_bullet_spaces + self.view.substr(done_task).lstrip() for done_task in done_tasks) + '\n')
+            self.view.insert(edit, line, '\n'.join(self.before_tasks_bullet_spaces + self.view.substr(done_task).lstrip() for done_task in archivable_tasks) + '\n')
+
             # remove moved tasks (starting from the last one otherwise it screw up regions after the first delete)
-            for done_task in reversed(done_tasks):
+            for done_task in reversed(archivable_tasks):
                 self.view.erase(edit, self.view.full_line(done_task))
-
-            # adding cancelled tasks to archive section
-            self.view.insert(edit, line, '\n'.join(self.before_tasks_bullet_spaces + self.view.substr(canc_task).lstrip() for canc_task in canc_tasks) + '\n')
-            # remove moved tasks (starting from the last one otherwise it screw up regions after the first delete)
-            for canc_task in reversed(canc_tasks):
-                self.view.erase(edit, self.view.full_line(canc_task))
-
 
 class NewTaskDocCommand(sublime_plugin.WindowCommand):
     def run(self):
