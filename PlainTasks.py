@@ -7,7 +7,7 @@ import sublime_plugin
 from datetime import datetime
 
 
-class SublimeTasksBase(sublime_plugin.TextCommand):
+class PlainTasksBase(sublime_plugin.TextCommand):
     def run(self, edit):
         self.open_tasks_bullet = self.view.settings().get('open_tasks_bullet')
         self.done_tasks_bullet = self.view.settings().get('done_tasks_bullet')
@@ -23,7 +23,7 @@ class SublimeTasksBase(sublime_plugin.TextCommand):
         self.runCommand(edit)
 
 
-class NewCommand(SublimeTasksBase):
+class PlainTasksNewCommand(PlainTasksBase):
     def runCommand(self, edit):
         for region in self.view.sel():
             line = self.view.line(region)
@@ -62,7 +62,7 @@ class NewCommand(SublimeTasksBase):
                     self.view.sel().add(pt)
 
 
-class CompleteCommand(SublimeTasksBase):
+class PlainTasksCompleteCommand(PlainTasksBase):
     def runCommand(self, edit):
         original = [r for r in self.view.sel()]
         done_line_end = ' %s %s' % (self.done_tag, datetime.now().strftime(self.date_format))
@@ -98,8 +98,8 @@ class CompleteCommand(SublimeTasksBase):
             new_pt = sublime.Region(pt.a + ofs, pt.b + ofs)
             self.view.sel().add(new_pt)
 
-class CancelCommand(SublimeTasksBase):
-    """docstring for CancelledCommand"""
+
+class PlainTasksCancelCommand(PlainTasksBase):
     def runCommand(self, edit):
         original = [r for r in self.view.sel()]
         canc_line_end = ' %s %s' % (self.canc_tag, datetime.now().strftime(self.date_format))
@@ -118,7 +118,8 @@ class CancelCommand(SublimeTasksBase):
                 self.view.insert(edit, line.end(), canc_line_end)
                 replacement = u'%s%s %s' % (grps[0], self.canc_tasks_bullet, grps[1].rstrip())
                 self.view.replace(edit, line, replacement)
-            elif done_matches: pass
+            elif done_matches:
+                pass
                 # grps = done_matches.groups()
                 # replacement = u'%s%s %s' % (grps[0], self.canc_tasks_bullet, grps[1].rstrip())
                 # self.view.replace(edit, line, replacement)
@@ -134,7 +135,8 @@ class CancelCommand(SublimeTasksBase):
             new_pt = sublime.Region(pt.a + ofs, pt.b + ofs)
             self.view.sel().add(new_pt)
 
-class ArchiveCommand(SublimeTasksBase):
+
+class PlainTasksArchiveCommand(PlainTasksBase):
     def runCommand(self, edit):
         rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '\s*([^\b]*?)\s*(%s)?[\(\)\d\.:\-/ ]*[ \t]*$' % self.done_tag
         rcm = '^(\s*)' + re.escape(self.canc_tasks_bullet) + '\s*([^\b]*?)\s*(%s)?[\(\)\d\.:\-/ ]*[ \t]*$' % self.canc_tag
@@ -173,7 +175,7 @@ class ArchiveCommand(SublimeTasksBase):
                 self.view.erase(edit, self.view.full_line(task))
 
 
-class NewTaskDocCommand(sublime_plugin.WindowCommand):
+class PlainTasksNewTaskDocCommand(sublime_plugin.WindowCommand):
     def run(self):
         view = self.window.new_file()
         view.set_syntax_file('Packages/PlainTasks/PlainTasks.tmLanguage')

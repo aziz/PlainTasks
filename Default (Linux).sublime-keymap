@@ -1,7 +1,7 @@
 [
-  { "keys": ["ctrl+d"], "command": "complete","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },
-  { "keys": ["ctrl+m"], "command": "cancel", "context": [{"key": "selector", "operator": "equal", "operand": "text.todo" }] },
-  { "keys": ["ctrl+enter"], "command": "new","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },
-  { "keys": ["ctrl+i"], "command": "new","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },
-  { "keys": ["ctrl+shift+a"], "command": "archive","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] }
+  { "keys": ["ctrl+d"], "command": "plain_tasks_complete","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },
+  { "keys": ["ctrl+m"], "command": "plain_tasks_cancel", "context": [{"key": "selector", "operator": "equal", "operand": "text.todo" }] },
+  { "keys": ["ctrl+enter"], "command": "plain_tasks_new","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },
+  { "keys": ["ctrl+i"], "command": "plain_tasks_new","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },
+  { "keys": ["ctrl+shift+a"], "command": "plain_tasks_archive","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] }
 ]

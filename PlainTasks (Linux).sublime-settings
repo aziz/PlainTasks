@@ -5,6 +5,7 @@
   "before_tasks_bullet_margin": 1,
   "date_format": "(%y-%m-%d %H:%M)",
   "done_tag": true, // related to @cancelled as well
+
   "color_scheme": "Packages/PlainTasks/tasks.hidden-tmTheme",
   "font_size": 15,
   "font_face": "Consolas",

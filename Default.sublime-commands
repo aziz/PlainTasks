@@ -1,6 +1,6 @@
 [
     {
         "caption": "Tasks: New document",
-        "command": "new_task_doc"
+        "command": "plain_tasks_new_task_doc"
     }
 ]
