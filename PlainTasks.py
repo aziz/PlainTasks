@@ -156,24 +156,21 @@ class ArchiveCommand(SublimeTasksBase):
             canc_tasks.append(canc_task)
             canc_task = self.view.find(rcm, canc_task.end() + 1)
 
-        if done_tasks or canc_tasks:
+        all_tasks = done_tasks + canc_tasks
+        all_tasks.sort()
+
+        if all_tasks:
             if archive_pos:
                 line = self.view.full_line(archive_pos).end()
             else:
                 self.view.insert(edit, self.view.size(), u'\n\n＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿\nArchive:\n')
                 line = self.view.size()
 
-            # adding done tasks to archive section
-            self.view.insert(edit, line, '\n'.join(self.before_tasks_bullet_spaces + self.view.substr(done_task).lstrip() for done_task in done_tasks) + '\n')
+            # adding tasks to archive section
+            self.view.insert(edit, line, '\n'.join(self.before_tasks_bullet_spaces + self.view.substr(task).lstrip() for task in all_tasks) + '\n')
             # remove moved tasks (starting from the last one otherwise it screw up regions after the first delete)
-            for done_task in reversed(done_tasks):
-                self.view.erase(edit, self.view.full_line(done_task))
-
-            # adding cancelled tasks to archive section
-            self.view.insert(edit, line, '\n'.join(self.before_tasks_bullet_spaces + self.view.substr(canc_task).lstrip() for canc_task in canc_tasks) + '\n')
-            # remove moved tasks (starting from the last one otherwise it screw up regions after the first delete)
-            for canc_task in reversed(canc_tasks):
-                self.view.erase(edit, self.view.full_line(canc_task))
+            for task in reversed(all_tasks):
+                self.view.erase(edit, self.view.full_line(task))
 
 
 class NewTaskDocCommand(sublime_plugin.WindowCommand):
