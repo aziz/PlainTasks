@@ -105,7 +105,7 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#F00000</string>
+				<string>#b60101</string>
 				<key>fontStyle</key>
 				<string></string>
 			</dict>
