@@ -1,5 +1,4 @@
 TODO:
- ☐ document cancelled tasks and margin before task bullet option
  ☐ use control+shift+A to only archive the first level tasks (or current level of indent) @feature
  ☐ make links clickable and highlighted @feature
  ☐ include in the task the date and time of creation (using a shortcut key) @feature
@@ -20,6 +19,7 @@ TODO:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ document cancelled tasks and margin before task bullet option @done (12-11-28 04:53)
  ✔ change all keymaps to use new commands @done (12-11-28 04:46)
  ✔ margin before task bullet should be customizable @improvement @done (12-11-16 21:05)
  ✔ add link to repo @documentation @done (12-09-23 11:36)
