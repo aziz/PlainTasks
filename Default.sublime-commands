@@ -1,6 +1,7 @@
 [
-    {
-        "caption": "Tasks: New document",
-        "command": "plain_tasks_new_task_doc"
-    }
+    { "caption": "Tasks: New document", "command": "plain_tasks_new_task_doc" },
+    { "caption": "Tasks: Complete", "command": "plain_tasks_complete" },
+    { "caption": "Tasks: Cancel", "command": "plain_tasks_cancel" },
+    { "caption": "Tasks: New", "command": "plain_tasks_new" },
+    { "caption": "Tasks: Archive", "command": "plain_tasks_archive" }
 ]
