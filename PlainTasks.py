@@ -4,6 +4,7 @@
 import re
 import sublime
 import sublime_plugin
+import webbrowser
 from datetime import datetime
 
 
@@ -179,3 +180,44 @@ class PlainTasksNewTaskDocCommand(sublime_plugin.WindowCommand):
     def run(self):
         view = self.window.new_file()
         view.set_syntax_file('Packages/PlainTasks/PlainTasks.tmLanguage')
+
+
+class OpenUrlCommand(sublime_plugin.TextCommand):
+    #It is horrible regex but it works perfectly
+    URL_REGEX = r"""(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))
+        +(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))"""
+
+    def run(self, edit):
+        s = self.view.sel()[0]
+        # expand selection to possible URL
+        start = s.a
+        end = s.b
+
+        # expand selection to nearest stopSymbols
+        view_size = self.view.size()
+        stopSymbols = ['\t', ' ', '\"', '\'','>','<',',']
+        # move the selection back to the start of the url
+        while (start > 0
+                and not self.view.substr(start - 1) in stopSymbols
+                and self.view.classify(start) & sublime.CLASS_LINE_START == 0):
+            start -= 1
+
+        # move end of selection forward to the end of the url
+        while (end < view_size
+                and not self.view.substr(end) in stopSymbols
+                and self.view.classify(end) & sublime.CLASS_LINE_END == 0):
+            end += 1
+
+        # grab the URL
+        url = self.view.substr(sublime.Region(start, end))
+        # optional select URL
+        self.view.sel().add(sublime.Region(start, end))
+
+        exp = re.search(self.URL_REGEX, url, re.X)
+        if exp and exp.group(0):
+            strUrl = exp.group(0)
+            if strUrl.find("://") == -1:
+                strUrl = "http://" + strUrl
+            webbrowser.open_new_tab(strUrl)
+        else:
+            sublime.status_message("Looks like there is nothing to open")
