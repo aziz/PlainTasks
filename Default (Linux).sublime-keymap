@@ -4,5 +4,5 @@
   { "keys": ["ctrl+enter"], "command": "plain_tasks_new","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },
   { "keys": ["ctrl+i"], "command": "plain_tasks_new","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },
   { "keys": ["ctrl+shift+a"], "command": "plain_tasks_archive","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },
-  { "keys": ["ctrl+shift+u"], "command": "open_url","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] }
+  { "keys": ["ctrl+shift+u"], "command": "plain_tasks_open_url","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] }
 ]

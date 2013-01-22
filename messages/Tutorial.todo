@@ -16,10 +16,13 @@ Tasks:
    ☐ If you're on a line with some normal text pressing new task shortcut will convert it to a task
    ☐ New tasks will be nested as much as the task on the previous line
   Done:
-   ☐ Pressing ⌘+D (ctrl+d on Windows) mark a task as done
-   ☐ Pressing ⌘+D (ctrl+d on Windows) again will put it back in pending mode
+   ☐ Pressing ⌘+d (ctrl+d on Windows) mark a task as done
+   ☐ Pressing ⌘+d (ctrl+d on Windows) again will put it back in pending mode
+   ☐ Pressing ⌘+m (ctrl+m on Windows) will mark the task as cancelled
   Tagging:
    ☐ You can add tags using @ sign, like this @tag
+  URLs:
+   ☐ Pressing ⌘+shift+U (ctrl+shift+U on Windows) will open the url under the cursor in your default browser
 
   Archiving:
    ☐ Pressing ⌘+shift+A (ctrl+shift+A on Windows) will archive the done task.

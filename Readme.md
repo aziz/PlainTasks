@@ -25,6 +25,8 @@ Bring up the command palette (it's `⌘ + shift + p`  in OS X and `ctrl + shift 
 
 ☐ **`⌘ + shift + a`** will archive the done tasks, by removing them from your list and appending them to the bottom of the file under Archive project
 
+☐ **`⌘ + shift + u`** will open the url under the cursor in your default browser
+
 ☐ Anything with colon at the end of the line is a project title, you can also nest projects by indenting them. 
 
 ☐ You can write plain text as notes or descriptions wherever you want.

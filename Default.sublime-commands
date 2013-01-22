@@ -4,5 +4,5 @@
     { "caption": "Tasks: Cancel", "command": "plain_tasks_cancel" },
     { "caption": "Tasks: New", "command": "plain_tasks_new" },
     { "caption": "Tasks: Archive", "command": "plain_tasks_archive" },
-    { "caption": "Tasks: Open URL", "command": "open_url" }
+    { "caption": "Tasks: Open URL", "command": "plain_tasks_open_url" }
 ]

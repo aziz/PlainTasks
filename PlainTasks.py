@@ -182,7 +182,7 @@ class PlainTasksNewTaskDocCommand(sublime_plugin.WindowCommand):
         view.set_syntax_file('Packages/PlainTasks/PlainTasks.tmLanguage')
 
 
-class OpenUrlCommand(sublime_plugin.TextCommand):
+class PlainTasksOpenUrlCommand(sublime_plugin.TextCommand):
     #It is horrible regex but it works perfectly
     URL_REGEX = r"""(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))
         +(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))"""

@@ -1,21 +1,21 @@
 TODO:
- ☐ use control+shift+A to only archive the first level tasks (or current level of indent) @feature
  ☐ make links clickable and highlighted @feature
+ ☐ use control+shift+A to only archive the first level tasks (or current level of indent) @feature
  ☐ include in the task the date and time of creation (using a shortcut key) @feature
-    Maybe after mark the task as @done calculate (the end time - start time) would be so great!
- ☐ taskpaper compatibility @improvement
+    Maybe after mark the task as @done calculate (the end time - start time)
  ☐ in archive list, prefix task with project name, add specific scope for project prefixes @feature
  ☐ in archive list, add date in front of done tasks (e.g. 2012-09-06 14:41 Ξ some task) @feature
- ☐ export to html/ preview in browser @feature
- ☐ accept multiple bullet types at the same time @feature
+ ☐ in archive list, adding newly archived items to the bottom or top should be configurable @feature
+ ☐ when archiving, if a task has some note, those notes should also move to archive section @feature
  ☐ @today ✭ᴛᴏᴅᴀʏ tags @feature
  ☐ make gif animation @docs
- ☐ say why it's called opinionated @docs
- ☐ mouse interaction @feature
- ☐ other themes?
- ☐ done tag off by default?
- ☐ indenting notes below tasks?
  ☐ marking all nested tasks as done should mark the parent as done?
+ ☐ indenting notes below tasks?
+ ☐ accept multiple bullet types at the same time @feature
+ ☐ other themes?
+ ☐ export to html/ preview in browser @feature
+ ☐ taskpaper compatibility @improvement
+ ☐ mouse interaction @feature
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
