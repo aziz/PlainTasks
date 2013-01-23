@@ -195,7 +195,7 @@ class PlainTasksOpenUrlCommand(sublime_plugin.TextCommand):
 
         # expand selection to nearest stopSymbols
         view_size = self.view.size()
-        stopSymbols = ['\t', ' ', '\"', '\'','>','<',',']
+        stopSymbols = ['\t', ' ', '\"', '\'', '>', '<', ',']
         # move the selection back to the start of the url
         while (start > 0
                 and not self.view.substr(start - 1) in stopSymbols

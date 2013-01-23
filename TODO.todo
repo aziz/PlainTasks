@@ -8,7 +8,6 @@ TODO:
  ☐ in archive list, adding newly archived items to the bottom or top should be configurable @feature
  ☐ when archiving, if a task has some note, those notes should also move to archive section @feature
  ☐ @today ✭ᴛᴏᴅᴀʏ tags @feature
- ☐ make gif animation @docs
  ☐ marking all nested tasks as done should mark the parent as done?
  ☐ indenting notes below tasks?
  ☐ accept multiple bullet types at the same time @feature
@@ -19,6 +18,7 @@ TODO:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✘ make gif animation @docs @cancelled (13-01-22 23:25)
  ✔ document cancelled tasks and margin before task bullet option @done (12-11-28 04:53)
  ✔ change all keymaps to use new commands @done (12-11-28 04:46)
  ✔ margin before task bullet should be customizable @improvement @done (12-11-16 21:05)
