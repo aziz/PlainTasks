@@ -1,5 +1,5 @@
 ## [PlainTasks](https://github.com/aziz/PlainTasks)
-An opinionated todo-list plugin for Sublime Text 2 editor
+An opinionated todo-list plugin for Sublime Text (2 & 3) editor
 ![](http://f.cl.ly/items/2y2m3v1i0S2V1t2m2A0e/Screen%20Shot%202012-04-21%20at%2012.27.05%20AM.png)
 
 ## Installation
@@ -7,7 +7,7 @@ To install this plugin, you have two options:
 
 1. If you have Package Control installed, simply search for `PlainTasks` to install.
 
-2. Clone source code to Sublime Text 2 packages folder, in Mac it is `~/Library/Application Support/Sublime Text 2/Packages`.
+2. Clone source code to Sublime Text packages folder.
 
 ## Start a new todo-list
 Bring up the command palette (it's `⌘ + shift + p`  in OS X and `ctrl + shift + p` in Windows) and type `task` and select `Tasks: New document` command. 
