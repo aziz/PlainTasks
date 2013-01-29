@@ -147,14 +147,14 @@ class PlainTasksArchiveCommand(PlainTasksBase):
 
         done_tasks = []
         done_task = self.view.find(rdm, 0)
-        print done_task
+        print(done_task)
         while done_task and (not archive_pos or done_task < archive_pos):
             done_tasks.append(done_task)
             done_task = self.view.find(rdm, done_task.end() + 1)
 
         canc_tasks = []
         canc_task = self.view.find(rcm, 0)
-        print canc_task
+        print(canc_task)
         while canc_task and (not archive_pos or canc_task < archive_pos):
             canc_tasks.append(canc_task)
             canc_task = self.view.find(rcm, canc_task.end() + 1)
