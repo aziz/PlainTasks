@@ -80,7 +80,7 @@ PlainTasks comes with a custom todo icon that you can find in the `icons` folder
 ## [Introduction to PlainTasks Screencast](https://tutsplus.com/lesson/pretty-task-management/)
 by [Jeffrey Way](https://twitter.com/jeffrey_way) from [net.tutsplus.com](http://net.tutsplus.com/)
 
-[![](http://cl.ly/image/1a3e3C3N1Z2K/pt-sc.png)](https://tutsplus.com/lesson/pretty-task-management/)
+[![](http://i46.tinypic.com/9ggbd3.png)](https://tutsplus.com/lesson/pretty-task-management/)
 
 
 ## Contributors
