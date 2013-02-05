@@ -72,7 +72,7 @@ class PlainTasksCompleteCommand(PlainTasksBase):
             line = self.view.line(region)
             line_contents = self.view.substr(line).rstrip()
             rom = '^(\s*)' + re.escape(self.open_tasks_bullet) + '\s*(.*)$'
-            rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '\s*([^\b]*?)\s*(%s)?[\(\)\d\w,\.:\-/ ]*\s*$' % self.done_tag
+            rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '\s*([^\b]*?)\s*(%s)+[\(\)\d\w,\.:\-/ @]*\s*$' % self.done_tag
             rcm = '^(\s*)' + re.escape(self.canc_tasks_bullet) + '\s*([^\b]*?)\s*(%s)?[\(\)\d\w,\.:\-/ ]*\s*$' % self.canc_tag
             open_matches = re.match(rom, line_contents)
             done_matches = re.match(rdm, line_contents)
@@ -169,12 +169,22 @@ class PlainTasksArchiveCommand(PlainTasksBase):
                 self.view.insert(edit, self.view.size(), u'\n\n＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿\nArchive:\n')
                 line = self.view.size()
 
+            projects = self.view.find_all('^\s*(\w+.+:\s*$\n?)', 0)
             # adding tasks to archive section
-            self.view.insert(edit, line, '\n'.join(self.before_tasks_bullet_spaces + self.view.substr(task).lstrip() for task in all_tasks) + '\n')
+            self.view.insert(edit, line, '\n'.join(self.before_tasks_bullet_spaces + 
+                self.view.substr(task).lstrip() + self.get_task_project(task, projects) for task in all_tasks) + '\n')
             # remove moved tasks (starting from the last one otherwise it screw up regions after the first delete)
             for task in reversed(all_tasks):
                 self.view.erase(edit, self.view.full_line(task))
 
+    def get_task_project(self, task, projects):
+        project = ''
+        for ind, pr in enumerate(projects):
+            if task < pr:
+                project = projects[ind-1] if ind > 0 else ''
+                break
+        return ' @project(' + self.view.substr(project).strip().strip(':') + ')' if project else ''
+        
 
 class PlainTasksNewTaskDocCommand(sublime_plugin.WindowCommand):
     def run(self):
