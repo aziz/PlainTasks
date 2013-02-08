@@ -72,8 +72,8 @@ class PlainTasksCompleteCommand(PlainTasksBase):
             line = self.view.line(region)
             line_contents = self.view.substr(line).rstrip()
             rom = '^(\s*)' + re.escape(self.open_tasks_bullet) + '\s*(.*)$'
-            rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '\s*([^\b]*?)\s*(%s)+[\(\)\d\w,\.:\-/ @]*\s*$' % self.done_tag
-            rcm = '^(\s*)' + re.escape(self.canc_tasks_bullet) + '\s*([^\b]*?)\s*(%s)?[\(\)\d\w,\.:\-/ ]*\s*$' % self.canc_tag
+            rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '\s*([^\b]*?)\s*(%s)+[\(\)\d\w,\.:\-\/ @]*\s*$' % self.done_tag
+            rcm = '^(\s*)' + re.escape(self.canc_tasks_bullet) + '\s*([^\b]*?)\s*(%s)+[\(\)\d\w,\.:\-\/ @]*\s*$' % self.canc_tag
             open_matches = re.match(rom, line_contents)
             done_matches = re.match(rdm, line_contents)
             canc_matches = re.match(rcm, line_contents)
@@ -109,8 +109,8 @@ class PlainTasksCancelCommand(PlainTasksBase):
             line = self.view.line(region)
             line_contents = self.view.substr(line).rstrip()
             rom = '^(\s*)' + re.escape(self.open_tasks_bullet) + '\s*(.*)$'
-            rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '\s*([^\b]*?)\s*(%s)?[\(\)\d\w,\.:\-/ ]*\s*$' % self.done_tag
-            rcm = '^(\s*)' + re.escape(self.canc_tasks_bullet) + '\s*([^\b]*?)\s*(%s)?[\(\)\d\w,\.:\-/ ]*\s*$' % self.canc_tag
+            rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '\s*([^\b]*?)\s*(%s)+[\(\)\d\w,\.:\-\/ @]*\s*$' % self.done_tag
+            rcm = '^(\s*)' + re.escape(self.canc_tasks_bullet) + '\s*([^\b]*?)\s*(%s)+[\(\)\d\w,\.:\-\/ @]*\s*$' % self.canc_tag
             open_matches = re.match(rom, line_contents)
             done_matches = re.match(rdm, line_contents)
             canc_matches = re.match(rcm, line_contents)
@@ -139,8 +139,8 @@ class PlainTasksCancelCommand(PlainTasksBase):
 
 class PlainTasksArchiveCommand(PlainTasksBase):
     def runCommand(self, edit):
-        rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '\s*([^\b]*?)\s*(%s)?[\(\)\d\.:\-/ ]*[ \t]*$' % self.done_tag
-        rcm = '^(\s*)' + re.escape(self.canc_tasks_bullet) + '\s*([^\b]*?)\s*(%s)?[\(\)\d\.:\-/ ]*[ \t]*$' % self.canc_tag
+        rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '\s*([^\b]*?)\s*(%s)+[\(\)\d\.:\-\/ @]*[ \t]*$' % self.done_tag
+        rcm = '^(\s*)' + re.escape(self.canc_tasks_bullet) + '\s*([^\b]*?)\s*(%s)+[\(\)\d\.:\-\/ @]*[ \t]*$' % self.canc_tag
 
         # finding archive section
         archive_pos = self.view.find('Archive:', 0, sublime.LITERAL)
