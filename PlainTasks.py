@@ -240,8 +240,11 @@ class PlainTasksAgendaCommand(sublime_plugin.WindowCommand):
         self.window.show_quick_panel(als, self.on_done)
 
     def on_done(self, call_value):
-        view = self.window.active_view()
-        view.show_at_center(self.pos[call_value])
-        view.sel().clear()
-        view.sel().add(self.pos[call_value])
+        if call_value == -1:
+            pass
+        else:
+            view = self.window.active_view()
+            view.show_at_center(self.pos[call_value])
+            view.sel().clear()
+            view.sel().add(self.pos[call_value])
         # print(self.pos[call_value])
