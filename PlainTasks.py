@@ -221,3 +221,27 @@ class PlainTasksOpenUrlCommand(sublime_plugin.TextCommand):
             webbrowser.open_new_tab(strUrl)
         else:
             sublime.status_message("Looks like there is nothing to open")
+
+
+class PlainTasksAgendaCommand(sublime_plugin.WindowCommand):
+    '''Find all strings with @ ; show them in quick panel; go to choosen task and select its line'''
+    def run(self):
+        view = self.window.active_view()
+        a = '^.*@.*$'
+        self.pos = []
+        b = view.find(a, 0)
+        while b:
+            self.pos.append(b)
+            b = view.find(a, b.end() + 1)
+        # print(self.pos)
+        als = []
+        for t in self.pos:
+            als.append(view.substr(t))
+        self.window.show_quick_panel(als, self.on_done)
+
+    def on_done(self, call_value):
+        view = self.window.active_view()
+        view.show_at_center(self.pos[call_value])
+        view.sel().clear()
+        view.sel().add(self.pos[call_value])
+        # print(self.pos[call_value])
