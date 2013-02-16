@@ -31,6 +31,7 @@ class PlainTasksNewCommand(PlainTasksBase):
             line_contents = self.view.substr(line).rstrip()
             has_bullet = re.match('^(\s*)[' + re.escape(self.open_tasks_bullet) + re.escape(self.done_tasks_bullet) + re.escape(self.canc_tasks_bullet) + ']', self.view.substr(line))
             current_scope = self.view.scope_name(self.view.sel()[0].b)
+            
             if has_bullet:
                 grps = has_bullet.groups()
                 line_contents = self.view.substr(line) + '\n' + grps[0] + self.open_tasks_bullet + ' '
@@ -170,6 +171,7 @@ class PlainTasksArchiveCommand(PlainTasksBase):
                 line = self.view.size()
 
             projects = self.view.find_all('^\s*(\w+.+:\s*$\n?)', 0)
+
             # adding tasks to archive section
             self.view.insert(edit, line, '\n'.join(self.before_tasks_bullet_spaces + 
                 self.view.substr(task).lstrip() + self.get_task_project(task, projects) for task in all_tasks) + '\n')
@@ -178,12 +180,33 @@ class PlainTasksArchiveCommand(PlainTasksBase):
                 self.view.erase(edit, self.view.full_line(task))
 
     def get_task_project(self, task, projects):
-        project = ''
+        index = -1
         for ind, pr in enumerate(projects):
             if task < pr:
-                project = projects[ind-1] if ind > 0 else ''
+                if ind > 0:
+                    index = ind-1 
                 break
-        return ' @project(' + self.view.substr(project).strip().strip(':') + ')' if project else ''
+        #if there is no projects for task - return empty string
+        if index == -1:
+            return ''
+
+        prog = re.compile('^\n*([ \t]*).+')
+        hierarhProject = ''
+
+        if index >= 0 and prog.match(self.view.substr(projects[index])):
+            depth = str(prog.match(self.view.substr(self.view.line(task))).groups()[0])
+            while index >= 0:
+                strProject = self.view.substr(projects[index])
+                if prog.match(strProject):
+                    spaces = prog.match(strProject).groups()[0]
+                    if len(spaces) < len(depth):
+                        hierarhProject = strProject.strip().strip(':') + ((" / " + hierarhProject) if hierarhProject else '')
+                        depth = spaces
+                        if len(depth) == 0:
+                            break
+                index -= 1
+
+        return ' @project(' + hierarhProject + ')'
         
 
 class PlainTasksNewTaskDocCommand(sublime_plugin.WindowCommand):
