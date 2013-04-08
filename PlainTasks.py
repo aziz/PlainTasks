@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+import os
 import re
 import sublime
 import sublime_plugin
@@ -221,3 +222,49 @@ class PlainTasksOpenUrlCommand(sublime_plugin.TextCommand):
             webbrowser.open_new_tab(strUrl)
         else:
             sublime.status_message("Looks like there is nothing to open")
+
+
+class PlainTasksOpenLinkCommand(sublime_plugin.TextCommand):
+
+    LINK_PATTERN = re.compile(r'#(?P<fn>[A-Za-z_.\-/]+)(@(?P<sym>\w+))?')
+
+    def _format_res(self, res):
+        return [res[0], "line: %d column: %d" % (res[1], res[2])]
+
+    def _on_panel_selection(self, selection):
+        if selection >= 0:
+            res = self._current_res[selection]
+            win = sublime.active_window()
+            win.open_file('%s:%s:%s' % res, sublime.ENCODED_POSITION)
+
+    def show_panel_or_open(self, fn, sym):
+        win = sublime.active_window()
+        self._current_res = list()
+
+        if sym:
+            for name, _, pos in win.lookup_symbol_in_index(sym):
+                if name.endswith(fn):
+                    line, col = pos
+                    self._current_res.append((name, line, col))
+        else:
+            fn = fn.replace('/', os.sep)
+            for folder in win.folders():
+                for root, dirnames, filenames in os.walk(folder):
+                    filenames = [os.path.join(root, f) for f in filenames]
+                    for name in filenames:
+                        if name.endswith(fn):
+                            self._current_res.append((name, 0, 0))
+
+        if len(self._current_res) == 1:
+            self._on_panel_selection(0)
+        else:
+            entries = [self._format_res(res) for res in self._current_res]
+            win.show_quick_panel(entries, self._on_panel_selection)
+
+    def run(self, edit):
+        point = self.view.sel()[0].begin()
+        line = self.view.substr(self.view.line(point))
+        match = self.LINK_PATTERN.search(line)
+        if match:
+            fn, sym = match.group('fn', 'sym')
+            self.show_panel_or_open(fn, sym)
