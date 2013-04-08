@@ -9,7 +9,6 @@
   "color_scheme": "Packages/PlainTasks/tasks.hidden-tmTheme",
   "font_size": 15,
   "font_face": "Consolas",
-  "font_options": [ "subpixel_antialias", "no_round", "directwrite"],
   "draw_indent_guides": false,
   "line_numbers": false,
   "gutter": true,
