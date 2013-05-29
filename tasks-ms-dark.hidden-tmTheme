@@ -903,13 +903,11 @@
 				<key>name</key>
 				<string>Time estimate</string>
 				<key>scope</key>
-				<string>string.other.tag.estimatetime</string>
+				<string>string.other.tag.todo.estimatetime</string>
 				<key>settings</key>
 				<dict>
 					<key>foreground</key>
-					<string>#00FF33</string>
-					<key>fontStyle</key>
-					<string>italic</string>
+					<string>#E6DB74</string>
 				</dict>
 			</dict>
 			<!-- endof PlainTasks -->
