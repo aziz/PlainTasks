@@ -447,6 +447,19 @@
 				<string>bold</string>
 			</dict>
 		</dict>
+		<dict>
+            <key>name</key>
+            <string>Time estimate</string>
+            <key>scope</key>
+            <string>string.other.tag.estimatetime</string>
+            <key>settings</key>
+            <dict>
+                <key>foreground</key>
+                <string>#00FF33</string>
+                <key>fontStyle</key>
+                <string>italic</string>
+            </dict>
+        </dict>
 	</array>
 	<key>uuid</key>
 	<string>FE674D9A-27B3-4A5A-84F7-1CC67BD29531</string>
