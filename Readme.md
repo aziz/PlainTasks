@@ -78,8 +78,6 @@ PlainTasks comes with a custom todo icon that you can find in the `icons` folder
 ![](http://f.cl.ly/items/2t312B30121l2X1l0927/todo-icon.png)
 
 ## [Introduction to PlainTasks Screencast](https://tutsplus.com/lesson/pretty-task-management/)
-by [Jeffrey Way](https://twitter.com/jeffrey_way) from [net.tutsplus.com](http://net.tutsplus.com/)
-
 [![](http://i46.tinypic.com/9ggbd3.png)](https://tutsplus.com/lesson/pretty-task-management/)
 
 
@@ -96,5 +94,4 @@ You can contribute on [github](https://github.com/aziz/PlainTasks)
 - Thanks to [TaskPaper Mac application from hogbaysoftware.com](http://www.hogbaysoftware.com/products/taskpaper)
 
 ## License
-Copyright 2012-2013 Allen Bargi. Licensed under the MIT License
-
+Copyright 2012-2013 [Allen Bargi](https://twitter.com/aziz). Licensed under the MIT License
