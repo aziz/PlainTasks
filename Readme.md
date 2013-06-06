@@ -17,15 +17,15 @@ Bring up the command palette (it's `⌘ + shift + p`  in OS X and `ctrl + shift 
 ## Usage
 **NOTE:** In windows or Linux use `ctrl` instead of `⌘`
 
-☐ **`⌘ + enter` or `⌘ + i`**: new task
+☐ `⌘ + enter` or `⌘ + i`: new task
 
-☐ **`⌘ + d`**: toggle task as completed. You can also use your mouse to mark a task a completed. just hold down `⌘` (or `ctrl` if you're on Windows or Linux) and click the task. Clicking again will toggle the task back to the pending state.
+☐ `⌘ + d`: toggle task as completed. You can also use your mouse to mark a task a completed. just hold down `⌘` (or `ctrl` if you're on Windows or Linux) and click the task. Clicking again will toggle the task back to the pending state.
 
-☐ **`alt + c`**: toggle task as cancelled.
+☐ `alt + c`: toggle task as cancelled.
 
-☐ **`⌘ + shift + a`** will archive the done tasks, by removing them from your list and appending them to the bottom of the file under Archive project
+☐ `⌘ + shift + a` will archive the done tasks, by removing them from your list and appending them to the bottom of the file under Archive project
 
-☐ **`⌘ + shift + u`** will open the url under the cursor in your default browser
+☐ `⌘ + shift + u` will open the url under the cursor in your default browser
 
 ☐ Anything with colon at the end of the line is a project title, you can also nest projects by indenting them. 
 
@@ -71,6 +71,21 @@ Here is a list of PlainTasks' specific settings:
 * **before_tasks_bullet_margin**  
   Default: 1  
   Determines the number of spaces (default indent) before the task bullet
+
+## Taskpaper Compatibility
+Go to `Preferences > Package Settings > PlainTasks` and open `Settings - User`, then
+add these settings to the json file:
+
+```json
+{
+  "before_tasks_bullet_margin": 0,
+  "tab_size": 2,
+  "translate_tabs_to_spaces": false,
+  "open_tasks_bullet": "-",
+  "done_tasks_bullet": "-",
+  "canc_tasks_bullet": "-"
+}
+```
 
 ## [BONUS] Custom todo icon
 PlainTasks comes with a custom todo icon that you can find in the `icons` folder. You can assign it to your todo files to give them a better look and distinguish them from other plain text files. Google and find out how to assign a custom icon to a file type in your operating system.
