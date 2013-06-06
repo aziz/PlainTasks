@@ -14,6 +14,20 @@
 	<key>patterns</key>
 	<array>
 
+		<!-- simple link detector -->
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.bullet.completed.todo</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>^\s*.*?((http|https|ftp|ssh):(\\|//).*)</string>
+		</dict>
+
 		<dict>
 			<key>match</key>
 			<string>^\s*(\w+.+:\s*$\n?)</string>
