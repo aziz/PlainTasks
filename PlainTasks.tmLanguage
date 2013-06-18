@@ -43,7 +43,7 @@
 
 		<dict>
 		  <key>match</key>
-		  <string>^\s*((?!-|\+|✓|✔|❍|❑|■|□|☐|▪|▫|–|—|＿|✘|x)\S).*((?!:\s*).\s*)$</string>
+		  <string>^\s*((?!-|\+|✓|✔|❍|❑|■|□|☐|▪|▫|–|—|＿|✘|(x\s+))\S).*((?!:\s*).\s*)$</string>
 		  <key>name</key>
 		  <string>notes.todo</string>
 		</dict>
