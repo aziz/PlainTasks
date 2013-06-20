@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
@@ -43,7 +43,7 @@
 
 		<dict>
 		  <key>match</key>
-		  <string>^\s*((?!-|\+|✓|✔|❍|❑|■|□|☐|▪|▫|–|—|＿|✘)\S).*((?!:\s*).\s*)$</string>
+		  <string>^\s*((?!-|\+|✓|✔|❍|❑|■|□|☐|▪|▫|–|—|＿|✘|(x\s+))\S).*((?!:\s*).\s*)$</string>
 		  <key>name</key>
 		  <string>notes.todo</string>
 		</dict>
@@ -125,7 +125,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^\s*(✘)\s+((?:[^\@]|(?&lt;!\s)\@)*)</string>
+			<string>^\s*(✘|x)\s+((?:[^\@]|(?&lt;!\s)\@)*)</string>
 			<key>name</key>
 			<string>meta.item.todo.cancelled</string>
 		</dict>
