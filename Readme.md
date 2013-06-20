@@ -37,6 +37,8 @@ Bring up the command palette (it's `⌘ + shift + p`  in OS X and `ctrl + shift 
 
 `--` and then `tab key` will give you this: `--- ✄ -----------------------`
 
+☐ You can create link to a file within project `#filename` and even (ST3-only) specify a symbol `#filename@symbol`. Then `alt + l` will open this file.
+
 ### Editor Useful Tools:
 
 ☐ Use **`⌘ + control + up/down (ctrl+shift+up/down on Windows)`** to move tasks up and down.
@@ -99,6 +101,8 @@ PlainTasks comes with a custom todo icon that you can find in the `icons` folder
 ## Contributors
 - [Dominique Wahli](https://github.com/bizoo)
 - [Jesse Robertson](https://github.com/speilberg0)
+- [Marc Schlaich](https://github.com/schlamar)
+- [Vova Kolobok](https://github.com/vovkkk)
 
 You can contribute on [github](https://github.com/aziz/PlainTasks)
 
