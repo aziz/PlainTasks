@@ -37,7 +37,9 @@ Bring up the command palette (it's `⌘ + shift + p`  in OS X and `ctrl + shift 
 
 `--` and then `tab key` will give you this: `--- ✄ -----------------------`
 
-☐ You can create link to a file within project `#filename` and even (ST3-only) specify a symbol `#filename@symbol`. Then `alt + l` will open this file.
+☐ You can create a link to a file within your project by prefixing the file name with a pound sign like: `#filename`.  
+  In SublimeText 3 you can even specify a symbol inside that file by using @ symbol like: `#filename@symbol`.  
+  Pressing `alt + l` will open the file in Sublime.
 
 ### Editor Useful Tools:
 
