@@ -1,4 +1,4 @@
-﻿{
+{
   "open_tasks_bullet": "☐", // options: - | ❍ | ❑ | ■ | □ | ☐ | ▪ | ▫ | – | — ≡ → ›
   "done_tasks_bullet": "✔", // options: + | ✓ | ✔
   "canc_tasks_bullet": "✘", // options: x | ✘
