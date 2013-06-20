@@ -226,7 +226,7 @@ class PlainTasksOpenUrlCommand(sublime_plugin.TextCommand):
 
 class PlainTasksOpenLinkCommand(sublime_plugin.TextCommand):
 
-    LINK_PATTERN = re.compile(r'#(?P<fn>[A-Za-z_.\-/]+)(@(?P<sym>\w+))?')
+    LINK_PATTERN = re.compile(r'#(?P<fn>[^ \t\n\r\f\v@]+)(@(?P<sym>\w+))?')
 
     def _format_res(self, res):
         return [res[0], "line: %d column: %d" % (res[1], res[2])]
