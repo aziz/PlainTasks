@@ -194,7 +194,7 @@ class PlainTasksArchiveCommand(PlainTasksBase):
         hierarhProject = ''
 
         if index >= 0:
-            depth = str(prog.match(self.view.substr(self.view.line(task))).group(1))
+            depth = re.match(r"\s*", self.view.substr(self.view.line(task))).group()
             while index >= 0:
                 strProject = self.view.substr(projects[index])
                 if prog.match(strProject):
