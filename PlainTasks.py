@@ -32,6 +32,7 @@ class PlainTasksNewCommand(PlainTasksBase):
             line_contents = self.view.substr(line).rstrip()
             has_bullet = re.match('^(\s*)[' + re.escape(self.open_tasks_bullet) + re.escape(self.done_tasks_bullet) + re.escape(self.canc_tasks_bullet) + ']', self.view.substr(line))
             current_scope = self.view.scope_name(self.view.sel()[0].b)
+
             if has_bullet:
                 grps = has_bullet.groups()
                 line_contents = self.view.substr(line) + '\n' + grps[0] + self.open_tasks_bullet + ' '
@@ -73,11 +74,11 @@ class PlainTasksCompleteCommand(PlainTasksBase):
             line = self.view.line(region)
             line_contents = self.view.substr(line).rstrip()
             rom = '^(\s*)' + re.escape(self.open_tasks_bullet) + '\s*(.*)$'
-            rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '\s*([^\b]*?)\s*(%s)?[\(\)\d\w,\.:\-/ ]*\s*$' % self.done_tag
-            rcm = '^(\s*)' + re.escape(self.canc_tasks_bullet) + '\s*([^\b]*?)\s*(%s)?[\(\)\d\w,\.:\-/ ]*\s*$' % self.canc_tag
-            open_matches = re.match(rom, line_contents)
-            done_matches = re.match(rdm, line_contents)
-            canc_matches = re.match(rcm, line_contents)
+            rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '\s*([^\b]*?)\s*(%s)+[\(\)\d\w,\.:\-\/ @]*\s*$' % self.done_tag
+            rcm = '^(\s*)' + re.escape(self.canc_tasks_bullet) + '\s*([^\b]*?)\s*(%s)+[\(\)\d\w,\.:\-\/ @]*\s*$' % self.canc_tag
+            open_matches = re.match(rom, line_contents, re.U)
+            done_matches = re.match(rdm, line_contents, re.U)
+            canc_matches = re.match(rcm, line_contents, re.U)
             if open_matches:
                 grps = open_matches.groups()
                 self.view.insert(edit, line.end(), done_line_end)
@@ -110,11 +111,11 @@ class PlainTasksCancelCommand(PlainTasksBase):
             line = self.view.line(region)
             line_contents = self.view.substr(line).rstrip()
             rom = '^(\s*)' + re.escape(self.open_tasks_bullet) + '\s*(.*)$'
-            rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '\s*([^\b]*?)\s*(%s)?[\(\)\d\w,\.:\-/ ]*\s*$' % self.done_tag
-            rcm = '^(\s*)' + re.escape(self.canc_tasks_bullet) + '\s*([^\b]*?)\s*(%s)?[\(\)\d\w,\.:\-/ ]*\s*$' % self.canc_tag
-            open_matches = re.match(rom, line_contents)
-            done_matches = re.match(rdm, line_contents)
-            canc_matches = re.match(rcm, line_contents)
+            rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '\s*([^\b]*?)\s*(%s)+[\(\)\d\w,\.:\-\/ @]*\s*$' % self.done_tag
+            rcm = '^(\s*)' + re.escape(self.canc_tasks_bullet) + '\s*([^\b]*?)\s*(%s)+[\(\)\d\w,\.:\-\/ @]*\s*$' % self.canc_tag
+            open_matches = re.match(rom, line_contents, re.U)
+            done_matches = re.match(rdm, line_contents, re.U)
+            canc_matches = re.match(rcm, line_contents, re.U)
             if open_matches:
                 grps = open_matches.groups()
                 self.view.insert(edit, line.end(), canc_line_end)
@@ -140,8 +141,8 @@ class PlainTasksCancelCommand(PlainTasksBase):
 
 class PlainTasksArchiveCommand(PlainTasksBase):
     def runCommand(self, edit):
-        rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '\s*([^\b]*?)\s*(%s)?[\(\)\d\.:\-/ ]*[ \t]*$' % self.done_tag
-        rcm = '^(\s*)' + re.escape(self.canc_tasks_bullet) + '\s*([^\b]*?)\s*(%s)?[\(\)\d\.:\-/ ]*[ \t]*$' % self.canc_tag
+        rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '\s*([^\b]*?)\s*(%s)+[\(\)\d\.:\-\/ @]*[ \t]*$' % self.done_tag
+        rcm = '^(\s*)' + re.escape(self.canc_tasks_bullet) + '\s*([^\b]*?)\s*(%s)+[\(\)\d\.:\-\/ @]*[ \t]*$' % self.canc_tag
 
         # finding archive section
         archive_pos = self.view.find('Archive:', 0, sublime.LITERAL)
@@ -170,11 +171,52 @@ class PlainTasksArchiveCommand(PlainTasksBase):
                 self.view.insert(edit, self.view.size(), u'\n\n＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿\nArchive:\n')
                 line = self.view.size()
 
+            projects = self.view.find_all('^\s*(\w+.+:\s*$\n?)|^\s*---.{3,5}---+$', 0)
+
             # adding tasks to archive section
-            self.view.insert(edit, line, '\n'.join(self.before_tasks_bullet_spaces + self.view.substr(task).lstrip() for task in all_tasks) + '\n')
+            self.view.insert(edit, line, '\n'.join(self.before_tasks_bullet_spaces +
+                self.view.substr(task).lstrip() + self.get_task_project(task, projects) for task in all_tasks) + '\n')
             # remove moved tasks (starting from the last one otherwise it screw up regions after the first delete)
             for task in reversed(all_tasks):
                 self.view.erase(edit, self.view.full_line(task))
+
+    def get_task_project(self, task, projects):
+        index = -1
+        for ind, pr in enumerate(projects):
+            if task < pr:
+                if ind > 0:
+                    index = ind-1
+                break
+        #if there is no projects for task - return empty string
+        if index == -1:
+            return ''
+
+        prog = re.compile('^\n*([ \t]*).+:')
+        hierarhProject = ''
+
+        if index >= 0:
+            depth = re.match(r"\s*", self.view.substr(self.view.line(task))).group()
+            while index >= 0:
+                strProject = self.view.substr(projects[index])
+                if prog.match(strProject):
+                    spaces = prog.match(strProject).group(1)
+                    if len(spaces) < len(depth):
+                        hierarhProject = strProject.strip().strip(':') + ((" / " + hierarhProject) if hierarhProject else '')
+                        depth = spaces
+                        if len(depth) == 0:
+                            break
+                else:
+                    sep = re.compile('(^\s*)---.{3,5}---+$')
+                    spaces = sep.match(strProject).group(1)
+                    if len(spaces) < len(depth):
+                        depth = spaces
+                        if len(depth) == 0:
+                            break
+                index -= 1
+        if not hierarhProject:
+            return ''
+        else:
+            return ' @project(' + hierarhProject + ')'
 
 
 class PlainTasksNewTaskDocCommand(sublime_plugin.WindowCommand):
