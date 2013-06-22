@@ -1,5 +1,7 @@
 TODO:
- ☐ make links highlighted @feature
+ ☐ make urls highlighted @feature
+ ☐ make file links highlighted @feature
+ ☐ in archive list, prefix task with project name, add specific scope for project prefixes @option
  ☐ use control+shift+A to only archive the first level tasks (or current level of indent) @feature
  ☐ include in the task the date and time of creation (using a shortcut key) @feature
     Maybe after mark the task as @done calculate (the end time - start time)
@@ -17,7 +19,7 @@ TODO:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
- ✔ in archive list, prefix task with project name, add specific scope for project prefixes @feature @done (13-02-08 17:33) @project(TODO)
+ ✔ in archive list, postfix task with project name, add specific scope for project postfixes @feature @done (13-02-08 17:33) @project(TODO)
  ✔ make links clickable @feature @done (13-01-22 12:59)
  ✘ make gif animation @docs @cancelled (13-01-22 23:25)
  ✔ document cancelled tasks and margin before task bullet option @done (12-11-28 04:53)

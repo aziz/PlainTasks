@@ -104,6 +104,7 @@ PlainTasks comes with a custom todo icon that you can find in the `icons` folder
 - [Dominique Wahli](https://github.com/bizoo)
 - [Jesse Robertson](https://github.com/speilberg0)
 - [Marc Schlaich](https://github.com/schlamar)
+- [Stanislav Parfeniuk](https://github.com/travmik)
 - [Vova Kolobok](https://github.com/vovkkk)
 
 You can contribute on [github](https://github.com/aziz/PlainTasks)
