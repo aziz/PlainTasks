@@ -81,8 +81,8 @@ class PlainTasksCompleteCommand(PlainTasksBase):
             line = self.view.line(region)
             line_contents = self.view.substr(line).rstrip()
             rom = '^(\s*)' + re.escape(self.open_tasks_bullet) + '\s*(.*)$'
-            rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '\s*([^\b]*?)\s?(?=\s*(@done)|\s*\(|$)[\(\)\d\w,\.:\-\/ @]*\s*$'
-            rcm = '^(\s*)' + re.escape(self.canc_tasks_bullet) + '\s*([^\b]*?)\s?(?=\s*(@cancelled)|\s*\(|$)[\(\)\d\w,\.:\-\/ @]*\s*$'
+            rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '\s*([^\b]*?)\s?(?=\s*(@done|@project)|\s*\(|$)[\(\)\d\w,\.:\-\/ @]*\s*$'
+            rcm = '^(\s*)' + re.escape(self.canc_tasks_bullet) + '\s*([^\b]*?)\s?(?=\s*(@cancelled|@project)|\s*\(|$)[\(\)\d\w,\.:\-\/ @]*\s*$'
             open_matches = re.match(rom, line_contents, re.U)
             done_matches = re.match(rdm, line_contents, re.U)
             canc_matches = re.match(rcm, line_contents, re.U)
@@ -121,8 +121,8 @@ class PlainTasksCancelCommand(PlainTasksBase):
             line = self.view.line(region)
             line_contents = self.view.substr(line).rstrip()
             rom = '^(\s*)' + re.escape(self.open_tasks_bullet) + '\s*(.*)$'
-            rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '\s*([^\b]*?)\s?(?=\s*(@done)|\s*\(|$)[\(\)\d\w,\.:\-\/ @]*\s*$'
-            rcm = '^(\s*)' + re.escape(self.canc_tasks_bullet) + '\s*([^\b]*?)\s?(?=\s*(@cancelled)|\s*\(|$)[\(\)\d\w,\.:\-\/ @]*\s*$'
+            rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '\s*([^\b]*?)\s?(?=\s*(@done|@project)|\s*\(|$)[\(\)\d\w,\.:\-\/ @]*\s*$'
+            rcm = '^(\s*)' + re.escape(self.canc_tasks_bullet) + '\s*([^\b]*?)\s?(?=\s*(@cancelled|@project)|\s*\(|$)[\(\)\d\w,\.:\-\/ @]*\s*$'
             open_matches = re.match(rom, line_contents, re.U)
             done_matches = re.match(rdm, line_contents, re.U)
             canc_matches = re.match(rcm, line_contents, re.U)
