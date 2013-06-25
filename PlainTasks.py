@@ -7,7 +7,8 @@ import sublime
 import sublime_plugin
 import webbrowser
 from datetime import datetime
-import locale
+if float(sublime.version()) <= 2217:
+    import locale
 
 
 class PlainTasksBase(sublime_plugin.TextCommand):
@@ -17,13 +18,14 @@ class PlainTasksBase(sublime_plugin.TextCommand):
         self.canc_tasks_bullet = self.view.settings().get('canc_tasks_bullet')
         self.before_tasks_bullet_spaces = ' ' * self.view.settings().get('before_tasks_bullet_margin')
         self.date_format = self.view.settings().get('date_format')
-        self.sys_enc = locale.getpreferredencoding()
         if self.view.settings().get('done_tag'):
             self.done_tag = "@done"
             self.canc_tag = "@cancelled"
         else:
             self.done_tag = ""
             self.canc_tag = ""
+        if float(sublime.version()) <= 2217:
+            self.sys_enc = locale.getpreferredencoding()
         self.runCommand(edit)
 
 
@@ -70,7 +72,10 @@ class PlainTasksNewCommand(PlainTasksBase):
 class PlainTasksCompleteCommand(PlainTasksBase):
     def runCommand(self, edit):
         original = [r for r in self.view.sel()]
-        done_line_end = ' %s %s' % (self.done_tag, datetime.now().strftime(self.date_format).decode(self.sys_enc))
+        try:
+            done_line_end = ' %s %s' % (self.done_tag, datetime.now().strftime(self.date_format).decode(self.sys_enc))
+        except:
+            done_line_end = ' %s %s' % (self.done_tag, datetime.now().strftime(self.date_format))
         offset = len(done_line_end)
         for region in self.view.sel():
             line = self.view.line(region)
@@ -107,7 +112,10 @@ class PlainTasksCompleteCommand(PlainTasksBase):
 class PlainTasksCancelCommand(PlainTasksBase):
     def runCommand(self, edit):
         original = [r for r in self.view.sel()]
-        canc_line_end = ' %s %s' % (self.canc_tag, datetime.now().strftime(self.date_format).decode(self.sys_enc))
+        try:
+            canc_line_end = ' %s %s' % (self.canc_tag, datetime.now().strftime(self.date_format).decode(self.sys_enc))
+        except:
+            canc_line_end = ' %s %s' % (self.canc_tag, datetime.now().strftime(self.date_format))
         offset = len(canc_line_end)
         for region in self.view.sel():
             line = self.view.line(region)
