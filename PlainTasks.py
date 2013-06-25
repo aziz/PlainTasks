@@ -81,8 +81,8 @@ class PlainTasksCompleteCommand(PlainTasksBase):
             line = self.view.line(region)
             line_contents = self.view.substr(line).rstrip()
             rom = '^(\s*)' + re.escape(self.open_tasks_bullet) + '\s*(.*)$'
-            rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '\s*([^\b]*?)\s*(%s)+[\(\)\d\w,\.:\-\/ @]*\s*$' % self.done_tag
-            rcm = '^(\s*)' + re.escape(self.canc_tasks_bullet) + '\s*([^\b]*?)\s*(%s)+[\(\)\d\w,\.:\-\/ @]*\s*$' % self.canc_tag
+            rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '\s*([^\b]*?)\s?(?=\s*(@done)|\s*\(|$)[\(\)\d\w,\.:\-\/ @]*\s*$'
+            rcm = '^(\s*)' + re.escape(self.canc_tasks_bullet) + '\s*([^\b]*?)\s?(?=\s*(@cancelled)|\s*\(|$)[\(\)\d\w,\.:\-\/ @]*\s*$'
             open_matches = re.match(rom, line_contents, re.U)
             done_matches = re.match(rdm, line_contents, re.U)
             canc_matches = re.match(rcm, line_contents, re.U)
@@ -121,8 +121,8 @@ class PlainTasksCancelCommand(PlainTasksBase):
             line = self.view.line(region)
             line_contents = self.view.substr(line).rstrip()
             rom = '^(\s*)' + re.escape(self.open_tasks_bullet) + '\s*(.*)$'
-            rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '\s*([^\b]*?)\s*(%s)+[\(\)\d\w,\.:\-\/ @]*\s*$' % self.done_tag
-            rcm = '^(\s*)' + re.escape(self.canc_tasks_bullet) + '\s*([^\b]*?)\s*(%s)+[\(\)\d\w,\.:\-\/ @]*\s*$' % self.canc_tag
+            rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '\s*([^\b]*?)\s?(?=\s*(@done)|\s*\(|$)[\(\)\d\w,\.:\-\/ @]*\s*$'
+            rcm = '^(\s*)' + re.escape(self.canc_tasks_bullet) + '\s*([^\b]*?)\s?(?=\s*(@cancelled)|\s*\(|$)[\(\)\d\w,\.:\-\/ @]*\s*$'
             open_matches = re.match(rom, line_contents, re.U)
             done_matches = re.match(rdm, line_contents, re.U)
             canc_matches = re.match(rcm, line_contents, re.U)
@@ -187,8 +187,8 @@ class PlainTasksArchiveCommand(PlainTasksBase):
 
             # adding tasks to archive section
             for task in all_tasks:
-                match_done = re.compile(rdm, re.U).match(self.view.substr(task))
-                match_canc = re.compile(rcm, re.U).match(self.view.substr(task))
+                match_done = re.match(rdm, self.view.substr(task), re.U)
+                match_canc = re.match(rcm, self.view.substr(task), re.U)
                 if match_done or match_canc:
                     end_of_line = self.view.insert(edit, line, self.before_tasks_bullet_spaces + self.view.substr(task).lstrip() + self.get_task_project(task, projects) + '\n')
                 else:
