@@ -162,6 +162,7 @@ class PlainTasksArchiveCommand(PlainTasksBase):
         # print(done_task)
         while done_task and (not archive_pos or done_task < archive_pos):
             done_tasks.append(done_task)
+            self.get_task_note(done_task, done_tasks)
             done_task = self.view.find(rdm, done_task.end() + 1)
 
         canc_tasks = []
@@ -169,6 +170,7 @@ class PlainTasksArchiveCommand(PlainTasksBase):
         # print(canc_task)
         while canc_task and (not archive_pos or canc_task < archive_pos):
             canc_tasks.append(canc_task)
+            self.get_task_note(canc_task, canc_tasks)
             canc_task = self.view.find(rcm, canc_task.end() + 1)
 
         all_tasks = done_tasks + canc_tasks
@@ -184,8 +186,14 @@ class PlainTasksArchiveCommand(PlainTasksBase):
             projects = self.view.find_all('^\s*(\w+.+:\s*$\n?)|^\s*---.{3,5}---+$', 0)
 
             # adding tasks to archive section
-            self.view.insert(edit, line, '\n'.join(self.before_tasks_bullet_spaces +
-                self.view.substr(task).lstrip() + self.get_task_project(task, projects) for task in all_tasks) + '\n')
+            for task in all_tasks:
+                match_done = re.compile(rdm, re.U).match(self.view.substr(task))
+                match_canc = re.compile(rcm, re.U).match(self.view.substr(task))
+                if match_done or match_canc:
+                    end_of_line = self.view.insert(edit, line, self.before_tasks_bullet_spaces + self.view.substr(task).lstrip() + self.get_task_project(task, projects) + '\n')
+                else:
+                    end_of_line = self.view.insert(edit, line, self.before_tasks_bullet_spaces * 2 + self.view.substr(task).lstrip() + '\n')
+                line += end_of_line
             # remove moved tasks (starting from the last one otherwise it screw up regions after the first delete)
             for task in reversed(all_tasks):
                 self.view.erase(edit, self.view.full_line(task))
@@ -227,6 +235,12 @@ class PlainTasksArchiveCommand(PlainTasksBase):
             return ''
         else:
             return ' @project(' + hierarhProject + ')'
+
+    def get_task_note(self, task, tasks):
+        note_line = task.end() + 1
+        while self.view.scope_name(note_line) == 'text.todo notes.todo ':
+            tasks.append(self.view.line(note_line))
+            note_line = self.view.line(note_line).end() + 1
 
 
 class PlainTasksNewTaskDocCommand(sublime_plugin.WindowCommand):
