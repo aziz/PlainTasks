@@ -13,7 +13,6 @@
 	<string>Tasks</string>
 	<key>patterns</key>
 	<array>
-
 		<dict>
 			<key>match</key>
 			<string>^\s*(\w+.+:\s*$\n?)</string>
@@ -70,14 +69,14 @@
 
 		<dict>
 			<key>match</key>
-			<string>(?&lt;=\s)(\@[\w\d\.\-!?]+\s+)*(\@done)[\(\)\d\w,\.:\-\/\s\@\+]*\s*\n</string>
+			<string>(?&lt;=\s)(\@[\w\d\.\-!?]+\s+)*(\@done|\@project|\(\d*.*\))[\(\)\d\w,\.:\-\/\s\@\+]*\s*\n*</string>
 			<key>name</key>
 			<string>meta.tag.todo.completed</string>
 		</dict>
 
 		<dict>
 			<key>match</key>
-			<string>(?&lt;=\s)(\@[\w\d\.\-!?]+\s+)*(\@cancelled)[\(\)\d\w,\.:\-\/\s\@\+]*\s*\n</string>
+			<string>(?&lt;=\s)(\@[\w\d\.\-!?]+\s+)*(\@cancelled|\@project|\(\d*.*\))[\(\)\d\w,\.:\-\/\s\@\+]*\s*\n*</string>
 			<key>name</key>
 			<string>meta.tag.todo.cancelled</string>
 		</dict>
@@ -102,7 +101,7 @@
 			<key>name</key>
 			<string>meta.punctuation.separator.todo</string>
 		</dict>
-
+		
 		<dict>
 			<key>match</key>
 			<string>(?&lt;=\s)\@today|✭ᴛᴏᴅᴀʏ</string>
