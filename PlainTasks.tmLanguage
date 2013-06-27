@@ -69,14 +69,14 @@
 
 		<dict>
 			<key>match</key>
-			<string>(?&lt;=\s)(\@[\w\d\.\-!?]+\s+)*(\@done|\@project|\(\d*.*\))[\(\)\d\w,\.:\-\/\s\@\+]*\s*\n</string>
+			<string>(?&lt;=\s)(\@[\w\d\.\-!?]+\s+)*(\@done|\@project|\(\d*.*\))[\(\)\d\w,\.:\-\/\s\@\+]*\s*\n*</string>
 			<key>name</key>
 			<string>meta.tag.todo.completed</string>
 		</dict>
 
 		<dict>
 			<key>match</key>
-			<string>(?&lt;=\s)(\@[\w\d\.\-!?]+\s+)*(\@cancelled|\@project|\(\d*.*\))[\(\)\d\w,\.:\-\/\s\@\+]*\s*\n</string>
+			<string>(?&lt;=\s)(\@[\w\d\.\-!?]+\s+)*(\@cancelled|\@project|\(\d*.*\))[\(\)\d\w,\.:\-\/\s\@\+]*\s*\n*</string>
 			<key>name</key>
 			<string>meta.tag.todo.cancelled</string>
 		</dict>
@@ -94,7 +94,7 @@
 			<key>name</key>
 			<string>meta.punctuation.archive.todo</string>
 		</dict>
-		
+
 		<dict>
 			<key>match</key>
 			<string>^\s*---.{3,5}---+$</string>
