@@ -151,8 +151,8 @@ class PlainTasksCancelCommand(PlainTasksBase):
 
 class PlainTasksArchiveCommand(PlainTasksBase):
     def runCommand(self, edit):
-        rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '.*$'
-        rcm = '^(\s*)' + re.escape(self.canc_tasks_bullet) + '.*$'
+        rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '\s+.*$'
+        rcm = '^(\s*)' + re.escape(self.canc_tasks_bullet) + '\s+.*$'
 
         # finding archive section
         archive_pos = self.view.find('Archive:', 0, sublime.LITERAL)
