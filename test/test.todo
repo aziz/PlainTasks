@@ -1,0 +1,24 @@
+Project:
+  ☐ simple
+  ☐ with tags @tag1 @tag2
+  Completed with done/cancel: 
+    ✔ done simple @done (13-06-27 10:08)
+    ✘ canceled simple @cancelled (13-06-27 10:08)
+    ✔ done with tags @tag1 @tag2 @done (13-06-27 10:08)
+    ✘ cenceled with tags @tag1 @tag2 @cancelled (13-06-27 10:08)
+  Completed without done/cancel: 
+    ✔ done simple  (13-06-27 10:09)
+    ✘ canceled simple  (13-06-27 10:09)
+    ✔ done with tags @tag1 @tag2  (13-06-27 10:09)
+    ✘ cenceled with tags @tag1 @tag2  (13-06-27 10:09)
+
+＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
+Archive:
+  ✔ done simple @done (13-06-27 10:08) @project(Project / Completed with done/cancel)
+  ✘ canceled simple @cancelled (13-06-27 10:08) @project(Project / Completed with done/cancel)
+  ✔ done with tags @tag1 @tag2 @done (13-06-27 10:08) @project(Project / Completed with done/cancel)
+  ✘ cenceled with tags @tag1 @tag2 @cancelled (13-06-27 10:08) @project(Project / Completed with done/cancel)
+  ✔ done simple  (13-06-27 10:09) @project(Project / Completed without done/cancel)
+  ✘ canceled simple  (13-06-27 10:09) @project(Project / Completed without done/cancel)
+  ✔ done with tags @tag1 @tag2  (13-06-27 10:09) @project(Project / Completed without done/cancel)
+  ✘ cenceled with tags @tag1 @tag2  (13-06-27 10:09) @project(Project / Completed without done/cancel)
