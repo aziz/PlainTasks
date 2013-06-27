@@ -80,26 +80,26 @@ class PlainTasksCompleteCommand(PlainTasksBase):
         for region in self.view.sel():
             line = self.view.line(region)
             line_contents = self.view.substr(line).rstrip()
-            rom = '^(\s*)' + re.escape(self.open_tasks_bullet) + '\s*(.*)$'
-            rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '\s*([^\b]*?)\s*(%s)+[\(\)\d\w,\.:\-\/ @]*\s*$' % self.done_tag
-            rcm = '^(\s*)' + re.escape(self.canc_tasks_bullet) + '\s*([^\b]*?)\s*(%s)+[\(\)\d\w,\.:\-\/ @]*\s*$' % self.canc_tag
+            rom = '^(\s*)' + re.escape(self.open_tasks_bullet) + '(\s*.*)$'
+            rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '(\s*[^\b]*?\s*)(?=\s@done|@project|\s\(|$)[\(\)\d\w,\.:\-\/ @]*\s*$'
+            rcm = '^(\s*)' + re.escape(self.canc_tasks_bullet) + '(\s*[^\b]*?\s*)(?=\s@cancelled|@project|\s\(|$)[\(\)\d\w,\.:\-\/ @]*\s*$'
             open_matches = re.match(rom, line_contents, re.U)
             done_matches = re.match(rdm, line_contents, re.U)
             canc_matches = re.match(rcm, line_contents, re.U)
             if open_matches:
                 grps = open_matches.groups()
                 self.view.insert(edit, line.end(), done_line_end)
-                replacement = u'%s%s %s' % (grps[0], self.done_tasks_bullet, grps[1].rstrip())
+                replacement = u'%s%s%s' % (grps[0], self.done_tasks_bullet, grps[1].rstrip())
                 self.view.replace(edit, line, replacement)
             elif done_matches:
                 grps = done_matches.groups()
-                replacement = u'%s%s %s' % (grps[0], self.open_tasks_bullet, grps[1].rstrip())
+                replacement = u'%s%s%s' % (grps[0], self.open_tasks_bullet, grps[1].rstrip())
                 self.view.replace(edit, line, replacement)
                 offset = -offset
             elif canc_matches:
                 grps = canc_matches.groups()
                 self.view.insert(edit, line.end(), done_line_end)
-                replacement = u'%s%s %s' % (grps[0], self.done_tasks_bullet, grps[1].rstrip())
+                replacement = u'%s%s%s' % (grps[0], self.done_tasks_bullet, grps[1].rstrip())
                 self.view.replace(edit, line, replacement)
                 offset = -offset
         self.view.sel().clear()
@@ -120,26 +120,26 @@ class PlainTasksCancelCommand(PlainTasksBase):
         for region in self.view.sel():
             line = self.view.line(region)
             line_contents = self.view.substr(line).rstrip()
-            rom = '^(\s*)' + re.escape(self.open_tasks_bullet) + '\s*(.*)$'
-            rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '\s*([^\b]*?)\s*(%s)+[\(\)\d\w,\.:\-\/ @]*\s*$' % self.done_tag
-            rcm = '^(\s*)' + re.escape(self.canc_tasks_bullet) + '\s*([^\b]*?)\s*(%s)+[\(\)\d\w,\.:\-\/ @]*\s*$' % self.canc_tag
+            rom = '^(\s*)' + re.escape(self.open_tasks_bullet) + '(\s*.*)$'
+            rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '(\s*[^\b]*?\s*)(?=\s@done|@project|\s\(|$)[\(\)\d\w,\.:\-\/ @]*\s*$'
+            rcm = '^(\s*)' + re.escape(self.canc_tasks_bullet) + '(\s*[^\b]*?\s*)(?=\s@cancelled|@project|\s\(|$)[\(\)\d\w,\.:\-\/ @]*\s*$'
             open_matches = re.match(rom, line_contents, re.U)
             done_matches = re.match(rdm, line_contents, re.U)
             canc_matches = re.match(rcm, line_contents, re.U)
             if open_matches:
                 grps = open_matches.groups()
                 self.view.insert(edit, line.end(), canc_line_end)
-                replacement = u'%s%s %s' % (grps[0], self.canc_tasks_bullet, grps[1].rstrip())
+                replacement = u'%s%s%s' % (grps[0], self.canc_tasks_bullet, grps[1].rstrip())
                 self.view.replace(edit, line, replacement)
             elif done_matches:
                 pass
                 # grps = done_matches.groups()
-                # replacement = u'%s%s %s' % (grps[0], self.canc_tasks_bullet, grps[1].rstrip())
+                # replacement = u'%s%s%s' % (grps[0], self.canc_tasks_bullet, grps[1].rstrip())
                 # self.view.replace(edit, line, replacement)
                 # offset = -offset
             elif canc_matches:
                 grps = canc_matches.groups()
-                replacement = u'%s%s %s' % (grps[0], self.open_tasks_bullet, grps[1].rstrip())
+                replacement = u'%s%s%s' % (grps[0], self.open_tasks_bullet, grps[1].rstrip())
                 self.view.replace(edit, line, replacement)
                 offset = -offset
         self.view.sel().clear()
@@ -151,8 +151,8 @@ class PlainTasksCancelCommand(PlainTasksBase):
 
 class PlainTasksArchiveCommand(PlainTasksBase):
     def runCommand(self, edit):
-        rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '\s*([^\b]*?)\s*(%s)+[\(\)\d\w,\.:\-\/ @]*[ \t]*$' % self.done_tag
-        rcm = '^(\s*)' + re.escape(self.canc_tasks_bullet) + '\s*([^\b]*?)\s*(%s)+[\(\)\d\w,\.:\-\/ @]*[ \t]*$' % self.canc_tag
+        rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '.*$'
+        rcm = '^(\s*)' + re.escape(self.canc_tasks_bullet) + '.*$'
 
         # finding archive section
         archive_pos = self.view.find('Archive:', 0, sublime.LITERAL)
@@ -187,8 +187,8 @@ class PlainTasksArchiveCommand(PlainTasksBase):
 
             # adding tasks to archive section
             for task in all_tasks:
-                match_done = re.compile(rdm, re.U).match(self.view.substr(task))
-                match_canc = re.compile(rcm, re.U).match(self.view.substr(task))
+                match_done = re.match(rdm, self.view.substr(task), re.U)
+                match_canc = re.match(rcm, self.view.substr(task), re.U)
                 if match_done or match_canc:
                     end_of_line = self.view.insert(edit, line, self.before_tasks_bullet_spaces + self.view.substr(task).lstrip() + self.get_task_project(task, projects) + '\n')
                 else:
