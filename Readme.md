@@ -107,7 +107,11 @@ PlainTasks comes with a custom todo icon that you can find in the `icons` folder
 - [Stanislav Parfeniuk](https://github.com/travmik)
 - [Vova Kolobok](https://github.com/vovkkk)
 
-You can contribute on [github](https://github.com/aziz/PlainTasks)
+You can contribute on [github](https://github.com/aziz/PlainTasks).    
+We always welcome pull requests. Here's some general requirement for pull requests be accepted:  
+- [PEP8](http://www.python.org/dev/peps/pep-0008/) is our coding style guide..
+- Please create a branch before sending pull requests.
+- Your pull request should be atomic. That is, fix a bug or implementing a feature in one commit instead of multiple commit. This is a recommendation, not a requirement.
 
 
 ## Inspiration
