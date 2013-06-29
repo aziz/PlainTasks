@@ -65,7 +65,7 @@ Here is a list of PlainTasks' specific settings:
   Default: ✔  
   other valid options: + ✓ ☑
 
-* **cancelled_tasks_bullet**
+* **cancelled_tasks_bullet**  
   Default: ✘  
   other valid option: x
 
