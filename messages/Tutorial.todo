@@ -18,11 +18,15 @@ Tasks:
   Done:
    ☐ Pressing ⌘+d (ctrl+d on Windows) mark a task as done
    ☐ Pressing ⌘+d (ctrl+d on Windows) again will put it back in pending mode
-   ☐ Pressing ⌘+m (ctrl+m on Windows) will mark the task as cancelled
+   ☐ Pressing alt+c will mark the task as cancelled
   Tagging:
    ☐ You can add tags using @ sign, like this @tag
   URLs:
    ☐ Pressing ⌘+shift+U (ctrl+shift+U on Windows) will open the url under the cursor in your default browser
+  File links:
+   ☐ You can create a link to a file within your project by prefixing the file name with a pound sign like: #filename
+   ☐ In SublimeText 3 you can even specify a symbol inside that file by using @ symbol like: #filename@symbol
+   ☐ Pressing alt+l will open the file in Sublime
 
   Archiving:
    ☐ Pressing ⌘+shift+A (ctrl+shift+A on Windows) will archive the done task.
@@ -33,11 +37,8 @@ Tasks:
    ☐ Bring up the command palette (it's ⌘+shift+p in Mac and ctrl+shift+p in Windows)
    ☐ type `task` and select `Tasks: New document` command
 
-  Using Mouse:
-   ☐ You can use you mouse to toggle a task. just hold ⌘ (ctrl on Windows) and click the task
-
 --- ✄ -----------------------
-You can use separator snippet to separate your todo lists. type -- and press tab
+You can use separator snippet to separate your todo lists, type -- and press tab
 
 FileType Support:
  PlainTasks support these file types out of the box

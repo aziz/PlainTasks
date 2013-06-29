@@ -51,9 +51,9 @@ Bring up the command palette (it's `⌘ + shift + p`  in OS X and `ctrl + shift 
 ★ See the [Tutorial](https://github.com/aziz/PlainTasks/blob/master/messages/Tutorial.todo) for more detailed information.
 
 ## Settings
-PlainTasks is an opinionated plugin, which means that it is highly configured to look in a specific way. but this does not mean that you can not customize it. If you feel that something does not look right and you want to change it, you can easily do it in your user settings file. 
+PlainTasks is an opinionated plugin, which means that it is highly configured to look in a specific way, but this does not mean that you can not customize it. If you feel that something does not look right and you want to change it, you can easily do it in your user settings file. 
 
-Go to `Preferences > Package Settings > PlainTasks` and open `Settings - User`, there you can override all the default settings. to get an idea you can take a look at `Settings - Default`.
+Go to `Preferences > Package Settings > PlainTasks` and open `Settings - User`, there you can override all the default settings, to get an idea you can take a look at `Settings - Default`.
 
 Here is a list of PlainTasks' specific settings:
 
@@ -64,6 +64,10 @@ Here is a list of PlainTasks' specific settings:
 * **done_tasks_bullet**  
   Default: ✔  
   other valid options: + ✓ ☑
+
+* **cancelled_tasks_bullet**
+  Default: ✘  
+  other valid option: x
 
 * **date_format**  
   Default: (%y-%m-%d %H:%M)
@@ -87,7 +91,7 @@ add these settings to the json file:
   "translate_tabs_to_spaces": false,
   "open_tasks_bullet": "-",
   "done_tasks_bullet": "-",
-  "canc_tasks_bullet": "-"
+  "cancelled_tasks_bullet": "-"
 }
 ```
 

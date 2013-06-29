@@ -7,7 +7,7 @@ import sublime
 import sublime_plugin
 import webbrowser
 from datetime import datetime
-if float(sublime.version()) <= 2217:
+if int(sublime.version()) < 3000:
     import locale
 
 
@@ -15,7 +15,7 @@ class PlainTasksBase(sublime_plugin.TextCommand):
     def run(self, edit):
         self.open_tasks_bullet = self.view.settings().get('open_tasks_bullet')
         self.done_tasks_bullet = self.view.settings().get('done_tasks_bullet')
-        self.canc_tasks_bullet = self.view.settings().get('canc_tasks_bullet')
+        self.canc_tasks_bullet = self.view.settings().get('cancelled_tasks_bullet')
         self.before_tasks_bullet_spaces = ' ' * self.view.settings().get('before_tasks_bullet_margin')
         self.date_format = self.view.settings().get('date_format')
         if self.view.settings().get('done_tag'):
@@ -24,7 +24,7 @@ class PlainTasksBase(sublime_plugin.TextCommand):
         else:
             self.done_tag = ""
             self.canc_tag = ""
-        if float(sublime.version()) <= 2217:
+        if int(sublime.version()) < 3000:
             self.sys_enc = locale.getpreferredencoding()
         self.runCommand(edit)
 
