@@ -9,7 +9,6 @@ TODO:
  ☐ in archive list, adding newly archived items to the bottom or top should be configurable @feature
  ☐ @today ✭ᴛᴏᴅᴀʏ tags @feature
  ☐ marking all nested tasks as done should mark the parent as done?
- ☐ indenting notes below tasks?
  ☐ accept multiple bullet types at the same time @feature
  ☐ other themes?
  ☐ export to html/ preview in browser @feature
@@ -18,6 +17,7 @@ TODO:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ indenting notes below tasks? @done (13-07-08 00:59) @project(TODO)
  ✔ when archiving, if a task has some note, those notes should also move to archive section @feature @done (13-06-25 11:49) @project(TODO)
  ✔ in archive list, postfix task with project name, add specific scope for project postfixes @feature @done (13-02-08 17:33) @project(TODO)
  ✔ make links clickable @feature @done (13-01-22 12:59)
