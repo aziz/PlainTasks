@@ -194,9 +194,10 @@ class PlainTasksArchiveCommand(PlainTasksBase):
                         eol = self.view.insert(edit, line,
                                                self.before_tasks_bullet_spaces +
                                                self.view.substr(task).lstrip() +
-                                               ' @project(' +
-                                               self.get_task_project(task, projects) +
-                                               ')' + '\n')
+                                               (' @project(' if self.get_task_project(task, projects)[0] else '') +
+                                               self.get_task_project(task, projects)[1] +
+                                               (')' if self.get_task_project(task, projects)[0] else '')
+                                               + '\n')
                     else:
                         eol = self.view.insert(edit, line,
                                                self.before_tasks_bullet_spaces +
