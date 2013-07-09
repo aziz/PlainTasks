@@ -80,6 +80,10 @@ Here is a list of PlainTasks' specific settings:
   Default: 1  
   Determines the number of spaces (default indent) before the task bullet
 
+* **project_tag**  
+  Default: true  
+  Postfix archived task with project tag, otherwise prefix
+
 ## Taskpaper Compatibility
 Go to `Preferences > Package Settings > PlainTasks` and open `Settings - User`, then
 add these settings to the json file:

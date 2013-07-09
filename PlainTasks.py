@@ -26,6 +26,7 @@ class PlainTasksBase(sublime_plugin.TextCommand):
             self.canc_tag = ""
         if int(sublime.version()) < 3000:
             self.sys_enc = locale.getpreferredencoding()
+        self.project_postfix = self.view.settings().get('project_tag')
         self.runCommand(edit)
 
 
@@ -187,13 +188,30 @@ class PlainTasksArchiveCommand(PlainTasksBase):
 
             # adding tasks to archive section
             for task in all_tasks:
-                match_done = re.match(rdm, self.view.substr(task), re.U)
-                match_canc = re.match(rcm, self.view.substr(task), re.U)
-                if match_done or match_canc:
-                    end_of_line = self.view.insert(edit, line, self.before_tasks_bullet_spaces + self.view.substr(task).lstrip() + self.get_task_project(task, projects) + '\n')
+                match_task = re.match('^(\s*)(' + re.escape(self.done_tasks_bullet) + '|' + re.escape(self.canc_tasks_bullet) + ')(\s+.*$)', self.view.substr(task), re.U)
+                if match_task:
+                    if self.project_postfix:
+                        eol = self.view.insert(edit, line,
+                                               self.before_tasks_bullet_spaces +
+                                               self.view.substr(task).lstrip() +
+                                               ' @project(' +
+                                               self.get_task_project(task, projects) +
+                                               ')' + '\n')
+                    else:
+                        eol = self.view.insert(edit, line,
+                                               self.before_tasks_bullet_spaces +
+                                               match_task.group(2) + # bullet
+                                               (' ' if self.get_task_project(task, projects)[0] else '') +
+                                               self.get_task_project(task, projects)[1] +
+                                               (':' if self.get_task_project(task, projects)[0] else '') +
+                                               match_task.group(3) + # very task
+                                               '\n')
                 else:
-                    end_of_line = self.view.insert(edit, line, self.before_tasks_bullet_spaces * 2 + self.view.substr(task).lstrip() + '\n')
-                line += end_of_line
+                    eol = self.view.insert(edit, line,
+                                           self.before_tasks_bullet_spaces * 2 +
+                                           self.view.substr(task).lstrip() +
+                                           '\n')
+                line += eol
             # remove moved tasks (starting from the last one otherwise it screw up regions after the first delete)
             for task in reversed(all_tasks):
                 self.view.erase(edit, self.view.full_line(task))
@@ -207,7 +225,7 @@ class PlainTasksArchiveCommand(PlainTasksBase):
                 break
         #if there is no projects for task - return empty string
         if index == -1:
-            return ''
+            return (False, '')
 
         prog = re.compile('^\n*([ \t]*).+:')
         hierarhProject = ''
@@ -232,9 +250,9 @@ class PlainTasksArchiveCommand(PlainTasksBase):
                             break
                 index -= 1
         if not hierarhProject:
-            return ''
+            return (False, '')
         else:
-            return ' @project(' + hierarhProject + ')'
+            return (True, hierarhProject)
 
     def get_task_note(self, task, tasks):
         note_line = task.end() + 1

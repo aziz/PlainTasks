@@ -1,7 +1,6 @@
 TODO:
  ☐ make urls highlighted @feature
  ☐ make file links highlighted @feature
- ☐ in archive list, prefix task with project name, add specific scope for project prefixes @option
  ☐ use control+shift+A to only archive the first level tasks (or current level of indent) @feature
  ☐ include in the task the date and time of creation (using a shortcut key) @feature
     Maybe after mark the task as @done calculate (the end time - start time)
@@ -17,6 +16,7 @@ TODO:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ in archive list, prefix task with project name, add specific scope for project prefixes @option @done (13-07-09 13:08) @project(TODO)
  ✔ indenting notes below tasks? @done (13-07-08 00:59) @project(TODO)
  ✔ when archiving, if a task has some note, those notes should also move to archive section @feature @done (13-06-25 11:49) @project(TODO)
  ✔ in archive list, postfix task with project name, add specific scope for project postfixes @feature @done (13-02-08 17:33) @project(TODO)
