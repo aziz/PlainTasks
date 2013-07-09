@@ -57,32 +57,17 @@ Go to `Preferences > Package Settings > PlainTasks` and open `Settings - User`, 
 
 Here is a list of PlainTasks' specific settings:
 
-* **open_tasks_bullet**  
-  Default: ☐  
-  other valid options: - ❍ ❑ ■ □ ☐ ▪ ▫ – — ≡ → ›
+|            Setting             |     Default      |                                 Options/Description                                 |
+| ------------------------------ | ---------------- | ----------------------------------------------------------------------- |
+| **open_tasks_bullet**          | ☐                | - ❍ ❑ ■ □ ☐ ▪ ▫ – — ≡ → ›                                               |
+| **done_tasks_bullet**          | ✔                | ✓   ☑ +                                                                   |
+| **cancelled_tasks_bullet**     | ✘                | x                                                                       |
+| **date_format**                | `(%y-%m-%d %H:%M)` |                                                                         |
+| **done_tag**                   | true             | Determines whether done tasks should gain a @done tag or not            |
+| **before_tasks_bullet_margin** | 1                | Determines the number of spaces (default indent) before the task bullet |
+| **project_tag**                | true             | Postfix archived task with project tag, otherwise prefix                |
 
-* **done_tasks_bullet**  
-  Default: ✔  
-  other valid options: + ✓ ☑
 
-* **cancelled_tasks_bullet**  
-  Default: ✘  
-  other valid option: x
-
-* **date_format**  
-  Default: (%y-%m-%d %H:%M)
-
-* **done_tag**  
-  Default: true  
-  Determines whether done tasks should gain a @done tag or not    
-
-* **before_tasks_bullet_margin**  
-  Default: 1  
-  Determines the number of spaces (default indent) before the task bullet
-
-* **project_tag**  
-  Default: true  
-  Postfix archived task with project tag, otherwise prefix
 
 ## Taskpaper Compatibility
 Go to `Preferences > Package Settings > PlainTasks` and open `Settings - User`, then
