@@ -66,6 +66,7 @@ Here is a list of PlainTasks' specific settings:
 | **done_tag**                   | true             | Determines whether done tasks should gain a @done tag or not            |
 | **before_tasks_bullet_margin** | 1                | Determines the number of spaces (default indent) before the task bullet |
 | **project_tag**                | true             | Postfix archived task with project tag, otherwise prefix                |
+| **archive_name**               | `Archive:`       | Make sure it is the unique project name within your todo files          |
 
 
 

@@ -27,6 +27,7 @@ class PlainTasksBase(sublime_plugin.TextCommand):
         if int(sublime.version()) < 3000:
             self.sys_enc = locale.getpreferredencoding()
         self.project_postfix = self.view.settings().get('project_tag')
+        self.archive_name = self.view.settings().get('archive_name')
         self.runCommand(edit)
 
 
@@ -146,7 +147,7 @@ class PlainTasksArchiveCommand(PlainTasksBase):
         rcm = '^(\s*)' + re.escape(self.canc_tasks_bullet) + '\s+.*$'
 
         # finding archive section
-        archive_pos = self.view.find('Archive:', 0, sublime.LITERAL)
+        archive_pos = self.view.find(self.archive_name, 0, sublime.LITERAL)
 
         done_tasks = []
         done_task = self.view.find(rdm, 0)
@@ -171,7 +172,8 @@ class PlainTasksArchiveCommand(PlainTasksBase):
             if archive_pos:
                 line = self.view.full_line(archive_pos).end()
             else:
-                self.view.insert(edit, self.view.size(), u'\n\n＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿\nArchive:\n')
+                create_archive = u'\n\n＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿\n' + self.archive_name + '\n'
+                self.view.insert(edit, self.view.size(), create_archive)
                 line = self.view.size()
 
             projects = self.view.find_all('^\s*(\w+.+:\s*$\n?)|^\s*---.{3,5}---+$', 0)
