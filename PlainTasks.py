@@ -32,42 +32,32 @@ class PlainTasksBase(sublime_plugin.TextCommand):
 
 class PlainTasksNewCommand(PlainTasksBase):
     def runCommand(self, edit):
-        for region in self.view.sel():
+        selections = list(self.view.sel()) # for ST3 support
+        selections.reverse() # because with multiple selections regions would be messed up after first iteration
+        for region in selections:
             line = self.view.line(region)
             line_contents = self.view.substr(line).rstrip()
             has_bullet = re.match('^(\s*)[' + re.escape(self.open_tasks_bullet) + re.escape(self.done_tasks_bullet) + re.escape(self.canc_tasks_bullet) + ']', self.view.substr(line))
-            current_scope = self.view.scope_name(self.view.sel()[0].b)
 
             if has_bullet:
                 grps = has_bullet.groups()
                 line_contents = self.view.substr(line) + '\n' + grps[0] + self.open_tasks_bullet + ' '
-                self.view.replace(edit, line, line_contents)
-            elif 'header' in current_scope:
+            elif 'header' in self.view.scope_name(line.b):
                 header = re.match('^(\s*)\S+', self.view.substr(line))
                 if header:
                     grps = header.groups()
                     line_contents = self.view.substr(line) + '\n' + grps[0] + self.before_tasks_bullet_spaces + self.open_tasks_bullet + ' '
                 else:
                     line_contents = self.before_tasks_bullet_spaces + self.open_tasks_bullet + ' '
-                self.view.replace(edit, line, line_contents)
-                end = self.view.sel()[0].b
-                pt = sublime.Region(end, end)
-                self.view.sel().clear()
-                self.view.sel().add(pt)
             else:
                 has_space = re.match('^(\s+)(.*)', self.view.substr(line))
                 if has_space:
                     grps = has_space.groups()
                     spaces = grps[0]
                     line_contents = spaces + self.open_tasks_bullet + ' ' + grps[1]
-                    self.view.replace(edit, line, line_contents)
                 else:
                     line_contents = self.before_tasks_bullet_spaces + self.open_tasks_bullet + ' ' + self.view.substr(line)
-                    self.view.replace(edit, line, line_contents)
-                    end = self.view.sel()[0].b
-                    pt = sublime.Region(end, end)
-                    self.view.sel().clear()
-                    self.view.sel().add(pt)
+            self.view.replace(edit, line, line_contents)
 
 
 class PlainTasksCompleteCommand(PlainTasksBase):
