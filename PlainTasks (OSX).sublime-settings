@@ -13,7 +13,7 @@
   "font_face": "Consolas",
   "draw_indent_guides": false,
   "auto_indent": true,
-  "smart_indent": true, // indenting the next line after projects and tasks
+  "smart_indent": true, // indenting the next line after tasks
   "line_numbers": false,
   "gutter": true,
   "margin": 2,

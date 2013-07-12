@@ -9,7 +9,7 @@
 	<key>settings</key>
 	<dict>
 		<key>increaseIndentPattern</key>
-		<string>(^\s*\w+.+:\s*$\n?)|(^\s*[-|+|✓|✔|❍|❑|■|□|☐|▪|▫|–|—|✘|x]\s+.+$)</string>
+		<string>^\s*\w+.+:\s*$</string>
 	</dict>
 	<key>uuid</key>
 	<string>6944f261-8115-412d-a83f-e91eac1e0561</string>
