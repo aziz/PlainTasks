@@ -39,11 +39,10 @@ class PlainTasksNewCommand(PlainTasksBase):
             line = self.view.line(region)
             line_contents = self.view.substr(line).rstrip()
             has_bullet = re.match('^(\s*)[' + re.escape(self.open_tasks_bullet) + re.escape(self.done_tasks_bullet) + re.escape(self.canc_tasks_bullet) + ']', self.view.substr(line))
-
             if has_bullet:
                 grps = has_bullet.groups()
                 line_contents = self.view.substr(line) + '\n' + grps[0] + self.open_tasks_bullet + ' '
-            elif 'header' in self.view.scope_name(line.b):
+            elif ('header' or 'separator') in self.view.scope_name(line.b):
                 header = re.match('^(\s*)\S+', self.view.substr(line))
                 if header:
                     grps = header.groups()
@@ -59,6 +58,17 @@ class PlainTasksNewCommand(PlainTasksBase):
                 else:
                     line_contents = self.before_tasks_bullet_spaces + self.open_tasks_bullet + ' ' + self.view.substr(line)
             self.view.replace(edit, line, line_contents)
+
+        # convert each selection to single cursor, ready to type
+        new_selections = []
+        for sel in list(self.view.sel()):
+            if not sel.empty():
+                new_selections.append(sublime.Region(sel.b, sel.b))
+            else:
+                new_selections.append(sel)
+        self.view.sel().clear()
+        for sel in new_selections:
+            self.view.sel().add(sel)
 
 
 class PlainTasksCompleteCommand(PlainTasksBase):
