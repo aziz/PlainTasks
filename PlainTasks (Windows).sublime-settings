@@ -7,13 +7,12 @@
   "done_tag": true, // related to @cancelled as well
   "project_tag": true, // if true - postfix archived task with project tag, if false - prefix
   "archive_name": "Archive:", // make sure it is the unique project name within your todo files
+  "indent_after_task": true, // indenting the next line after tasks
 
   "color_scheme": "Packages/PlainTasks/tasks.hidden-tmTheme",
   "font_size": 11,
   "font_face": "Consolas",
   "draw_indent_guides": false,
-  "auto_indent": true,
-  "smart_indent": true, // indenting the next line after tasks
   "line_numbers": false,
   "gutter": true,
   "margin": 2,

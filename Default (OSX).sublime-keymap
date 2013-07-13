@@ -8,7 +8,8 @@
   { "keys": ["alt+o"], "command": "plain_tasks_open_link","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },
   { "keys": ["enter"], "command": "insert", "args": {"characters": "\n\t"}, "context":
     [
-      { "key": "setting.smart_indent", "operator": "equal", "operand": true },
+      { "key": "setting.auto_indent", "operator": "equal", "operand": true },
+      { "key": "setting.indent_after_task", "operator": "equal", "operand": true },
       { "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true },
       { "key": "selector", "operator": "equal", "operand": "text.todo" },
       { "key": "preceding_text", "operator": "regex_contains", "operand": "[-|+|✓|✔|❍|❑|■|□|☐|▪|▫|–|—|✘|x]\\s+.+", "match_all": true }
