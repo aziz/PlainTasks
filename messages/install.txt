@@ -1,0 +1,4 @@
+Thank you for installing PlainTasks.
+
+For quick start you probably would like to go through a short tutorial:
+Preferences > Package Settings > PlainTasks > Tutorial
