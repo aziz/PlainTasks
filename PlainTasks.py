@@ -39,24 +39,29 @@ class PlainTasksNewCommand(PlainTasksBase):
             line = self.view.line(region)
             line_contents = self.view.substr(line).rstrip()
             has_bullet = re.match('^(\s*)[' + re.escape(self.open_tasks_bullet) + re.escape(self.done_tasks_bullet) + re.escape(self.canc_tasks_bullet) + ']', self.view.substr(line))
+            not_empty_line = re.match('^(\s*)(\S.+)$', self.view.substr(line))
+            empty_line     = re.match('^(\s+)$', self.view.substr(line))
+            current_scope  = self.view.scope_name(line.a)
             if has_bullet:
                 grps = has_bullet.groups()
                 line_contents = self.view.substr(line) + '\n' + grps[0] + self.open_tasks_bullet + ' '
-            elif ('header' or 'separator') in self.view.scope_name(line.b):
-                header = re.match('^(\s*)\S+', self.view.substr(line))
-                if header:
-                    grps = header.groups()
-                    line_contents = self.view.substr(line) + '\n' + grps[0] + self.before_tasks_bullet_spaces + self.open_tasks_bullet + ' '
-                else:
+            elif 'header' in current_scope:
+                grps = not_empty_line.groups()
+                line_contents = self.view.substr(line) + '\n' + grps[0] + self.before_tasks_bullet_spaces + self.open_tasks_bullet + ' '
+            elif 'separator' in current_scope:
+                grps = not_empty_line.groups()
+                line_contents = self.view.substr(line) + '\n' + grps[0] + self.before_tasks_bullet_spaces + self.open_tasks_bullet + ' '
+            elif not ('header' and 'separator') in current_scope:
+                if not_empty_line:
+                    grps = not_empty_line.groups()
+                    line_contents = (grps[0] if len(grps[0]) > 0 else self.before_tasks_bullet_spaces) + self.open_tasks_bullet + ' ' + grps[1]
+                elif empty_line: # only whitespaces
+                    grps = empty_line.groups()
+                    line_contents = grps[0] + self.open_tasks_bullet + ' '
+                else: # completely empty, no whitespaces
                     line_contents = self.before_tasks_bullet_spaces + self.open_tasks_bullet + ' '
             else:
-                has_space = re.match('^(\s+)(.*)', self.view.substr(line))
-                if has_space:
-                    grps = has_space.groups()
-                    spaces = grps[0]
-                    line_contents = spaces + self.open_tasks_bullet + ' ' + grps[1]
-                else:
-                    line_contents = self.before_tasks_bullet_spaces + self.open_tasks_bullet + ' ' + self.view.substr(line)
+                print('oops, need to improve PlainTasksNewCommand')
             self.view.replace(edit, line, line_contents)
 
         # convert each selection to single cursor, ready to type
