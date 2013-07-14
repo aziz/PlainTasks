@@ -195,31 +195,23 @@ class PlainTasksArchiveCommand(PlainTasksBase):
 
             # adding tasks to archive section
             for task in all_tasks:
-                match_task = re.match('^(\s*)(' + re.escape(self.done_tasks_bullet) + '|' + re.escape(self.canc_tasks_bullet) + ')(\s+.*$)', self.view.substr(task), re.U)
+                match_task = re.match('^\s*(' + re.escape(self.done_tasks_bullet) + '|' + re.escape(self.canc_tasks_bullet) + ')(\s+.*$)', self.view.substr(task), re.U)
                 if match_task:
+                    pr = self.get_task_project(task, projects)
                     if self.project_postfix:
-                        eol = self.view.insert(edit, line,
-                                               self.before_tasks_bullet_spaces +
-                                               self.view.substr(task).lstrip() +
-                                               (' @project(' if self.get_task_project(task, projects)[0] else '') +
-                                               self.get_task_project(task, projects)[1] +
-                                               (')' if self.get_task_project(task, projects)[0] else '')
-                                               + '\n')
+                        eol = (self.before_tasks_bullet_spaces + self.view.substr(task).lstrip() +
+                               (' @project(' if pr[0] else '') + pr[1] + (')' if pr[0] else '') +
+                               '\n')
                     else:
-                        eol = self.view.insert(edit, line,
-                                               self.before_tasks_bullet_spaces +
-                                               match_task.group(2) + # bullet
-                                               (' ' if self.get_task_project(task, projects)[0] else '') +
-                                               self.get_task_project(task, projects)[1] +
-                                               (':' if self.get_task_project(task, projects)[0] else '') +
-                                               match_task.group(3) + # very task
-                                               '\n')
+                        eol = (self.before_tasks_bullet_spaces +
+                               match_task.group(1) + # bullet
+                               (' ' if pr[0] else '') + pr[1] + (':' if pr[0] else '') +
+                               match_task.group(2) + # very task
+                               '\n')
                 else:
-                    eol = self.view.insert(edit, line,
-                                           self.before_tasks_bullet_spaces * 2 +
-                                           self.view.substr(task).lstrip() +
-                                           '\n')
-                line += eol
+                    eol = self.before_tasks_bullet_spaces * 2 + self.view.substr(task).lstrip() + '\n'
+                line += self.view.insert(edit, line, eol)
+
             # remove moved tasks (starting from the last one otherwise it screw up regions after the first delete)
             for task in reversed(all_tasks):
                 self.view.erase(edit, self.view.full_line(task))
