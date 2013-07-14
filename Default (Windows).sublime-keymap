@@ -12,7 +12,7 @@
       { "key": "setting.indent_after_task", "operator": "equal", "operand": true },
       { "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true },
       { "key": "selector", "operator": "equal", "operand": "text.todo" },
-      { "key": "preceding_text", "operator": "regex_contains", "operand": "[-|+|✓|✔|❍|❑|■|□|☐|▪|▫|–|—|✘|x]\\s+.+", "match_all": true }
+      { "key": "preceding_text", "operator": "regex_contains", "operand": "^\\s*[-|+|✓|✔|❍|❑|■|□|☐|▪|▫|–|—|✘|x]\\s+.+", "match_all": true }
     ]
   }
 ]
