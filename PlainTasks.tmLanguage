@@ -6,6 +6,7 @@
 	<array>
 		<string>todo</string>
 		<string>tasks</string>
+		<string>todolist.txt</string>
 	</array>
 	<key>keyEquivalent</key>
 	<string>^~T</string>
@@ -101,7 +102,7 @@
 			<key>name</key>
 			<string>meta.punctuation.separator.todo</string>
 		</dict>
-		
+
 		<dict>
 			<key>match</key>
 			<string>(?&lt;=\s)\@today|✭ᴛᴏᴅᴀʏ</string>

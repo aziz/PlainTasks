@@ -13,6 +13,7 @@ To install this plugin, you have two options:
 Bring up the command palette (it's `⌘ + shift + p`  in OS X and `ctrl + shift + p` in Windows) and type `task` and select `Tasks: New document` command. 
 
 **NOTE:** Save your todo files with `todo`, `todolist`, `tasks` or `taskpaper` file extensions or just name them `TODO` with no extension.
+For more portability you can use `todolist.txt` either as a filename or as suffix for any arbitrary filename.
 
 ## Usage
 **NOTE:** In windows or Linux use `ctrl` instead of `⌘`
