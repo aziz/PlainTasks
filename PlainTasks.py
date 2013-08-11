@@ -16,7 +16,10 @@ class PlainTasksBase(sublime_plugin.TextCommand):
         self.open_tasks_bullet = self.view.settings().get('open_tasks_bullet')
         self.done_tasks_bullet = self.view.settings().get('done_tasks_bullet')
         self.canc_tasks_bullet = self.view.settings().get('cancelled_tasks_bullet')
-        self.before_tasks_bullet_spaces = ' ' * self.view.settings().get('before_tasks_bullet_margin')
+        translate_tabs_to_spaces = self.view.settings().get('translate_tabs_to_spaces')
+        self.tasks_bullet_space = self.view.settings().get('tasks_bullet_space', ' ' if translate_tabs_to_spaces else '\t')
+        tasks_bullet_tab = (' ' * self.view.settings().get('tab_size')) if translate_tabs_to_spaces else '\t'
+        self.before_tasks_bullet_spaces = tasks_bullet_tab * self.view.settings().get('before_tasks_bullet_margin')
         self.date_format = self.view.settings().get('date_format')
         if self.view.settings().get('done_tag'):
             self.done_tag = "@done"
@@ -44,22 +47,22 @@ class PlainTasksNewCommand(PlainTasksBase):
             current_scope  = self.view.scope_name(line.a)
             if has_bullet:
                 grps = has_bullet.groups()
-                line_contents = self.view.substr(line) + '\n' + grps[0] + self.open_tasks_bullet + ' '
+                line_contents = self.view.substr(line) + '\n' + grps[0] + self.open_tasks_bullet + self.tasks_bullet_space
             elif 'header' in current_scope:
                 grps = not_empty_line.groups()
-                line_contents = self.view.substr(line) + '\n' + grps[0] + self.before_tasks_bullet_spaces + self.open_tasks_bullet + ' '
+                line_contents = self.view.substr(line) + '\n' + grps[0] + self.before_tasks_bullet_spaces + self.open_tasks_bullet + self.tasks_bullet_space
             elif 'separator' in current_scope:
                 grps = not_empty_line.groups()
-                line_contents = self.view.substr(line) + '\n' + grps[0] + self.before_tasks_bullet_spaces + self.open_tasks_bullet + ' '
+                line_contents = self.view.substr(line) + '\n' + grps[0] + self.before_tasks_bullet_spaces + self.open_tasks_bullet + self.tasks_bullet_space
             elif not ('header' and 'separator') in current_scope:
                 if not_empty_line:
                     grps = not_empty_line.groups()
-                    line_contents = (grps[0] if len(grps[0]) > 0 else self.before_tasks_bullet_spaces) + self.open_tasks_bullet + ' ' + grps[1]
-                elif empty_line: # only whitespaces
+                    line_contents = (grps[0] if len(grps[0]) > 0 else self.before_tasks_bullet_spaces) + self.open_tasks_bullet + self.tasks_bullet_space + grps[1]
+                elif empty_line:  # only whitespaces
                     grps = empty_line.groups()
-                    line_contents = grps[0] + self.open_tasks_bullet + ' '
-                else: # completely empty, no whitespaces
-                    line_contents = self.before_tasks_bullet_spaces + self.open_tasks_bullet + ' '
+                    line_contents = grps[0] + self.open_tasks_bullet + self.tasks_bullet_space
+                else:  # completely empty, no whitespaces
+                    line_contents = self.before_tasks_bullet_spaces + self.open_tasks_bullet + self.tasks_bullet_space
             else:
                 print('oops, need to improve PlainTasksNewCommand')
             self.view.replace(edit, line, line_contents)
@@ -205,7 +208,7 @@ class PlainTasksArchiveCommand(PlainTasksBase):
                     else:
                         eol = (self.before_tasks_bullet_spaces +
                                match_task.group(1) + # bullet
-                               (' ' if pr[0] else '') + pr[1] + (':' if pr[0] else '') +
+                               (self.tasks_bullet_space if pr[0] else '') + pr[1] + (':' if pr[0] else '') +
                                match_task.group(2) + # very task
                                '\n')
                 else:
