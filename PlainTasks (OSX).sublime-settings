@@ -2,7 +2,6 @@
   "open_tasks_bullet": "☐", // options: - | ❍ | ❑ | ■ | □ | ☐ | ▪ | ▫ | – | — ≡ → ›
   "done_tasks_bullet": "✔", // options: + | ✓ | ✔
   "cancelled_tasks_bullet": "✘", // options: x | ✘
-  "tasks_bullet_space": " ",
   "before_tasks_bullet_margin": 1,
   "date_format": "(%y-%m-%d %H:%M)",
   "done_tag": true, // related to @cancelled as well
