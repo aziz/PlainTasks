@@ -63,7 +63,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^\s*(-[✔✘]|❍|❑|■|□|☐|▪|▫|–|—)\s+((?:[^\@]|(?&lt;!\s)\@)*)</string>
+			<string>^\s*(-|❍|❑|■|□|☐|▪|▫|–|—)\s+((?:[^\@]|(?&lt;!\s)\@)*)</string>
 			<key>name</key>
 			<string>meta.item.todo.pending</string>
 		</dict>
