@@ -38,7 +38,7 @@ class PlainTasksNewCommand(PlainTasksBase):
         for region in selections:
             line = self.view.line(region)
             line_contents = self.view.substr(line).rstrip()
-            has_bullet = re.match('^(\s*)[' + re.escape(self.open_tasks_bullet) + re.escape(self.done_tasks_bullet) + re.escape(self.canc_tasks_bullet) + ']', self.view.substr(line))
+            has_bullet = re.match('^(\s*)(' + re.escape(self.open_tasks_bullet) + '|' + re.escape(self.done_tasks_bullet) + '|' + re.escape(self.canc_tasks_bullet) + ')', self.view.substr(line))
             not_empty_line = re.match('^(\s*)(\S.+)$', self.view.substr(line))
             empty_line     = re.match('^(\s+)$', self.view.substr(line))
             current_scope  = self.view.scope_name(line.a)
@@ -93,7 +93,7 @@ class PlainTasksCompleteCommand(PlainTasksBase):
             open_matches = re.match(rom, line_contents, re.U)
             done_matches = re.match(rdm, line_contents, re.U)
             canc_matches = re.match(rcm, line_contents, re.U)
-            if open_matches:
+            if open_matches and not (done_matches or canc_matches):
                 grps = open_matches.groups()
                 self.view.insert(edit, line.end(), done_line_end)
                 replacement = u'%s%s%s' % (grps[0], self.done_tasks_bullet, grps[1].rstrip())
@@ -133,7 +133,7 @@ class PlainTasksCancelCommand(PlainTasksBase):
             open_matches = re.match(rom, line_contents, re.U)
             done_matches = re.match(rdm, line_contents, re.U)
             canc_matches = re.match(rcm, line_contents, re.U)
-            if open_matches:
+            if open_matches and not (done_matches or canc_matches):
                 grps = open_matches.groups()
                 self.view.insert(edit, line.end(), canc_line_end)
                 replacement = u'%s%s%s' % (grps[0], self.canc_tasks_bullet, grps[1].rstrip())
@@ -191,7 +191,7 @@ class PlainTasksArchiveCommand(PlainTasksBase):
                 self.view.insert(edit, self.view.size(), create_archive)
                 line = self.view.size()
 
-            projects = self.view.find_all('^\s*(\w+.+:\s*$\n?)|^\s*---.{3,5}---+$', 0)
+            projects = self.view.find_all('^\s*(\w+.+:\s*(\@[^\s]+(\(.*?\))?\s*)*$\n?)|^\s*---.{3,5}---+$', 0)
 
             # adding tasks to archive section
             for task in all_tasks:
@@ -200,12 +200,12 @@ class PlainTasksArchiveCommand(PlainTasksBase):
                     pr = self.get_task_project(task, projects)
                     if self.project_postfix:
                         eol = (self.before_tasks_bullet_spaces + self.view.substr(task).lstrip() +
-                               (' @project(' if pr[0] else '') + pr[1] + (')' if pr[0] else '') +
+                               (' @project(' if pr else '') + pr + (')' if pr else '') +
                                '\n')
                     else:
                         eol = (self.before_tasks_bullet_spaces +
                                match_task.group(1) + # bullet
-                               (' ' if pr[0] else '') + pr[1] + (':' if pr[0] else '') +
+                               (' ' if pr else '') + pr + (':' if pr else '') +
                                match_task.group(2) + # very task
                                '\n')
                 else:
@@ -225,9 +225,9 @@ class PlainTasksArchiveCommand(PlainTasksBase):
                 break
         #if there is no projects for task - return empty string
         if index == -1:
-            return (False, '')
+            return ''
 
-        prog = re.compile('^\n*([ \t]*).+:')
+        prog = re.compile('^\n*(\s*)(.+):\s*(\@[^\s]+(\(.*?\))?\s*)*')
         hierarhProject = ''
 
         if index >= 0:
@@ -237,7 +237,7 @@ class PlainTasksArchiveCommand(PlainTasksBase):
                 if prog.match(strProject):
                     spaces = prog.match(strProject).group(1)
                     if len(spaces) < len(depth):
-                        hierarhProject = strProject.strip().strip(':') + ((" / " + hierarhProject) if hierarhProject else '')
+                        hierarhProject = prog.match(strProject).group(2) + ((" / " + hierarhProject) if hierarhProject else '')
                         depth = spaces
                         if len(depth) == 0:
                             break
@@ -250,9 +250,9 @@ class PlainTasksArchiveCommand(PlainTasksBase):
                             break
                 index -= 1
         if not hierarhProject:
-            return (False, '')
+            return ''
         else:
-            return (True, hierarhProject)
+            return hierarhProject
 
     def get_task_note(self, task, tasks):
         note_line = task.end() + 1

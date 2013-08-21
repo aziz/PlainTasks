@@ -16,7 +16,7 @@
 	<array>
 		<dict>
 			<key>match</key>
-			<string>^\s*(\w+.+:\s*$\n?)</string>
+			<string>^\s*(\w+.+:\s*(\@[^\s]+(\(.*?\))?\s*)*$\n?)</string>
 			<key>name</key>
 			<string>keyword.control.header.todo</string>
 		</dict>
@@ -36,14 +36,14 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^\s*(\+|✓|✔|☑)\s+((?:[^\@]|(?&lt;!\s)\@|\@(?=\s))*)</string>
+			<string>^\s*(\+|✓|✔|☑|- ✔)\s+((?:[^\@]|(?&lt;!\s)\@|\@(?=\s))*)</string>
 			<key>name</key>
 			<string>meta.item.todo.completed</string>
 		</dict>
 
 		<dict>
 		  <key>match</key>
-		  <string>^\s*((?!-|\+|✓|✔|❍|❑|■|□|☐|▪|▫|–|—|＿|✘|(x\s+))\S).*((?!:\s*).\s*)$</string>
+		  <string>^\s*((?!-|\+|✓|✔|- ✔|❍|❑|■|□|☐|▪|▫|–|—|＿|✘|(x\s+)|- ✘)\S).*((?!:\s*).\s*)$</string>
 		  <key>name</key>
 		  <string>notes.todo</string>
 		</dict>
@@ -63,7 +63,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^\s*(-|❍|❑|■|□|☐|▪|▫|–|—)\s+((?:[^\@]|(?&lt;!\s)\@)*)</string>
+			<string>^\s*(-[✔✘]|❍|❑|■|□|☐|▪|▫|–|—)\s+((?:[^\@]|(?&lt;!\s)\@)*)</string>
 			<key>name</key>
 			<string>meta.item.todo.pending</string>
 		</dict>
@@ -125,7 +125,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^\s*(✘|x)\s+((?:[^\@]|(?&lt;!\s)\@)*)</string>
+			<string>^\s*(✘|x|- ✘)\s+((?:[^\@]|(?&lt;!\s)\@)*)</string>
 			<key>name</key>
 			<string>meta.item.todo.cancelled</string>
 		</dict>
