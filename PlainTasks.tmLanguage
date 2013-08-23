@@ -42,6 +42,26 @@
 		</dict>
 
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.bullet.cancelled.todo</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>text.cancelled.todo</string>
+				</dict>
+			</dict>
+			<key>match</key>
+			<string>^\s*(✘|x|- ✘)\s+((?:[^\@]|(?&lt;!\s)\@)*)</string>
+			<key>name</key>
+			<string>meta.item.todo.cancelled</string>
+		</dict>
+
+		<dict>
 		  <key>match</key>
 		  <string>^\s*((?!-|\+|✓|✔|- ✔|❍|❑|■|□|☐|▪|▫|–|—|＿|✘|(x\s+)|- ✘)\S).*((?!:\s*).\s*)$</string>
 		  <key>name</key>
@@ -108,26 +128,6 @@
 			<string>(?&lt;=\s)\@today|✭ᴛᴏᴅᴀʏ</string>
 			<key>name</key>
 			<string>string.other.tag.todo.today</string>
-		</dict>
-
-		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.definition.bullet.cancelled.todo</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>text.cancelled.todo</string>
-				</dict>
-			</dict>
-			<key>match</key>
-			<string>^\s*(✘|x|- ✘)\s+((?:[^\@]|(?&lt;!\s)\@)*)</string>
-			<key>name</key>
-			<string>meta.item.todo.cancelled</string>
 		</dict>
 
 	</array>
