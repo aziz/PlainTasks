@@ -79,11 +79,16 @@
 				<key>2</key>
 				<dict>
 					<key>name</key>
+					<string>string.other.tag.todo.estimatetime</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
 					<string>text.pending.todo</string>
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^\s*(-|❍|❑|■|□|☐|▪|▫|–|—)\s+((?:[^\@]|(?&lt;!\s)\@)*)</string>
+			<string>^\s*(-|❍|❑|■|□|☐|▪|▫|–|—)\s+(\[\d{1,2}\-{0,1}\+{,1}\d{0,2}\s{0,1}\w{0,1}\]){,1}((?:[^\@]|(?&lt;!\s)\@)*)</string>
 			<key>name</key>
 			<string>meta.item.todo.pending</string>
 		</dict>
