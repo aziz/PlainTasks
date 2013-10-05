@@ -13,12 +13,15 @@ if int(sublime.version()) < 3000:
 
 class PlainTasksBase(sublime_plugin.TextCommand):
     def run(self, edit):
-        self.open_tasks_bullet = self.view.settings().get('open_tasks_bullet')
-        self.done_tasks_bullet = self.view.settings().get('done_tasks_bullet')
-        self.canc_tasks_bullet = self.view.settings().get('cancelled_tasks_bullet')
+        if self.view.settings().get('taskpaper_compatible'):
+            self.open_tasks_bullet = self.done_tasks_bullet = self.canc_tasks_bullet = '-'
+        else:
+            self.open_tasks_bullet = self.view.settings().get('open_tasks_bullet')
+            self.done_tasks_bullet = self.view.settings().get('done_tasks_bullet')
+            self.canc_tasks_bullet = self.view.settings().get('cancelled_tasks_bullet')
         self.before_tasks_bullet_spaces = ' ' * self.view.settings().get('before_tasks_bullet_margin')
         self.date_format = self.view.settings().get('date_format')
-        if self.view.settings().get('done_tag'):
+        if self.view.settings().get('done_tag') or self.view.settings().get('taskpaper_compatible'):
             self.done_tag = "@done"
             self.canc_tag = "@cancelled"
         else:
@@ -87,9 +90,14 @@ class PlainTasksCompleteCommand(PlainTasksBase):
         for region in self.view.sel():
             line = self.view.line(region)
             line_contents = self.view.substr(line).rstrip()
-            rom = '^(\s*)' + re.escape(self.open_tasks_bullet) + '(\s*.*)$'
-            rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '(\s*[^\b]*?\s*)(?=\s@done|@project|\s\(|$)[\(\)\d\w,\.:\-\/ @]*\s*$'
-            rcm = '^(\s*)' + re.escape(self.canc_tasks_bullet) + '(\s*[^\b]*?\s*)(?=\s@cancelled|@project|\s\(|$)[\(\)\d\w,\.:\-\/ @]*\s*$'
+            if self.view.settings().get('taskpaper_compatible'):
+                rom = '^(\s*)-(\s*[^\b]*\s*)(?!\s@(done|cancelled))[\(\)\d\w,\.:\-\/ @]*\s*$'
+                rdm = '^(\s*)-(\s*[^\b]*?\s*)(?=\s@done)[\(\)\d\w,\.:\-\/ @]*\s*$'
+                rcm = '^(\s*)-(\s*[^\b]*?\s*)(?=\s@cancelled)[\(\)\d\w,\.:\-\/ @]*\s*$'
+            else:
+                rom = '^(\s*)' + re.escape(self.open_tasks_bullet) + '(\s*.*)$'
+                rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '(\s*[^\b]*?\s*)(?=\s@done|@project|\s\(|$)[\(\)\d\w,\.:\-\/ @]*\s*$'
+                rcm = '^(\s*)' + re.escape(self.canc_tasks_bullet) + '(\s*[^\b]*?\s*)(?=\s@cancelled|@project|\s\(|$)[\(\)\d\w,\.:\-\/ @]*\s*$'
             open_matches = re.match(rom, line_contents, re.U)
             done_matches = re.match(rdm, line_contents, re.U)
             canc_matches = re.match(rcm, line_contents, re.U)
@@ -127,9 +135,14 @@ class PlainTasksCancelCommand(PlainTasksBase):
         for region in self.view.sel():
             line = self.view.line(region)
             line_contents = self.view.substr(line).rstrip()
-            rom = '^(\s*)' + re.escape(self.open_tasks_bullet) + '(\s*.*)$'
-            rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '(\s*[^\b]*?\s*)(?=\s@done|@project|\s\(|$)[\(\)\d\w,\.:\-\/ @]*\s*$'
-            rcm = '^(\s*)' + re.escape(self.canc_tasks_bullet) + '(\s*[^\b]*?\s*)(?=\s@cancelled|@project|\s\(|$)[\(\)\d\w,\.:\-\/ @]*\s*$'
+            if self.view.settings().get('taskpaper_compatible'):
+                rom = '^(\s*)-(\s*[^\b]*\s*)(?!\s@(done|cancelled))[\(\)\d\w,\.:\-\/ @]*\s*$'
+                rdm = '^(\s*)-(\s*[^\b]*?\s*)(?=\s@done)[\(\)\d\w,\.:\-\/ @]*\s*$'
+                rcm = '^(\s*)-(\s*[^\b]*?\s*)(?=\s@cancelled)[\(\)\d\w,\.:\-\/ @]*\s*$'
+            else:
+                rom = '^(\s*)' + re.escape(self.open_tasks_bullet) + '(\s*.*)$'
+                rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '(\s*[^\b]*?\s*)(?=\s@done|@project|\s\(|$)[\(\)\d\w,\.:\-\/ @]*\s*$'
+                rcm = '^(\s*)' + re.escape(self.canc_tasks_bullet) + '(\s*[^\b]*?\s*)(?=\s@cancelled|@project|\s\(|$)[\(\)\d\w,\.:\-\/ @]*\s*$'
             open_matches = re.match(rom, line_contents, re.U)
             done_matches = re.match(rdm, line_contents, re.U)
             canc_matches = re.match(rcm, line_contents, re.U)
@@ -158,8 +171,12 @@ class PlainTasksCancelCommand(PlainTasksBase):
 
 class PlainTasksArchiveCommand(PlainTasksBase):
     def runCommand(self, edit):
-        rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '\s+.*$'
-        rcm = '^(\s*)' + re.escape(self.canc_tasks_bullet) + '\s+.*$'
+        if self.view.settings().get('taskpaper_compatible'):
+            rdm = '^(\s*)-(\s*[^\n]*?\s*)(?=\s@done)[\(\)\d\w,\.:\-\/ @]*\s*[^\n]$'
+            rcm = '^(\s*)-(\s*[^\n]*?\s*)(?=\s@cancelled)[\(\)\d\w,\.:\-\/ @]*\s*[^\n]$'
+        else:
+            rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '\s+.*$'
+            rcm = '^(\s*)' + re.escape(self.canc_tasks_bullet) + '\s+.*$'
 
         # finding archive section
         archive_pos = self.view.find(self.archive_name, 0, sublime.LITERAL)
@@ -195,7 +212,10 @@ class PlainTasksArchiveCommand(PlainTasksBase):
 
             # adding tasks to archive section
             for task in all_tasks:
-                match_task = re.match('^\s*(' + re.escape(self.done_tasks_bullet) + '|' + re.escape(self.canc_tasks_bullet) + ')(\s+.*$)', self.view.substr(task), re.U)
+                if self.view.settings().get('taskpaper_compatible'):
+                    match_task = re.match('^\s*(-)(\s*[^\n]*?)', self.view.substr(task), re.U)
+                else:
+                    match_task = re.match('^\s*(' + re.escape(self.done_tasks_bullet) + '|' + re.escape(self.canc_tasks_bullet) + ')(\s+.*$)', self.view.substr(task), re.U)
                 if match_task:
                     pr = self.get_task_project(task, projects)
                     if self.project_postfix:

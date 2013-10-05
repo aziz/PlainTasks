@@ -81,9 +81,7 @@ add these settings to the json file:
   "before_tasks_bullet_margin": 0,
   "tab_size": 2,
   "translate_tabs_to_spaces": false,
-  "open_tasks_bullet": "-",
-  "done_tasks_bullet": "- ✔",
-  "cancelled_tasks_bullet": "- ✘"
+  "taskpaper_compatible": true
 }
 ```
 

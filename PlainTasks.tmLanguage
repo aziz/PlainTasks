@@ -34,9 +34,19 @@
 					<key>name</key>
 					<string>comment.line.completed.todo</string>
 				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.bullet.completed.todo</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>comment.line.completed.todo</string>
+				</dict>
 			</dict>
 			<key>match</key>
-			<string>^\s*(\+|✓|✔|☑|- ✔)\s+((?:[^\@]|(?&lt;!\s)\@|\@(?=\s))*)</string>
+			<string>^\s*(?:(\+|✓|✔|☑)\s+((?:[^\@]|(?&lt;!\s)\@|\@(?=\s))*))|(?:(-)\s+((?:[^\@]|(?&lt;!\s)\@|\@(?=\s))*)(?=(.*)?\@done))</string>
 			<key>name</key>
 			<string>meta.item.todo.completed</string>
 		</dict>
@@ -54,16 +64,26 @@
 					<key>name</key>
 					<string>text.cancelled.todo</string>
 				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.bullet.cancelled.todo</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>text.cancelled.todo</string>
+				</dict>
 			</dict>
 			<key>match</key>
-			<string>^\s*(✘|x|- ✘)\s+((?:[^\@]|(?&lt;!\s)\@)*)</string>
+			<string>^\s*(✘|x)\s+((?:[^\@]|(?&lt;!\s)\@)*)|(?:(-)\s+((?:[^\@]|(?&lt;!\s)\@|\@(?=\s))*)(?=(.*)?\@cancelled))</string>
 			<key>name</key>
 			<string>meta.item.todo.cancelled</string>
 		</dict>
 
 		<dict>
 		  <key>match</key>
-		  <string>^\s*((?!-|\+|✓|✔|- ✔|❍|❑|■|□|☐|▪|▫|–|—|＿|✘|(x\s+)|- ✘)\S).*((?!:\s*).\s*)$</string>
+		  <string>^\s*((?!-|\+|✓|✔|❍|❑|■|□|☐|▪|▫|–|—|＿|✘|(x\s+))\S).*((?!:\s*).\s*)$</string>
 		  <key>name</key>
 		  <string>notes.todo</string>
 		</dict>
@@ -83,7 +103,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^\s*(-|❍|❑|■|□|☐|▪|▫|–|—)\s+((?:[^\@]|(?&lt;!\s)\@)*)</string>
+			<string>^\s*(-|❍|❑|■|□|☐|▪|▫|–|—)\s+((?:[^\@]|(?&lt;!\s)\@)*)(?!(.*)?(\@done|\@cancelled))</string>
 			<key>name</key>
 			<string>meta.item.todo.pending</string>
 		</dict>
