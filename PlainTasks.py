@@ -186,7 +186,7 @@ class PlainTasksArchiveCommand(PlainTasksBase):
         # print(done_task)
         while done_task and (not archive_pos or done_task < archive_pos):
             done_tasks.append(done_task)
-            self.get_task_note(done_task, done_tasks)
+            self.get_task_note(self, done_task, done_tasks)
             done_task = self.view.find(rdm, done_task.end() + 1)
 
         canc_tasks = []
@@ -194,12 +194,15 @@ class PlainTasksArchiveCommand(PlainTasksBase):
         # print(canc_task)
         while canc_task and (not archive_pos or canc_task < archive_pos):
             canc_tasks.append(canc_task)
-            self.get_task_note(canc_task, canc_tasks)
+            self.get_task_note(self, canc_task, canc_tasks)
             canc_task = self.view.find(rcm, canc_task.end() + 1)
 
         all_tasks = done_tasks + canc_tasks
         all_tasks.sort()
+        self.ileik_tomoveit(self, edit, archive_pos, all_tasks)
 
+    @staticmethod
+    def ileik_tomoveit(self, edit, archive_pos, all_tasks):
         if all_tasks:
             if archive_pos:
                 line = self.view.full_line(archive_pos).end()
@@ -217,7 +220,7 @@ class PlainTasksArchiveCommand(PlainTasksBase):
                 else:
                     match_task = re.match('^\s*(' + re.escape(self.done_tasks_bullet) + '|' + re.escape(self.canc_tasks_bullet) + ')(\s+.*$)', self.view.substr(task), re.U)
                 if match_task:
-                    pr = self.get_task_project(task, projects)
+                    pr = PlainTasksArchiveCommand.get_task_project(self, task, projects)
                     if self.project_postfix:
                         eol = (self.before_tasks_bullet_spaces + self.view.substr(task).lstrip() +
                                (' @project(' if pr else '') + pr + (')' if pr else '') +
@@ -236,6 +239,7 @@ class PlainTasksArchiveCommand(PlainTasksBase):
             for task in reversed(all_tasks):
                 self.view.erase(edit, self.view.full_line(task))
 
+    @staticmethod
     def get_task_project(self, task, projects):
         index = -1
         for ind, pr in enumerate(projects):
@@ -274,11 +278,25 @@ class PlainTasksArchiveCommand(PlainTasksBase):
         else:
             return hierarhProject
 
+    @staticmethod
     def get_task_note(self, task, tasks):
         note_line = task.end() + 1
         while self.view.scope_name(note_line) == 'text.todo notes.todo ':
             tasks.append(self.view.line(note_line))
             note_line = self.view.line(note_line).end() + 1
+
+
+class PlainTasksPartialArchiveCommand(PlainTasksBase):
+    def runCommand(self, edit):
+        archive_pos = self.view.find(self.archive_name, 0, sublime.LITERAL)
+        all_tasks = []
+        for region in self.view.sel():
+            for l in self.view.lines(region):
+                line = self.view.line(l)
+                if ('completed' in self.view.scope_name(line.a)) or ('cancelled' in self.view.scope_name(line.a)):
+                    all_tasks.append(line)
+                    PlainTasksArchiveCommand.get_task_note(self, line, all_tasks)
+        PlainTasksArchiveCommand.ileik_tomoveit(self, edit, archive_pos, all_tasks)
 
 
 class PlainTasksNewTaskDocCommand(sublime_plugin.WindowCommand):
