@@ -69,6 +69,7 @@ Here is a list of PlainTasks' specific settings:
 | **project_tag**                | true             | Postfix archived task with project tag, otherwise prefix                |
 | **archive_name**               | `Archive:`       | Make sure it is the unique project name within your todo files          |
 | **indent_after_task**          | true             | Determines whether next line after task should be indented or not       |
+| **new_on_top**                 | true             | How to sort archived tasks (done_tag=true and default date_format are required)|
 
 
 

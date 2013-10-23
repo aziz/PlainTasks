@@ -235,6 +235,7 @@ class PlainTasksArchiveCommand(PlainTasksBase):
             # remove moved tasks (starting from the last one otherwise it screw up regions after the first delete)
             for task in reversed(all_tasks):
                 self.view.erase(edit, self.view.full_line(task))
+            self.view.run_command('plain_tasks_sort_by_date')
 
     def get_task_project(self, task, projects):
         index = -1
@@ -372,3 +373,30 @@ class PlainTasksOpenLinkCommand(sublime_plugin.TextCommand):
         if match:
             fn, sym = match.group('fn', 'sym')
             self.show_panel_or_open(fn, sym)
+
+
+class PlainTasksSortByDate(PlainTasksBase):
+    def runCommand(self, edit):
+        archive_pos = self.view.find(self.archive_name, 0, sublime.LITERAL)
+        if archive_pos:
+            have_date = '(^\s*[^\n]*?\s\@(?:done|cancelled)\s*(\([\d\w,\.:\-\/ ]*\))[^\n]*$)'
+            tasks_prefixed_date = []
+            tasks = self.view.find_all(have_date, archive_pos.b-1, "\\2\\1", tasks_prefixed_date)
+            notes = []
+            for ind, task in enumerate(tasks):
+                note_line = task.end() + 1
+                while self.view.scope_name(note_line) == 'text.todo notes.todo ':
+                    note = self.view.line(note_line)
+                    notes.append(note)
+                    tasks_prefixed_date[ind] += '\n' + self.view.substr(note)
+                    note_line = note.end() + 1
+            to_remove = tasks+notes
+            to_remove.sort()
+            for i in reversed(to_remove):
+                self.view.erase(edit, self.view.full_line(i))
+            tasks_prefixed_date.sort(reverse=self.view.settings().get('new_on_top'))
+            eol = archive_pos.end()
+            for a in tasks_prefixed_date:
+                eol += self.view.insert(edit, eol, '\n' + re.sub('^\([\d\w,\.:\-\/ ]*\)([^\b]*$)', '\\1', a))
+        else:
+            sublime.status_message("Nothing to sort")
