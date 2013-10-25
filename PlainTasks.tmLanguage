@@ -110,21 +110,21 @@
 
 		<dict>
 			<key>match</key>
-			<string>(?&lt;=\s)(\@[\w\d\.\-!?]+\s+)*(\@done|\@project|\(\d*.*\))[\(\)\d\w,\.:\-\/\s\@\+]*\s*\n*</string>
+			<string>(?&lt;=\s)(\@[\w\d\.\(\)\-!? :]+\s+)*(\@done|\@project|\(\d*.*\))[\(\)\d\w,\.:\-\/\s\@\+]*\s*\n*</string>
 			<key>name</key>
 			<string>meta.tag.todo.completed</string>
 		</dict>
 
 		<dict>
 			<key>match</key>
-			<string>(?&lt;=\s)(\@[\w\d\.\-!?]+\s+)*(\@cancelled|\@project|\(\d*.*\))[\(\)\d\w,\.:\-\/\s\@\+]*\s*\n*</string>
+			<string>(?&lt;=\s)(\@[\w\d\.\(\)\-!? :]+\s+)*(\@cancelled|\@project|\(\d*.*\))[\(\)\d\w,\.:\-\/\s\@\+]*\s*\n*</string>
 			<key>name</key>
 			<string>meta.tag.todo.cancelled</string>
 		</dict>
 
 		<dict>
 			<key>match</key>
-			<string>(?&lt;=\s)\@(?!today|completed|done)[\w\d\.\(\)\-!?]+\s*</string>
+			<string>(?&lt;=\s)\@(?!today|completed|done)[\w\d\.\(\)\-!? :]+\s*</string>
 			<key>name</key>
 			<string>meta.tag.todo</string>
 		</dict>

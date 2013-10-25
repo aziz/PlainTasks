@@ -14,5 +14,12 @@
       { "key": "selector", "operator": "equal", "operand": "text.todo" },
       { "key": "preceding_text", "operator": "regex_contains", "operand": "^\\s*[-|+|✓|✔|❍|❑|■|□|☐|▪|▫|–|—|✘|x]\\s+.+", "match_all": true }
     ]
+  },
+  { "keys": ["tab"], "command": "plain_task_insert_date", "context":
+    [
+      { "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true },
+      { "key": "selector", "operator": "equal", "operand": "text.todo" },
+      { "key": "preceding_text", "operator": "regex_contains", "operand": "@started(?!\\([\\d\\w,\\.:\\-\/ @]*\\))", "match_all": true }
+    ]
   }
 ]

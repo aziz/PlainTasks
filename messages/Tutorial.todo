@@ -39,6 +39,12 @@ Tasks:
 
 --- ✄ -----------------------
 You can use separator snippet to separate your todo lists, type -- and press tab
+Couple of tags are in completion rules:
+  ☐ type s, press tab key twice — it'll become @started(13-10-25 15:20)
+    you'll get a current date;
+    when a task with such tag is completed/cancelled, you'll know how many time has passed since start.
+  ☐ type t, press tab key — it'll become @today
+    easy to spot, eh?
 
 FileType Support:
  PlainTasks support these file types out of the box

@@ -2,8 +2,6 @@ TODO:
  ☐ make urls highlighted @feature
  ☐ make file links highlighted @feature
  ☐ use control+shift+A to only archive the first level tasks (or current level of indent) @feature
- ☐ include in the task the date and time of creation (using a shortcut key) @feature
-    Maybe after mark the task as @done calculate (the end time - start time)
  ☐ in archive list, add date in front of done tasks (e.g. 2012-09-06 14:41 Ξ some task) @feature
  ☐ @today ✭ᴛᴏᴅᴀʏ tags @feature
  ☐ marking all nested tasks as done should mark the parent as done?
@@ -15,7 +13,9 @@ TODO:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ include in the task the date and time of creation (using a shortcut key) @feature @done (13-10-25 14:47) @project(TODO)
  ✔ in archive list, adding newly archived items to the bottom or top should be configurable @feature @done (13-10-23 21:21) @project(TODO)
+ ✔ Maybe after mark the task as done calculate (the end time - start time) @done (13-10-22 17:50) @project(TODO)
  ✔ in archive list, prefix task with project name, add specific scope for project prefixes @option @done (13-07-09 13:08) @project(TODO)
  ✔ indenting notes below tasks? @done (13-07-08 00:59) @project(TODO)
  ✔ when archiving, if a task has some note, those notes should also move to archive section @feature @done (13-06-25 11:49) @project(TODO)
