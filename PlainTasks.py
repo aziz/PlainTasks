@@ -48,13 +48,13 @@ class PlainTasksNewCommand(PlainTasksBase):
             if has_bullet:
                 grps = has_bullet.groups()
                 line_contents = self.view.substr(line) + '\n' + grps[0] + self.open_tasks_bullet + ' '
-            elif 'header' in current_scope:
+            elif 'header' in current_scope and not self.view.settings().get('header_to_task'):
                 grps = not_empty_line.groups()
                 line_contents = self.view.substr(line) + '\n' + grps[0] + self.before_tasks_bullet_spaces + self.open_tasks_bullet + ' '
             elif 'separator' in current_scope:
                 grps = not_empty_line.groups()
                 line_contents = self.view.substr(line) + '\n' + grps[0] + self.before_tasks_bullet_spaces + self.open_tasks_bullet + ' '
-            elif not ('header' and 'separator') in current_scope:
+            elif not ('header' and 'separator') in current_scope or self.view.settings().get('header_to_task'):
                 if not_empty_line:
                     grps = not_empty_line.groups()
                     line_contents = (grps[0] if len(grps[0]) > 0 else self.before_tasks_bullet_spaces) + self.open_tasks_bullet + ' ' + grps[1]
