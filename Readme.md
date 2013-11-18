@@ -43,9 +43,11 @@ For more portability you can use `todolist.txt` either as a filename or as suffi
 - type `s`, press tab key — it'll become `@started` — press tab again and current date will be inserted, when you'll complete or cancel a task with such tag, you'll know how many time has passed since start;
 - type `t`, press tab key — it'll become `@today` — this one is highlighted differently than other tags, you can easily spot which task is important.
 
-☐ You can create a link to a file within your project by prefixing the file name with a pound sign like: `#filename`.  
-  In SublimeText 3 you can even specify a symbol inside that file by using @ symbol like: `#filename@symbol`.  
-  Pressing `alt + o` will open the file in Sublime.
+☐ You can create a link to a file within your project by prefixing the file name with a dot and (back)slash like: `.\filename\ ./another filename/`.  
+  The line and column can be specified by colons: `.\filename:11:8`.  
+  In SublimeText 3 you can specify a symbol inside that file by using \> character like: `.\filename>symbol`.  
+  In SublimeText 2 you can specify a text inside that file by using inch characters like: `.\filename"any text"`.  
+  Pressing `alt + o` will open the file in Sublime and scroll to specific position if any.
 
 ### Editor Useful Tools:
 

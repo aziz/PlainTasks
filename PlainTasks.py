@@ -91,13 +91,13 @@ class PlainTasksCompleteCommand(PlainTasksBase):
             line = self.view.line(region)
             line_contents = self.view.substr(line).rstrip()
             if self.view.settings().get('taskpaper_compatible'):
-                rom = '^(\s*)-(\s*[^\b]*\s*)(?!\s@(done|cancelled))[\(\)\d\w,\.:\-\/ @]*\s*$'
-                rdm = '^(\s*)-(\s*[^\b]*?\s*)(?=\s@done)[\(\)\d\w,\.:\-\/ @]*\s*$'
-                rcm = '^(\s*)-(\s*[^\b]*?\s*)(?=\s@cancelled)[\(\)\d\w,\.:\-\/ @]*\s*$'
+                rom = '^(\s*)-(\s*[^\b]*\s*)(?!\s@(done|cancelled)).*$'
+                rdm = '^(\s*)-(\s*[^\b]*?\s*)(?=\s@done).*$'
+                rcm = '^(\s*)-(\s*[^\b]*?\s*)(?=\s@cancelled).*$'
             else:
                 rom = '^(\s*)' + re.escape(self.open_tasks_bullet) + '(\s*.*)$'
-                rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '(\s*[^\b]*?\s*)(?=\s@done|@project|\s\(|$)[\(\)\d\w,\.:\-\/ @]*\s*$'
-                rcm = '^(\s*)' + re.escape(self.canc_tasks_bullet) + '(\s*[^\b]*?\s*)(?=\s@cancelled|@project|\s\(|$)[\(\)\d\w,\.:\-\/ @]*\s*$'
+                rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '(\s*[^\b]*?\s*)(?=\s@done|@project|\s\(|$).*$'
+                rcm = '^(\s*)' + re.escape(self.canc_tasks_bullet) + '(\s*[^\b]*?\s*)(?=\s@cancelled|@project|\s\(|$).*$'
             started = '^\s*[^\b]*?\s*@started(\([\d\w,\.:\-\/ @]*\)).*$'
             open_matches = re.match(rom, line_contents, re.U)
             done_matches = re.match(rdm, line_contents, re.U)
@@ -142,13 +142,13 @@ class PlainTasksCancelCommand(PlainTasksBase):
             line = self.view.line(region)
             line_contents = self.view.substr(line).rstrip()
             if self.view.settings().get('taskpaper_compatible'):
-                rom = '^(\s*)-(\s*[^\b]*\s*)(?!\s@(done|cancelled))[\(\)\d\w,\.:\-\/ @]*\s*$'
-                rdm = '^(\s*)-(\s*[^\b]*?\s*)(?=\s@done)[\(\)\d\w,\.:\-\/ @]*\s*$'
-                rcm = '^(\s*)-(\s*[^\b]*?\s*)(?=\s@cancelled)[\(\)\d\w,\.:\-\/ @]*\s*$'
+                rom = '^(\s*)-(\s*[^\b]*\s*)(?!\s@(done|cancelled)).*$'
+                rdm = '^(\s*)-(\s*[^\b]*?\s*)(?=\s@done).*$'
+                rcm = '^(\s*)-(\s*[^\b]*?\s*)(?=\s@cancelled).*$'
             else:
                 rom = '^(\s*)' + re.escape(self.open_tasks_bullet) + '(\s*.*)$'
-                rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '(\s*[^\b]*?\s*)(?=\s@done|@project|\s\(|$)[\(\)\d\w,\.:\-\/ @]*\s*$'
-                rcm = '^(\s*)' + re.escape(self.canc_tasks_bullet) + '(\s*[^\b]*?\s*)(?=\s@cancelled|@project|\s\(|$)[\(\)\d\w,\.:\-\/ @]*\s*$'
+                rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '(\s*[^\b]*?\s*)(?=\s@done|@project|\s\(|$).*$'
+                rcm = '^(\s*)' + re.escape(self.canc_tasks_bullet) + '(\s*[^\b]*?\s*)(?=\s@cancelled|@project|\s\(|$).*$'
             started = '^\s*[^\b]*?\s*@started(\([\d\w,\.:\-\/ @]*\)).*$'
             open_matches = re.match(rom, line_contents, re.U)
             done_matches = re.match(rdm, line_contents, re.U)
@@ -342,22 +342,20 @@ class PlainTasksOpenUrlCommand(sublime_plugin.TextCommand):
 
 
 class PlainTasksOpenLinkCommand(sublime_plugin.TextCommand):
-
-    LINK_PATTERN = re.compile(r'#(?P<fn>[^ \t\n\r\f\v@]+)(@(?P<sym>\w+))?')
+    LINK_PATTERN = re.compile(r'\.[\\/](?P<fn>[^\\/:*?"<>|]+[\\/]?)+[\\/]?(>(?P<sym>\w+))?(\:(?P<line>\d+))?(\:(?P<col>\d+))?(\"(?P<text>[^\n]*)\")?', re.I| re.U)
 
     def _format_res(self, res):
-        return [res[0], "line: %d column: %d" % (res[1], res[2])]
+        return [res[0], "line: %d column: %d" % (int(res[1]), int(res[2]))]
 
     def _on_panel_selection(self, selection):
         if selection >= 0:
             res = self._current_res[selection]
             win = sublime.active_window()
-            win.open_file('%s:%s:%s' % res, sublime.ENCODED_POSITION)
+            self.opened_file = win.open_file('%s:%s:%s' % res, sublime.ENCODED_POSITION)
 
-    def show_panel_or_open(self, fn, sym):
+    def show_panel_or_open(self, fn, sym, line, col, text):
         win = sublime.active_window()
         self._current_res = list()
-
         if sym:
             for name, _, pos in win.lookup_symbol_in_index(sym):
                 if name.endswith(fn):
@@ -367,11 +365,10 @@ class PlainTasksOpenLinkCommand(sublime_plugin.TextCommand):
             fn = fn.replace('/', os.sep)
             for folder in win.folders():
                 for root, dirnames, filenames in os.walk(folder):
-                    filenames = [os.path.join(root, f) for f in filenames]
+                    filenames = [os.path.join(root, f) for f in filenames] + [v.file_name() for v in win.views() if v.file_name()]
                     for name in filenames:
-                        if name.endswith(fn):
-                            self._current_res.append((name, 0, 0))
-
+                        if name.lower().endswith(fn.lower()):
+                            self._current_res.append((name, line if line else 0, col if col else 0))
         if len(self._current_res) == 1:
             self._on_panel_selection(0)
         else:
@@ -383,8 +380,17 @@ class PlainTasksOpenLinkCommand(sublime_plugin.TextCommand):
         line = self.view.substr(self.view.line(point))
         match = self.LINK_PATTERN.search(line)
         if match:
-            fn, sym = match.group('fn', 'sym')
-            self.show_panel_or_open(fn, sym)
+            fn, sym, line, col, text = match.group('fn', 'sym', 'line', 'col', 'text')
+            self.show_panel_or_open(fn, sym, line, col, text)
+            if text:
+                sublime.set_timeout(lambda:self.find_text(self.opened_file, text, line), 50)
+
+    def find_text(self, view, text, line):
+        result = view.find(text, view.sel()[0].a if line else 0, sublime.LITERAL)
+        view.sel().clear()
+        view.sel().add(result.a)
+        view.set_viewport_position(view.text_to_layout(view.size()), False)
+        view.show_at_center(result)
 
 
 class PlainTasksSortByDate(PlainTasksBase):
