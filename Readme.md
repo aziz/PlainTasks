@@ -22,7 +22,7 @@ For more portability you can use `todolist.txt` either as a filename or as suffi
 
 ☐ `⌘ + d`: toggle task as completed. You can also use your mouse to mark a task a completed. just hold down `⌘` (or `ctrl` if you're on Windows or Linux) and click the task. Clicking again will toggle the task back to the pending state.
 
-☐ `alt + c`: toggle task as cancelled.
+☐ `ctrl + c`: toggle task as cancelled on Mac. `alt + c` on Windows/Linux.
 
 ☐ `⌘ + shift + a` will archive the done tasks, by removing them from your list and appending them to the bottom of the file under Archive project
 
@@ -47,11 +47,11 @@ For more portability you can use `todolist.txt` either as a filename or as suffi
   The line and column can be specified by colons: `.\filename:11:8`.  
   In SublimeText 3 you can specify a symbol inside that file by using \> character like: `.\filename>symbol`.  
   In SublimeText 2 you can specify a text inside that file by using inch characters like: `.\filename"any text"`.  
-  Pressing `alt + o` will open the file in Sublime and scroll to specific position if any.
+  Pressing `ctrl + o` (`alt + o` on Windows/Linux) will open the file in Sublime and scroll to specific position if any.
 
 ### Editor Useful Tools:
 
-☐ Use **`⌘ + control + up/down (ctrl+shift+up/down on Windows)`** to move tasks up and down.
+☐ Use **`⌘ + control + up/down (ctrl + shift + up/down on Windows)`** to move tasks up and down.
 
 ☐ Use **`⌘ + r`** to see a list of projects and quickly jump between them
 
