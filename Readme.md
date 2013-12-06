@@ -22,7 +22,7 @@ For more portability you can use `todolist.txt` either as a filename or as suffi
 
 ☐ `⌘ + d`: toggle task as completed. You can also use your mouse to mark a task a completed. just hold down `⌘` (or `ctrl` if you're on Windows or Linux) and click the task. Clicking again will toggle the task back to the pending state.
 
-☐ `alt + c`: toggle task as cancelled.
+☐ `ctrl + c`: toggle task as cancelled on Mac. `alt + c` on Windows/Linux.
 
 ☐ `⌘ + shift + a` will archive the done tasks, by removing them from your list and appending them to the bottom of the file under Archive project
 

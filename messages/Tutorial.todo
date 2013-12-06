@@ -18,7 +18,7 @@ Tasks:
   Done:
    ☐ Pressing ⌘+d (ctrl+d on Windows) mark a task as done
    ☐ Pressing ⌘+d (ctrl+d on Windows) again will put it back in pending mode
-   ☐ Pressing alt+c will mark the task as cancelled
+   ☐ Pressing ctrl+c (alt+c on Windows) will mark the task as cancelled
   Tagging:
    ☐ You can add tags using @ sign, like this @tag
   URLs:
