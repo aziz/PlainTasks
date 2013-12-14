@@ -37,16 +37,26 @@
 				<key>3</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.bullet.completed.todo</string>
+					<string>meta.tag.todo.completed</string>
 				</dict>
 				<key>4</key>
 				<dict>
 					<key>name</key>
+					<string>punctuation.definition.bullet.completed.todo</string>
+				</dict>
+				<key>5</key>
+				<dict>
+					<key>name</key>
 					<string>comment.line.completed.todo</string>
+				</dict>
+				<key>6</key>
+				<dict>
+					<key>name</key>
+					<string>meta.tag.todo.completed</string>
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^\s*(?:(\+|✓|✔|☑)\s+((?:[^\@]|(?&lt;!\s)\@|\@(?=\s))*))|(?:(-)\s+((?:[^\@]|(?&lt;!\s)\@|\@(?=\s))*)(?=(.*)?\@done))</string>
+			<string>^\s*(?:(\+|✓|✔|☑)\s+((?:[^\@]|(?&lt;!\s)\@|\@(?=\s))*)(.*(?:\(d*.*\)$)))|(?:(-)\s+((?:[^\@]|(?&lt;!\s)\@|\@(?=\s))*)(.*\@done.*))\s*\n*</string>
 			<key>name</key>
 			<string>meta.item.todo.completed</string>
 		</dict>
@@ -67,16 +77,26 @@
 				<key>3</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.bullet.cancelled.todo</string>
+					<string>meta.tag.todo.cancelled</string>
 				</dict>
 				<key>4</key>
 				<dict>
 					<key>name</key>
+					<string>punctuation.definition.bullet.cancelled.todo</string>
+				</dict>
+				<key>5</key>
+				<dict>
+					<key>name</key>
 					<string>text.cancelled.todo</string>
+				</dict>
+				<key>6</key>
+				<dict>
+					<key>name</key>
+					<string>meta.tag.todo.cancelled</string>
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^\s*(✘|x)\s+((?:[^\@]|(?&lt;!\s)\@)*)|(?:(-)\s+((?:[^\@]|(?&lt;!\s)\@|\@(?=\s))*)(?=(.*)?\@cancelled))</string>
+			<string>^\s*(?:(✘|x)\s+((?:[^\@]|(?&lt;!\s)\@|\@(?=\s))*)(.*(?:\(d*.*\)$)))|(?:(-)\s+((?:[^\@]|(?&lt;!\s)\@|\@(?=\s))*)(.*\@cancelled.*))\s*\n*</string>
 			<key>name</key>
 			<string>meta.item.todo.cancelled</string>
 		</dict>
@@ -106,20 +126,6 @@
 			<string>^\s*(-|❍|❑|■|□|☐|▪|▫|–|—)\s+((?:[^\@]|(?&lt;!\s)\@)*)(?!(.*)?(\@done|\@cancelled))</string>
 			<key>name</key>
 			<string>meta.item.todo.pending</string>
-		</dict>
-
-		<dict>
-			<key>match</key>
-			<string>(?&lt;=\s)(\@[\w\d\.\(\)\-!? :]+\s+)*(\@done|\@project|\(\d*.*\))[\(\)\d\w,\.:\-\/\s\@\+]*\s*\n*</string>
-			<key>name</key>
-			<string>meta.tag.todo.completed</string>
-		</dict>
-
-		<dict>
-			<key>match</key>
-			<string>(?&lt;=\s)(\@[\w\d\.\(\)\-!? :]+\s+)*(\@cancelled|\@project|\(\d*.*\))[\(\)\d\w,\.:\-\/\s\@\+]*\s*\n*</string>
-			<key>name</key>
-			<string>meta.tag.todo.cancelled</string>
 		</dict>
 
 		<dict>
