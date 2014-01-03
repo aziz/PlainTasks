@@ -20,12 +20,15 @@ Tasks:
    ☐ Pressing ⌘+d (ctrl+d on Windows) again will put it back in pending mode
    ☐ Pressing ctrl+c (alt+c on Windows) will mark the task as cancelled
   Tagging:
-   ☐ You can add tags using @ sign, like this @tag
+   ☐ You can add tags using @ sign, like this @tag
   URLs:
    ☐ Pressing ⌘+shift+U (ctrl+shift+U on Windows) will open the url under the cursor in your default browser
   File links:
-   ☐ You can create a link to a file within your project by prefixing the file name with a pound sign like: #filename
-   ☐ In SublimeText 3 you can even specify a symbol inside that file by using @ symbol like: #filename@symbol
+   ☐ You can create a link to a file within your project by prefixing the file name with a dot and (back)slash sign like: .\filename\
+    ./another filename/ it supports only one filename per line
+   ☐ The line and column can be specified by colons: .\filename:11:8
+   ☐ In SublimeText 3 you can specify a symbol inside that file by using > character like: .\filename>symbol
+   ☐ In SublimeText 2 you can specify a text inside that file by using inch characters like: .\filename"any text"
    ☐ Pressing ctrl+o (alt+o on Windows) will open the file in Sublime
 
   Archiving:

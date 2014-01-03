@@ -345,7 +345,7 @@ class PlainTasksOpenUrlCommand(sublime_plugin.TextCommand):
 
 
 class PlainTasksOpenLinkCommand(sublime_plugin.TextCommand):
-    LINK_PATTERN = re.compile(r'\.[\\/](?P<fn>[^\\/:*?"<>|]+[\\/]?)+[\\/]?(>(?P<sym>\w+))?(\:(?P<line>\d+))?(\:(?P<col>\d+))?(\"(?P<text>[^\n]*)\")?', re.I| re.U)
+    LINK_PATTERN = re.compile(r'\.[\\/](?P<fn>[^\\/:*?"<>|]+)+[\\/]?(>(?P<sym>\w+))?(\:(?P<line>\d+))?(\:(?P<col>\d+))?(\"(?P<text>[^\n]*)\")?', re.I| re.U)
 
     def _format_res(self, res):
         return [res[0], "line: %d column: %d" % (int(res[1]), int(res[2]))]
@@ -372,6 +372,7 @@ class PlainTasksOpenLinkCommand(sublime_plugin.TextCommand):
                     for name in filenames:
                         if name.lower().endswith(fn.lower()):
                             self._current_res.append((name, line if line else 0, col if col else 0))
+            self._current_res = list(set(self._current_res))
         if len(self._current_res) == 1:
             self._on_panel_selection(0)
         else:
