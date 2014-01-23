@@ -44,12 +44,11 @@ class PlainTasksNewCommand(PlainTasksBase):
         for region in selections:
             line = self.view.line(region)
             line_contents = self.view.substr(line).rstrip()
-            has_bullet = re.match('^(\s*)(' + re.escape(self.open_tasks_bullet) + '|' + re.escape(self.done_tasks_bullet) + '|' + re.escape(self.canc_tasks_bullet) + ')', self.view.substr(line))
             not_empty_line = re.match('^(\s*)(\S.+)$', self.view.substr(line))
             empty_line     = re.match('^(\s+)$', self.view.substr(line))
             current_scope  = self.view.scope_name(line.a)
-            if has_bullet:
-                grps = has_bullet.groups()
+            if 'item' in current_scope:
+                grps = not_empty_line.groups()
                 line_contents = self.view.substr(line) + '\n' + grps[0] + self.open_tasks_bullet + ' '
             elif 'header' in current_scope and not self.view.settings().get('header_to_task'):
                 grps = not_empty_line.groups()
@@ -90,23 +89,24 @@ class PlainTasksCompleteCommand(PlainTasksBase):
         except:
             done_line_end = ' %s%s%s' % (self.done_tag, self.before_date_space, datetime.now().strftime(self.date_format))
         offset = len(done_line_end)
+        if self.taskpaper_compatible:
+            rom = '^(\s*)-(\s*[^\b]*\s*)(?!\s@(done|cancelled)).*$'
+            rdm = '^(\s*)-(\s*[^\b]*?\s*)(?=\s@done).*$'
+            rcm = '^(\s*)-(\s*[^\b]*?\s*)(?=\s@cancelled).*$'
+        else:
+            rom = '^(\s*)(?:\[\s\]|.)(\s*.*)$'
+            rdm = '^(\s*)(?:\[x\]|.)(\s*[^\b]*?\s*)(?=\s@done|@project|\s\(|$).*$'
+            rcm = '^(\s*)(?:\[\-\]|.)(\s*[^\b]*?\s*)(?=\s@cancelled|@project|\s\(|$).*$'
+        started = '^\s*[^\b]*?\s*@started(\([\d\w,\.:\-\/ @]*\)).*$'
         for region in self.view.sel():
             line = self.view.line(region)
             line_contents = self.view.substr(line).rstrip()
-            if self.taskpaper_compatible:
-                rom = '^(\s*)-(\s*[^\b]*\s*)(?!\s@(done|cancelled)).*$'
-                rdm = '^(\s*)-(\s*[^\b]*?\s*)(?=\s@done).*$'
-                rcm = '^(\s*)-(\s*[^\b]*?\s*)(?=\s@cancelled).*$'
-            else:
-                rom = '^(\s*)' + re.escape(self.open_tasks_bullet) + '(\s*.*)$'
-                rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '(\s*[^\b]*?\s*)(?=\s@done|@project|\s\(|$).*$'
-                rcm = '^(\s*)' + re.escape(self.canc_tasks_bullet) + '(\s*[^\b]*?\s*)(?=\s@cancelled|@project|\s\(|$).*$'
-            started = '^\s*[^\b]*?\s*@started(\([\d\w,\.:\-\/ @]*\)).*$'
             open_matches = re.match(rom, line_contents, re.U)
             done_matches = re.match(rdm, line_contents, re.U)
             canc_matches = re.match(rcm, line_contents, re.U)
             started_matches = re.match(started, line_contents, re.U)
-            if open_matches and not (done_matches or canc_matches):
+            current_scope = self.view.scope_name(line.a)
+            if 'pending' in current_scope:
                 grps = open_matches.groups()
                 eol = self.view.insert(edit, line.end(), done_line_end)
                 replacement = u'%s%s%s' % (grps[0], self.done_tasks_bullet, grps[1].rstrip())
@@ -115,12 +115,12 @@ class PlainTasksCompleteCommand(PlainTasksBase):
                     start = datetime.strptime(started_matches.group(1), self.date_format)
                     end = datetime.strptime(done_line_end.replace(' @done ', ''), self.date_format)
                     self.view.insert(edit, line.end() + eol, ' @lasted(%s)' % str(end - start))
-            elif done_matches:
+            elif 'completed' in current_scope:
                 grps = done_matches.groups()
                 replacement = u'%s%s%s' % (grps[0], self.open_tasks_bullet, grps[1].rstrip())
                 self.view.replace(edit, line, replacement)
                 offset = -offset
-            elif canc_matches:
+            elif 'cancelled' in current_scope:
                 grps = canc_matches.groups()
                 self.view.insert(edit, line.end(), done_line_end)
                 replacement = u'%s%s%s' % (grps[0], self.done_tasks_bullet, grps[1].rstrip())
@@ -141,23 +141,24 @@ class PlainTasksCancelCommand(PlainTasksBase):
         except:
             canc_line_end = ' %s%s%s' % (self.canc_tag,self.before_date_space, datetime.now().strftime(self.date_format))
         offset = len(canc_line_end)
+        if self.taskpaper_compatible:
+            rom = '^(\s*)-(\s*[^\b]*\s*)(?!\s@(done|cancelled)).*$'
+            rdm = '^(\s*)-(\s*[^\b]*?\s*)(?=\s@done).*$'
+            rcm = '^(\s*)-(\s*[^\b]*?\s*)(?=\s@cancelled).*$'
+        else:
+            rom = '^(\s*)(?:\[\s\]|.)(\s*.*)$'
+            rdm = '^(\s*)(?:\[x\]|.)(\s*[^\b]*?\s*)(?=\s@done|@project|\s\(|$).*$'
+            rcm = '^(\s*)(?:\[\-\]|.)(\s*[^\b]*?\s*)(?=\s@cancelled|@project|\s\(|$).*$'
+        started = '^\s*[^\b]*?\s*@started(\([\d\w,\.:\-\/ @]*\)).*$'
         for region in self.view.sel():
             line = self.view.line(region)
             line_contents = self.view.substr(line).rstrip()
-            if self.taskpaper_compatible:
-                rom = '^(\s*)-(\s*[^\b]*\s*)(?!\s@(done|cancelled)).*$'
-                rdm = '^(\s*)-(\s*[^\b]*?\s*)(?=\s@done).*$'
-                rcm = '^(\s*)-(\s*[^\b]*?\s*)(?=\s@cancelled).*$'
-            else:
-                rom = '^(\s*)' + re.escape(self.open_tasks_bullet) + '(\s*.*)$'
-                rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '(\s*[^\b]*?\s*)(?=\s@done|@project|\s\(|$).*$'
-                rcm = '^(\s*)' + re.escape(self.canc_tasks_bullet) + '(\s*[^\b]*?\s*)(?=\s@cancelled|@project|\s\(|$).*$'
-            started = '^\s*[^\b]*?\s*@started(\([\d\w,\.:\-\/ @]*\)).*$'
             open_matches = re.match(rom, line_contents, re.U)
             done_matches = re.match(rdm, line_contents, re.U)
             canc_matches = re.match(rcm, line_contents, re.U)
             started_matches = re.match(started, line_contents, re.U)
-            if open_matches and not (done_matches or canc_matches):
+            current_scope = self.view.scope_name(line.a)
+            if 'pending' in current_scope:
                 grps = open_matches.groups()
                 eol = self.view.insert(edit, line.end(), canc_line_end)
                 replacement = u'%s%s%s' % (grps[0], self.canc_tasks_bullet, grps[1].rstrip())
@@ -166,13 +167,13 @@ class PlainTasksCancelCommand(PlainTasksBase):
                     start = datetime.strptime(started_matches.group(1), self.date_format)
                     end = datetime.strptime(canc_line_end.replace(' @cancelled ', ''), self.date_format)
                     self.view.insert(edit, line.end() + eol, ' @wasted(%s)' % str(end - start))
-            elif done_matches:
+            elif 'completed' in current_scope:
                 pass
                 # grps = done_matches.groups()
                 # replacement = u'%s%s%s' % (grps[0], self.canc_tasks_bullet, grps[1].rstrip())
                 # self.view.replace(edit, line, replacement)
                 # offset = -offset
-            elif canc_matches:
+            elif 'cancelled' in current_scope:
                 grps = canc_matches.groups()
                 replacement = u'%s%s%s' % (grps[0], self.open_tasks_bullet, grps[1].rstrip())
                 self.view.replace(edit, line, replacement)
@@ -186,31 +187,19 @@ class PlainTasksCancelCommand(PlainTasksBase):
 
 class PlainTasksArchiveCommand(PlainTasksBase):
     def runCommand(self, edit):
-        if self.taskpaper_compatible:
-            rdm = '^(\s*)-(\s*[^\n]*?\s*)(?=\s@done)[\(\)\d\w,\.:\-\/ @]*\s*[^\n]$'
-            rcm = '^(\s*)-(\s*[^\n]*?\s*)(?=\s@cancelled)[\(\)\d\w,\.:\-\/ @]*\s*[^\n]$'
-        else:
-            rdm = '^(\s*)' + re.escape(self.done_tasks_bullet) + '\s+.*$'
-            rcm = '^(\s*)' + re.escape(self.canc_tasks_bullet) + '\s+.*$'
+        rds = 'meta.item.todo.completed'
+        rcs = 'meta.item.todo.cancelled'
 
         # finding archive section
         archive_pos = self.view.find(self.archive_name, 0, sublime.LITERAL)
 
-        done_tasks = []
-        done_task = self.view.find(rdm, 0)
-        # print(done_task)
-        while done_task and (not archive_pos or done_task < archive_pos):
-            done_tasks.append(done_task)
-            self.get_task_note(done_task, done_tasks)
-            done_task = self.view.find(rdm, done_task.end() + 1)
+        done_tasks = filter(lambda i: i < archive_pos, self.view.find_by_selector(rds))
+        for i in done_tasks:
+            self.get_task_note(i, done_tasks)
 
-        canc_tasks = []
-        canc_task = self.view.find(rcm, 0)
-        # print(canc_task)
-        while canc_task and (not archive_pos or canc_task < archive_pos):
-            canc_tasks.append(canc_task)
-            self.get_task_note(canc_task, canc_tasks)
-            canc_task = self.view.find(rcm, canc_task.end() + 1)
+        canc_tasks = filter(lambda i: i < archive_pos, self.view.find_by_selector(rcs))
+        for i in canc_tasks:
+            self.get_task_note(i, canc_tasks)
 
         all_tasks = done_tasks + canc_tasks
         all_tasks.sort()
@@ -227,11 +216,9 @@ class PlainTasksArchiveCommand(PlainTasksBase):
 
             # adding tasks to archive section
             for task in all_tasks:
-                if self.taskpaper_compatible:
-                    match_task = re.match('^\s*(-)(\s*[^\n]*?)', self.view.substr(task), re.U)
-                else:
-                    match_task = re.match('^\s*(' + re.escape(self.done_tasks_bullet) + '|' + re.escape(self.canc_tasks_bullet) + ')(\s+.*$)', self.view.substr(task), re.U)
-                if match_task:
+                match_task = re.match('^\s*(\[[x-]\]|.)(\s+.*$)', self.view.substr(task), re.U)
+                current_scope = self.view.scope_name(task.a)
+                if rds in current_scope or rcs in current_scope:
                     pr = self.get_task_project(task, projects)
                     if self.project_postfix:
                         eol = (self.before_tasks_bullet_spaces + self.view.substr(task).lstrip() +
@@ -293,7 +280,9 @@ class PlainTasksArchiveCommand(PlainTasksBase):
     def get_task_note(self, task, tasks):
         note_line = task.end() + 1
         while self.view.scope_name(note_line) == 'text.todo notes.todo ':
-            tasks.append(self.view.line(note_line))
+            note = self.view.line(note_line)
+            if note not in tasks:
+                tasks.append(note)
             note_line = self.view.line(note_line).end() + 1
 
 

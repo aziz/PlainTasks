@@ -67,9 +67,9 @@ Here is a list of PlainTasks' specific settings:
 
 |            Setting             |     Default      |                                 Options/Description                                 |
 | ------------------------------ | ---------------- | ----------------------------------------------------------------------- |
-| **open_tasks_bullet**          | ☐                | - ❍ ❑ ■ □ ☐ ▪ ▫ – — ≡ → ›                                               |
-| **done_tasks_bullet**          | ✔                | ✓   ☑ +                                                                   |
-| **cancelled_tasks_bullet**     | ✘                | x                                                                       |
+| **open_tasks_bullet**          | ☐                | - ❍ ❑ ■ □ ☐ ▪ ▫ – — ≡ → › [ ]                                           |
+| **done_tasks_bullet**          | ✔                | ✓   ☑ + [x]                                                               |
+| **cancelled_tasks_bullet**     | ✘                | x [-]                                                                   |
 | **date_format**                | `(%y-%m-%d %H:%M)` |                                                                         |
 | **done_tag**                   | true             | Determines whether done tasks should gain a @done tag or not            |
 | **before_tasks_bullet_margin** | 1                | Determines the number of spaces (default indent) before the task bullet |
