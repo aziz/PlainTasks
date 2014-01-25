@@ -193,11 +193,11 @@ class PlainTasksArchiveCommand(PlainTasksBase):
         # finding archive section
         archive_pos = self.view.find(self.archive_name, 0, sublime.LITERAL)
 
-        done_tasks = filter(lambda i: i < archive_pos, self.view.find_by_selector(rds))
+        done_tasks = [i for i in self.view.find_by_selector(rds) if i.a < (archive_pos.a if archive_pos and archive_pos.a > 0  else self.view.size())]
         for i in done_tasks:
             self.get_task_note(i, done_tasks)
 
-        canc_tasks = filter(lambda i: i < archive_pos, self.view.find_by_selector(rcs))
+        canc_tasks = [i for i in self.view.find_by_selector(rcs) if i.a < (archive_pos.a if archive_pos and archive_pos.a > 0 else self.view.size())]
         for i in canc_tasks:
             self.get_task_note(i, canc_tasks)
 
@@ -205,7 +205,7 @@ class PlainTasksArchiveCommand(PlainTasksBase):
         all_tasks.sort()
 
         if all_tasks:
-            if archive_pos:
+            if archive_pos and archive_pos.a > 0:
                 line = self.view.full_line(archive_pos).end()
             else:
                 create_archive = u'\n\n＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿\n' + self.archive_name + '\n'
