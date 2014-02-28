@@ -112,9 +112,13 @@ class PlainTasksCompleteCommand(PlainTasksBase):
                 replacement = u'%s%s%s' % (grps[0], self.done_tasks_bullet, grps[1].rstrip())
                 self.view.replace(edit, line, replacement)
                 if started_matches:
-                    start = datetime.strptime(started_matches.group(1), self.date_format)
-                    end = datetime.strptime(done_line_end.replace(' @done ', ''), self.date_format)
-                    self.view.insert(edit, line.end() + eol, ' @lasted(%s)' % str(end - start))
+                    self.calc_end_start_time(self, edit, line, started_matches.group(1), done_line_end, eol)
+            elif 'header' in current_scope:
+                eol = self.view.insert(edit, line.end(), done_line_end)
+                if started_matches:
+                    self.calc_end_start_time(self, edit, line, started_matches.group(1), done_line_end, eol)
+                indent = re.match('^(\s*)\S', line_contents, re.U)
+                self.view.insert(edit, line.begin() + len(indent.group(1)), '%s ' % self.done_tasks_bullet)
             elif 'completed' in current_scope:
                 grps = done_matches.groups()
                 replacement = u'%s%s%s' % (grps[0], self.open_tasks_bullet, grps[1].rstrip())
@@ -131,6 +135,12 @@ class PlainTasksCompleteCommand(PlainTasksBase):
             ofs = ind * offset
             new_pt = sublime.Region(pt.a + ofs, pt.b + ofs)
             self.view.sel().add(new_pt)
+
+    @staticmethod
+    def calc_end_start_time(self, edit, line, started_matches, done_line_end, eol, tag='lasted'):
+        start = datetime.strptime(started_matches, self.date_format)
+        end = datetime.strptime(done_line_end.replace(' @done ', '').replace(' @cancelled ', ''), self.date_format)
+        self.view.insert(edit, line.end() + eol, ' @%s(%s)' % (tag, str(end - start)))
 
 
 class PlainTasksCancelCommand(PlainTasksBase):
@@ -164,9 +174,13 @@ class PlainTasksCancelCommand(PlainTasksBase):
                 replacement = u'%s%s%s' % (grps[0], self.canc_tasks_bullet, grps[1].rstrip())
                 self.view.replace(edit, line, replacement)
                 if started_matches:
-                    start = datetime.strptime(started_matches.group(1), self.date_format)
-                    end = datetime.strptime(canc_line_end.replace(' @cancelled ', ''), self.date_format)
-                    self.view.insert(edit, line.end() + eol, ' @wasted(%s)' % str(end - start))
+                    PlainTasksCompleteCommand.calc_end_start_time(self, edit, line, started_matches.group(1), canc_line_end, eol, tag='wasted')
+            elif 'header' in current_scope:
+                eol = self.view.insert(edit, line.end(), canc_line_end)
+                if started_matches:
+                    PlainTasksCompleteCommand.calc_end_start_time(self, edit, line, started_matches.group(1), canc_line_end, eol, tag='wasted')
+                indent = re.match('^(\s*)\S', line_contents, re.U)
+                self.view.insert(edit, line.begin() + len(indent.group(1)), '%s ' % self.canc_tasks_bullet)
             elif 'completed' in current_scope:
                 pass
                 # grps = done_matches.groups()
@@ -250,7 +264,7 @@ class PlainTasksArchiveCommand(PlainTasksBase):
         if index == -1:
             return ''
 
-        prog = re.compile('^\n*(\s*)(.+):\s*(\@[^\s]+(\(.*?\))?\s*)*')
+        prog = re.compile('^\n*(\s*)(.+):(?=\s|$)\s*(\@[^\s]+(\(.*?\))?\s*)*')
         hierarhProject = ''
 
         if index >= 0:
