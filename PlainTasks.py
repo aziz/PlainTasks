@@ -276,7 +276,7 @@ class PlainTasksArchiveCommand(PlainTasksBase):
                 if rds in current_scope or rcs in current_scope:
                     pr = self.get_task_project(task, projects)
                     if self.project_postfix:
-                        eol = (self.before_tasks_bullet_spaces + self.view.substr(task).strip() +
+                        eol = (self.before_tasks_bullet_spaces * 2 + self.view.substr(task).strip() +
                                (' @project(' if pr else '') + pr + (')' if pr else '') +
                                '\n')
                     else:
