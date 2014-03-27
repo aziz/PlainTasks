@@ -2,3 +2,4 @@
 *.pyc
 .DS_Store
 package-metadata.json
+PlainTasks.sublime-project
