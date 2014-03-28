@@ -78,6 +78,7 @@ Here is a list of PlainTasks' specific settings:
 | **indent_after_task**          | true             | Determines whether next line after task should be indented or not       |
 | **new_on_top**                 | true             | How to sort archived tasks (done_tag=true and default date_format are required)|
 | **header_to_task**             | absent (false)   | If true, a project title line will be converted to a task on the certain keystroke  |
+| **tasks_bullet_space** | absent (whitespace or tab) | String to place after bullet, might be any character(s) |
 
 
 
@@ -87,13 +88,13 @@ add these settings to the json file:
 
 ```json
 {
-  "before_tasks_bullet_margin": 0,
-  "tab_size": 2,
   "translate_tabs_to_spaces": false,
   "date_format": "(%y-%m-%d)",
   "taskpaper_compatible": true
 }
 ```
+
+*Note*, `"translate_tabs_to_spaces": false` will cause tab character *after* bullet as well as before, if you need whitespace add `"tasks_bullet_space": " "`.
 
 ## [BONUS] Custom todo icon
 PlainTasks comes with a custom todo icon that you can find in the `icons` folder. You can assign it to your todo files to give them a better look and distinguish them from other plain text files. Google and find out how to assign a custom icon to a file type in your operating system.
