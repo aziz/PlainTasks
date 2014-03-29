@@ -1,6 +1,6 @@
 ## [PlainTasks](https://github.com/aziz/PlainTasks)
 An opinionated todo-list plugin for Sublime Text (2 & 3) editor
-![](http://f.cl.ly/items/2y2m3v1i0S2V1t2m2A0e/Screen%20Shot%202012-04-21%20at%2012.27.05%20AM.png)
+![](http://cl.ly/image/1q100Q212o2Q/ss.png)
 
 ## Installation
 To install this plugin, you have two options:
