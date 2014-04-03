@@ -371,9 +371,10 @@ class PlainTasksOpenLinkCommand(sublime_plugin.TextCommand):
                     self._current_res.append((name, line, col))
         else:
             fn = fn.replace('/', os.sep)
-            for folder in win.folders():
+            all_folders = win.folders() + [os.path.dirname(v.file_name()) for v in win.views() if v.file_name()]
+            for folder in set(all_folders):
                 for root, dirnames, filenames in os.walk(folder):
-                    filenames = [os.path.join(root, f) for f in filenames] + [v.file_name() for v in win.views() if v.file_name()]
+                    filenames = [os.path.join(root, f) for f in filenames]
                     for name in filenames:
                         if name.lower().endswith(fn.lower()):
                             self._current_res.append((name, line if line else 0, col if col else 0))
@@ -392,7 +393,7 @@ class PlainTasksOpenLinkCommand(sublime_plugin.TextCommand):
             fn, sym, line, col, text = match.group('fn', 'sym', 'line', 'col', 'text')
             self.show_panel_or_open(fn, sym, line, col, text)
             if text:
-                sublime.set_timeout(lambda:self.find_text(self.opened_file, text, line), 50)
+                sublime.set_timeout(lambda: self.find_text(self.opened_file, text, line), 300)
 
     def find_text(self, view, text, line):
         result = view.find(text, view.sel()[0].a if line else 0, sublime.LITERAL)
