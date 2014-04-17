@@ -91,15 +91,10 @@ class PlainTasksCompleteCommand(PlainTasksBase):
         except:
             done_line_end = ' %s%s%s' % (self.done_tag, self.before_date_space, datetime.now().strftime(self.date_format))
         offset = len(done_line_end)
-        if self.taskpaper_compatible:
-            rom = '^(\s*)-(\s*[^\b]*\s*)(?!\s@(done|cancelled)).*$'
-            rdm = '^(\s*)-(\s*[^\b]*?\s*)(?=\s@done).*$'
-            rcm = '^(\s*)-(\s*[^\b]*?\s*)(?=\s@cancelled).*$'
-        else:
-            rom = '^(\s*)(?:\[\s\]|.)(\s*.*)$'
-            rdm = '^(\s*)(?:\[x\]|.)(\s*[^\b]*?\s*)(?=\s@done|@project|\s\(|$).*$'
-            rcm = '^(\s*)(?:\[\-\]|.)(\s*[^\b]*?\s*)(?=\s@cancelled|@project|\s\(|$).*$'
-        started = '^\s*[^\b]*?\s*@started(\([\d\w,\.:\-\/ @]*\)).*$'
+        rom = r'^(\s*)(\[\s\]|.)(\s*.*)$'
+        rdm = r'^(\s*)(\[x\]|.)(\s*[^\b]*?\s*)(?=\s@done|@project|\s\(|$).*$'
+        rcm = r'^(\s*)(\[\-\]|.)(\s*[^\b]*?\s*)(?=\s@cancelled|@project|\s\(|$).*$'
+        started = r'^\s*[^\b]*?\s*@started(\([\d\w,\.:\-\/ @]*\)).*$'
         for region in self.view.sel():
             line = self.view.line(region)
             line_contents = self.view.substr(line).rstrip()
@@ -111,9 +106,10 @@ class PlainTasksCompleteCommand(PlainTasksBase):
             if 'pending' in current_scope:
                 grps = open_matches.groups()
                 eol = self.view.insert(edit, line.end(), done_line_end)
-                replacement = u'%s%s%s' % (grps[0], self.done_tasks_bullet, grps[1].rstrip())
+                replacement = u'%s%s%s' % (grps[0], self.done_tasks_bullet, grps[2].rstrip())
                 self.view.replace(edit, line, replacement)
                 if started_matches:
+                    eol -= len(grps[1]) - len(self.done_tasks_bullet)
                     self.calc_end_start_time(self, edit, line, started_matches.group(1), done_line_end, eol)
             elif 'header' in current_scope:
                 eol = self.view.insert(edit, line.end(), done_line_end)
@@ -123,13 +119,13 @@ class PlainTasksCompleteCommand(PlainTasksBase):
                 self.view.insert(edit, line.begin() + len(indent.group(1)), '%s ' % self.done_tasks_bullet)
             elif 'completed' in current_scope:
                 grps = done_matches.groups()
-                replacement = u'%s%s%s' % (grps[0], self.open_tasks_bullet, grps[1].rstrip())
+                replacement = u'%s%s%s' % (grps[0], self.open_tasks_bullet, grps[2].rstrip())
                 self.view.replace(edit, line, replacement)
                 offset = -offset
             elif 'cancelled' in current_scope:
                 grps = canc_matches.groups()
                 self.view.insert(edit, line.end(), done_line_end)
-                replacement = u'%s%s%s' % (grps[0], self.done_tasks_bullet, grps[1].rstrip())
+                replacement = u'%s%s%s' % (grps[0], self.done_tasks_bullet, grps[2].rstrip())
                 self.view.replace(edit, line, replacement)
                 offset = -offset
         self.view.sel().clear()
@@ -141,7 +137,7 @@ class PlainTasksCompleteCommand(PlainTasksBase):
     @staticmethod
     def calc_end_start_time(self, edit, line, started_matches, done_line_end, eol, tag='lasted'):
         start = datetime.strptime(started_matches, self.date_format)
-        end = datetime.strptime(done_line_end.replace(' @done ', '').replace(' @cancelled ', ''), self.date_format)
+        end = datetime.strptime(done_line_end.replace('@done', '').replace('@cancelled', '').strip(), self.date_format)
         self.view.insert(edit, line.end() + eol, ' @%s(%s)' % (tag, str(end - start)))
 
 
@@ -153,14 +149,9 @@ class PlainTasksCancelCommand(PlainTasksBase):
         except:
             canc_line_end = ' %s%s%s' % (self.canc_tag,self.before_date_space, datetime.now().strftime(self.date_format))
         offset = len(canc_line_end)
-        if self.taskpaper_compatible:
-            rom = '^(\s*)-(\s*[^\b]*\s*)(?!\s@(done|cancelled)).*$'
-            rdm = '^(\s*)-(\s*[^\b]*?\s*)(?=\s@done).*$'
-            rcm = '^(\s*)-(\s*[^\b]*?\s*)(?=\s@cancelled).*$'
-        else:
-            rom = '^(\s*)(?:\[\s\]|.)(\s*.*)$'
-            rdm = '^(\s*)(?:\[x\]|.)(\s*[^\b]*?\s*)(?=\s@done|@project|\s\(|$).*$'
-            rcm = '^(\s*)(?:\[\-\]|.)(\s*[^\b]*?\s*)(?=\s@cancelled|@project|\s\(|$).*$'
+        rom = r'^(\s*)(\[\s\]|.)(\s*.*)$'
+        rdm = r'^(\s*)(\[x\]|.)(\s*[^\b]*?\s*)(?=\s@done|@project|\s\(|$).*$'
+        rcm = r'^(\s*)(\[\-\]|.)(\s*[^\b]*?\s*)(?=\s@cancelled|@project|\s\(|$).*$'
         started = '^\s*[^\b]*?\s*@started(\([\d\w,\.:\-\/ @]*\)).*$'
         for region in self.view.sel():
             line = self.view.line(region)
@@ -173,9 +164,10 @@ class PlainTasksCancelCommand(PlainTasksBase):
             if 'pending' in current_scope:
                 grps = open_matches.groups()
                 eol = self.view.insert(edit, line.end(), canc_line_end)
-                replacement = u'%s%s%s' % (grps[0], self.canc_tasks_bullet, grps[1].rstrip())
+                replacement = u'%s%s%s' % (grps[0], self.canc_tasks_bullet, grps[2].rstrip())
                 self.view.replace(edit, line, replacement)
                 if started_matches:
+                    eol -= len(grps[1]) - len(self.canc_tasks_bullet)
                     PlainTasksCompleteCommand.calc_end_start_time(self, edit, line, started_matches.group(1), canc_line_end, eol, tag='wasted')
             elif 'header' in current_scope:
                 eol = self.view.insert(edit, line.end(), canc_line_end)
@@ -184,14 +176,14 @@ class PlainTasksCancelCommand(PlainTasksBase):
                 indent = re.match('^(\s*)\S', line_contents, re.U)
                 self.view.insert(edit, line.begin() + len(indent.group(1)), '%s ' % self.canc_tasks_bullet)
             elif 'completed' in current_scope:
-                pass
+                sublime.status_message('You cannot cancel what have been done, can you?')
                 # grps = done_matches.groups()
-                # replacement = u'%s%s%s' % (grps[0], self.canc_tasks_bullet, grps[1].rstrip())
+                # replacement = u'%s%s%s' % (grps[0], self.canc_tasks_bullet, grps[2].rstrip())
                 # self.view.replace(edit, line, replacement)
                 # offset = -offset
             elif 'cancelled' in current_scope:
                 grps = canc_matches.groups()
-                replacement = u'%s%s%s' % (grps[0], self.open_tasks_bullet, grps[1].rstrip())
+                replacement = u'%s%s%s' % (grps[0], self.open_tasks_bullet, grps[2].rstrip())
                 self.view.replace(edit, line, replacement)
                 offset = -offset
         self.view.sel().clear()
