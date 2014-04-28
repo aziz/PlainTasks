@@ -426,3 +426,118 @@ class PlainTaskInsertDate(PlainTasksBase):
     def runCommand(self, edit):
         for s in reversed(list(self.view.sel())):
             self.view.insert(edit, s.b, datetime.now().strftime(self.date_format))
+
+
+class PlainTasksConvertToHtml(PlainTasksBase):
+    def is_enabled(self):
+        return self.view.score_selector(0, "text.todo") > 0
+
+    def runCommand(self, edit):
+        all_lines_regions = self.view.split_by_newlines(sublime.Region(0, self.view.size()))
+        html_doc = []
+        patterns = {'HEADER'    : 'text.todo keyword.control.header.todo ',
+                    'EMPTY'     : 'text.todo ',
+                    'NOTE'      : 'text.todo notes.todo ',
+                    'OPEN'      : 'text.todo meta.item.todo.pending ',
+                    'DONE'      : 'text.todo meta.item.todo.completed ',
+                    'CANCELLED' : 'text.todo meta.item.todo.cancelled ',
+                    'SEPARATOR' : 'text.todo meta.punctuation.separator.todo ',
+                    'ARCHIVE'   : 'text.todo meta.punctuation.archive.todo '
+                    }
+        for r in all_lines_regions:
+            i = self.view.scope_name(r.a)
+
+            if patterns['HEADER'] in i:
+                ht = '<span class="header">%s</span>' % self.view.substr(r)
+
+            elif i == patterns['EMPTY']:
+                # these are empty lines
+                ht = '<span class="empty-line">%s</span>' % self.view.substr(r)
+
+            elif patterns['NOTE'] in i:
+                ht = note = '<span class="note">%s</span>' % self.view.substr(r)
+
+            elif patterns['OPEN'] in i:
+                scopes = self.extracting_scopes(self, r)
+                indent = self.view.substr(sublime.Region(r.a, scopes[0].a)) if r.a != scopes[0].a else ''
+                pending = '<span class="open">%s' % indent
+                for s in scopes:
+                    sn = self.view.scope_name(s.a)
+                    if 'bullet' in sn:
+                        pending += '<span class="bullet-pending">%s</span>' % self.view.substr(s)
+                    elif 'meta.tag' in sn:
+                        pending += '<span class="tag">%s</span>' % self.view.substr(s)
+                    elif 'tag.todo.today' in sn:
+                        pending += '<span class="tag-today">%s</span>' % self.view.substr(s)
+                    else:
+                        pending += self.view.substr(s)
+                ht = pending + '</span>'
+
+            elif patterns['DONE'] in i:
+                scopes = self.extracting_scopes(self, r)
+                indent = self.view.substr(sublime.Region(r.a, scopes[0].a)) if r.a != scopes[0].a else ''
+                done = '<span class="done">%s' % indent
+                for s in scopes:
+                    sn = self.view.scope_name(s.a)
+                    if 'bullet' in sn:
+                        done += '<span class="bullet-done">%s</span>' % self.view.substr(s)
+                    elif 'tag.todo.completed' in sn:
+                        done += '<span class="tag-done">%s</span>' % self.view.substr(s)
+                    else:
+                        done += self.view.substr(s)
+                ht = done + '</span>'
+
+            elif patterns['CANCELLED'] in i:
+                scopes = self.extracting_scopes(self, r)
+                indent = self.view.substr(sublime.Region(r.a, scopes[0].a)) if r.a != scopes[0].a else ''
+                cancelled = '<span class="cancelled">%s' % indent
+                for s in scopes:
+                    sn = self.view.scope_name(s.a)
+                    if 'bullet' in sn:
+                        cancelled += '<span class="bullet-cancelled">%s</span>' % self.view.substr(s)
+                    elif 'tag.todo.cancelled' in sn:
+                        cancelled += '<span class="tag-cancelled">%s</span>' % self.view.substr(s)
+                    else:
+                        cancelled += self.view.substr(s)
+                ht = cancelled + '</span>'
+
+            elif patterns['SEPARATOR'] in i:
+                ht = sep = '<span class="sep">%s</span>' % self.view.substr(r)
+
+            elif patterns['ARCHIVE'] in i:
+                ht = sep_archive = '<span class="sep-archive">%s</span>' % self.view.substr(r)
+
+            else:
+                sublime.error_message('Hey! you are not supposed to see this message.\n'
+                                      'Please, report an issue in PlainTasks repository on GitHub.')
+            html_doc.append(ht)
+
+        # create file
+        import tempfile, io
+        tmp_html = tempfile.NamedTemporaryFile(delete=False, suffix='.html')
+        with io.open('%s/PlainTasks/templates/template.html' % sublime.packages_path(), 'r', encoding='utf8') as template:
+            title = os.path.basename(self.view.file_name()) if self.view.file_name() else 'Export'
+            for line in template:
+                line = line.replace('$title', title).replace('$content', '\n'.join(html_doc))
+                tmp_html.write(line.encode('utf-8'))
+        tmp_html.close()
+        webbrowser.open_new_tab("file://%s" % tmp_html.name)
+
+    def extracting_scopes(self, edit, region):
+        '''extract scope for each char in line wo dups, ineffective but reliable'''
+        scopes = []
+        for p in range(region.b-region.a):
+            scope_region = self.view.extract_scope(region.a + p)
+            if scope_region != region and scope_region.b - 1 <= region.b and scope_region not in scopes:
+                    scopes.append(scope_region)
+        if len(scopes) > 2:
+            # fix bullet
+            if scopes[0].intersects(scopes[1]):
+                scopes[0] = sublime.Region(scopes[0].a, scopes[1].a)
+            # fix text after tag(s)
+            if scopes[~0].b <= region.b or scopes[~0].a < region.a:
+                scopes.append(sublime.Region(scopes[~0].b, region.b))
+                for i, s in enumerate(scopes[:0:~0]):
+                    if s.intersects(scopes[~(i + 1)]):
+                        scopes[~i] = sublime.Region(scopes[~(i + 1)].b, s.b)
+        return scopes

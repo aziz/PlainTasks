@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>$title</title>
+<style type="text/css">
+ * {
+  margin:0; padding:0;
+ }
+
+ body {
+  background-color: #efe9b7;
+ }
+
+ span { display: inline-block;}
+ pre {
+  margin: 30px;
+  font-family: "Consolas", "Monaco", monospace;
+  font-size: 15px;
+  font-style: italic;
+  line-height: 20px;
+  white-space: pre-wrap;
+ }
+
+ .bullet-pending {
+  font-style: normal;
+  font-weight: bold;
+  color: rgba(0,0,0,.6);
+ }
+
+ .bullet-done {
+  font-style: normal;
+  font-weight: bold;
+  color: #00723e;
+ }
+ .bullet-cancelled {
+  font-style: normal;
+  font-weight: bold;
+  color: #b60101;
+ }
+
+ .sep {
+  font-style: normal;
+  color: rgba(0,0,0,.44);
+ }
+ .sep-archive {
+  font-style: normal;
+  color: rgba(0,0,0,.44);
+ }
+ .header {
+  font-weight: bold;
+  font-style: normal;
+  color: #bc644a;
+  background-color: rgba(0,0,0,.05);
+  width: 100%;
+ }
+ .tag {
+  font-weight: bold;
+  font-style: normal;
+  color: #C37763;
+ }
+ .tag-done, .tag-cancelled {
+  font-style: normal;
+  color:#A49F85;
+ }
+ .tag-today{
+  font-weight: bold;
+  font-style: normal;
+  background: #EADD4E;
+  color: #000000;
+ }
+ .done, .cancelled, .note {
+  color: #66654F;
+ }
+ .empty-line {
+  /* span, either empty or containing whitespaces/tabs */
+ }
+</style>
+</head>
+<body>
+<pre>
+$content
+</pre>
+</body></html>

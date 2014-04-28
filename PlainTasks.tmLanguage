@@ -56,7 +56,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^\s*(?:(\+|✓|✔|☑|√|\[x\])\s+((?:[^\@]|(?&lt;!\s)\@|\@(?=\s))*)(.*))|^\s*(?:(-)\s+((?:[^\@]|(?&lt;!\s)\@|\@(?=\s))*)(.*\@done[^\n]*))</string>
+			<string>^\s*(?:(\+|✓|✔|☑|√|\[x\])(\s+(?:[^\@]|(?&lt;!\s)\@|\@(?=\s))*)(.*))|^\s*(?:(-)\s+((?:[^\@]|(?&lt;!\s)\@|\@(?=\s))*)(.*\@done[^\n]*))</string>
 			<key>name</key>
 			<string>meta.item.todo.completed</string>
 		</dict>
@@ -96,7 +96,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^\s*(?:(✘|x|\[-\])\s+((?:[^\@]|(?&lt;!\s)\@|\@(?=\s))*)(.*))|^\s*(?:(-)\s+((?:[^\@]|(?&lt;!\s)\@|\@(?=\s))*)(.*\@cancelled[^\n]*))</string>
+			<string>^\s*(?:(✘|x|\[-\])(\s+(?:[^\@]|(?&lt;!\s)\@|\@(?=\s))*)(.*))|^\s*(?:(-)\s+((?:[^\@]|(?&lt;!\s)\@|\@(?=\s))*)(.*\@cancelled[^\n]*))</string>
 			<key>name</key>
 			<string>meta.item.todo.cancelled</string>
 		</dict>
@@ -123,7 +123,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^\s*(-|❍|❑|■|□|☐|▪|▫|–|—|\[\s\])\s+((?:[^\@]|(?&lt;!\s)\@)*)(?!(.*)?(\@done|\@cancelled))</string>
+			<string>^\s*(-|❍|❑|■|□|☐|▪|▫|–|—|\[\s\])(\s+(?:[^\@\n]|(?&lt;!\s)\@)*)(?!(.*)?(\@done|\@cancelled))</string>
 			<key>name</key>
 			<string>meta.item.todo.pending</string>
 		</dict>
