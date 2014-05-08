@@ -455,7 +455,17 @@ class PlainTasksConvertToHtml(PlainTasksBase):
                 ht = '<span class="empty-line">%s</span>' % self.view.substr(r)
 
             elif patterns['NOTE'] in i:
-                ht = note = '<span class="note">%s</span>' % self.view.substr(r)
+                scopes = self.extracting_scopes(self, r, i)
+                note = '<span class="note">'
+                for s in scopes:
+                    sn = self.view.scope_name(s.a)
+                    if 'italic' in sn:
+                        note += '<i>%s</i>' % self.view.substr(s).replace('_', '').replace('*', '')
+                    elif 'bold' in sn:
+                        note += '<b>%s</b>' % self.view.substr(s).replace('_', '').replace('*', '')
+                    else:
+                        note += self.view.substr(s)
+                ht = note + '</span>'
 
             elif patterns['OPEN'] in i:
                 scopes = self.extracting_scopes(self, r)
@@ -523,21 +533,35 @@ class PlainTasksConvertToHtml(PlainTasksBase):
         tmp_html.close()
         webbrowser.open_new_tab("file://%s" % tmp_html.name)
 
-    def extracting_scopes(self, edit, region):
-        '''extract scope for each char in line wo dups, ineffective but reliable'''
+    def extracting_scopes(self, edit, region, scope_name=''):
+        '''extract scope for each char in line wo dups, ineffective but it works?'''
         scopes = []
         for p in range(region.b-region.a):
-            scope_region = self.view.extract_scope(region.a + p)
-            if scope_region != region and scope_region.b - 1 <= region.b and scope_region not in scopes:
-                    scopes.append(scope_region)
-        if len(scopes) > 2:
+            sr = self.view.extract_scope(region.a + p)
+            # fix multi-line notes, because variable region is always a single line
+            if 'note' in scope_name and sr.a < region.a or sr.b - 1 > region.b:
+                if scopes and p == scopes[~0].b: # *text* inbetween *markups*
+                    sr = sublime.Region(p, region.b + 1)
+                else: # multi-line
+                    sr = sublime.Region(region.a, region.b + 1)
+            # main block, add unique entity to the list
+            if sr != region and sr.b - 1 <= region.b and sr not in scopes:
+                scopes.append(sr)
+            # fix intersecting regions, e.g. markup in notes
+            if scopes and sr.a < scopes[~0].b and p - 1 == scopes[~0].b:
+                scopes.append(sublime.Region(scopes[~0].b, sr.b))
+        if len(scopes) > 1:
             # fix bullet
             if scopes[0].intersects(scopes[1]):
                 scopes[0] = sublime.Region(scopes[0].a, scopes[1].a)
             # fix text after tag(s)
             if scopes[~0].b <= region.b or scopes[~0].a < region.a:
                 scopes.append(sublime.Region(scopes[~0].b, region.b))
-                for i, s in enumerate(scopes[:0:~0]):
-                    if s.intersects(scopes[~(i + 1)]):
+            for i, s in enumerate(scopes[:0:~0]):
+                # fix overall intersections
+                if s.intersects(scopes[~(i + 1)]):
+                    if scopes[~(i + 1)].b < s.b:
                         scopes[~i] = sublime.Region(scopes[~(i + 1)].b, s.b)
+                    else:
+                        scopes[~(i + 1)] = sublime.Region(scopes[~(i + 1)].a, s.a)
         return scopes

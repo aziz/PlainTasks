@@ -12,7 +12,9 @@
   background-color: #efe9b7;
  }
 
- span { display: inline-block;}
+ span { display: inline-block; }         /* prevent unsupposed empty lines */
+ span[class|="tag"] { display: inline; } /* add proper wrapping for tags */
+
  pre {
   margin: 30px;
   font-family: "Consolas", "Monaco", monospace;
@@ -69,8 +71,12 @@
   background: #EADD4E;
   color: #000000;
  }
- .done, .cancelled, .note {
+ .done, .cancelled{
   color: #66654F;
+ }
+ .note{
+  font-style: normal;
+  color: #858266;
  }
  .empty-line {
   /* span, either empty or containing whitespaces/tabs */
