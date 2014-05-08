@@ -30,7 +30,7 @@ For more portability you can use `todolist.txt` either as a filename or as suffi
 
 ☐ Anything with colon at the end of the line is a project title, you can also nest projects by indenting them. 
 
-☐ You can write plain text as notes or descriptions wherever you want.
+☐ You can write plain text as notes or descriptions wherever you want. Use `_` or `*` for italic and bold just like in Markdown.
 
 ☐ You can add tags using **`@`** sign
 

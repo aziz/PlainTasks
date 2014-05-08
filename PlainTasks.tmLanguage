@@ -102,10 +102,23 @@
 		</dict>
 
 		<dict>
-		  <key>match</key>
-		  <string>^\s*((?!-|\+|✓|✔|√|❍|❑|■|□|☐|▪|▫|–|—|\[[\sx-]\]|＿|✘|(x\s+))\S).*((?!:\s*).\s*)$</string>
+		  <key>begin</key>
+		  <string>^\s*(?!-|\+|✓|✔|√|❍|❑|■|□|☐|▪|▫|–|—|\[[\sx-]\]|＿|✘|(x\s+))(?=\S)</string>
+		  <key>end</key>
+		  <string>$\n?</string>
 		  <key>name</key>
 		  <string>notes.todo</string>
+		  <key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#italic</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#bold</string>
+				</dict>
+			</array>
 		</dict>
 
 		<dict>
@@ -155,8 +168,45 @@
 			<key>name</key>
 			<string>string.other.tag.todo.today</string>
 		</dict>
-
 	</array>
+
+	<key>repository</key>
+	<dict>
+		<key>bold</key>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.bold</string>
+				</dict>
+			</dict>
+			<key>begin</key>
+			<string>(\*\*|__)(?=\S)(?=(?!(?&lt;=\S)\1).+(?&lt;=\S)\1)</string>
+			<key>end</key>
+			<string>(?&lt;=\S)(\1)</string>
+			<key>name</key>
+			<string>todo.bold</string>
+		</dict>
+		<key>italic</key>
+		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.italic</string>
+				</dict>
+			</dict>
+			<key>begin</key>
+			<string>(\*|_)(?=\S)(?=(\1\1|(?!(?&lt;=\S)\1).)++(?&lt;=\S)\1)</string>
+			<key>end</key>
+			<string>(?&lt;=\S)(\1)((?!\1)|(?=\1\1))</string>
+			<key>name</key>
+			<string>todo.italic</string>
+		</dict>
+	</dict>
 	<key>scopeName</key>
 	<string>text.todo</string>
 	<key>uuid</key>
