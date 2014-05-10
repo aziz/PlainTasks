@@ -186,10 +186,54 @@
 				<string>#93a1a1</string><!-- base1 -->
 			</dict>
 		</dict>
+		<dict>
+			<key>name</key>
+			<string>Italic punctuation</string>
+			<key>scope</key>
+			<string>punctuation.definition.italic</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#93a1a160</string><!-- base1 - 60% opacity -->
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Italic</string>
+			<key>scope</key>
+			<string>todo.italic</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>italic</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Bold punctuation</string>
+			<key>scope</key>
+			<string>punctuation.definition.bold</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#93a1a160</string><!-- base1 - 60% opacity -->
+				<key>fontStyle</key>
+				<string>normal</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Bold</string>
+			<key>scope</key>
+			<string>todo.bold</string>
+			<key>settings</key>
+			<dict>
+				<key>fontStyle</key>
+				<string>bold</string>
+			</dict>
+		</dict>
 
 		<!-- ======================================== -->
-
-
 
 		<dict>
 			<key>name</key>
