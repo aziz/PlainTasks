@@ -131,7 +131,7 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#93a1a150</string><!-- base1.5 - nonstandard -->
+				<string>#93a1a150</string><!-- base1 - 50% opacity - nonstandard -->
 				<key>fontStyle</key>
 				<string></string>
 			</dict>
@@ -144,7 +144,7 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#93a1a150</string><!-- base1.5 - nonstandard -->
+				<string>#93a1a150</string><!-- base1 - 50% opacity - nonstandard -->
 				<key>fontStyle</key>
 				<string></string>
 			</dict>
@@ -194,7 +194,7 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#93a1a160</string><!-- base1 - 60% opacity -->
+				<string>#93a1a150</string><!-- base1 - 50% opacity - nonstandard -->
 			</dict>
 		</dict>
 		<dict>
@@ -216,7 +216,7 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#93a1a160</string><!-- base1 - 60% opacity -->
+				<string>#93a1a150</string><!-- base1 - 50% opacity - nonstandard -->
 				<key>fontStyle</key>
 				<string>normal</string>
 			</dict>
