@@ -495,7 +495,6 @@ class PlainTasksClean(PlainTasksBase):
             self.checkAll(edit)
     def completeAll(self,edit):
         self.toComplete.sort()
-        print("Complete all is going to complete: " +str(self.toComplete))
         toc = 0
         iter = 1
         for reg in self.lineList:
@@ -503,7 +502,6 @@ class PlainTasksClean(PlainTasksBase):
                 break
             if(iter == self.toComplete[toc][0]):
                 mid = (reg.a+reg.b)/2;
-                print("I'm at line " + str(iter)+" to complete range of: "+str(reg))
                 self.view.sel().clear();
                 self.view.sel().add(sublime.Region((reg.a+reg.b)/2,(reg.a+reg.b)/2))
                 self.cancel(edit)
@@ -520,11 +518,8 @@ class PlainTasksClean(PlainTasksBase):
                 if(indLevel>self.maxInd):
                     self.maxInd = indLevel
                 self.finalList.append([iter,indLevel,type])
-        print("Final List: " +repr(self.finalList))
     def checkAll(self,edit):
-        print("MAXIND: "+repr(self.maxInd))
         for indentLev in range(self.maxInd-1,-1,-1):
-            print("Indent checking: "+str(indentLev))
             self.checkLevel(indentLev)
             self.completeAll(edit)
             self.toComplete = []
@@ -533,7 +528,6 @@ class PlainTasksClean(PlainTasksBase):
             if(self.finalList[i][1]==level):
                 rng = self.getChildren(i+1)
                 comp = self.allcomp(rng)
-                print("Item " +str(i+1) + "s children are " + str(rng) + " and all are completed: " +str(comp))
                 if(comp and (rng[0]-rng[1])<=0):
                     self.toComplete.append(self.finalList[i])
     def todoType(self, reg):
