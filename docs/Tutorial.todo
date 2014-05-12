@@ -1,0 +1,73 @@
+How to Use PlainTasks:
+
+Projects:
+ ☐ Anything with colon at the end of the line is a project title
+ ☐ You can nest projects inside each other
+ ☐ You can fold projects (a built-in editor feature)
+
+Tasks:
+  You can write plain text as _notes_ or descriptions wherever you want;
+  it's **totally** fine!
+  New:
+   ☐ Press ⌘+enter (ctrl+enter on Windows) to add a new task.
+   ☐ You can also use ⌘+i (ctrl+i on Windows) to add new task
+   ☐ If you're on a new line PlainTasks will create a new task on the current line
+   ☐ If you're on a line with a task pressing new task shortcut will add a task after it
+   ☐ If you're on a line with some normal text pressing new task shortcut will convert it to a task
+   ☐ New tasks will be nested as much as the task on the previous line
+  Done:
+   ☐ Pressing ⌘+d (ctrl+d on Windows) mark a task as done
+   ☐ Pressing ⌘+d (ctrl+d on Windows) again will put it back in pending mode
+   ☐ Pressing ctrl+c (alt+c on Windows) will mark the task as cancelled
+  Tagging:
+   ☐ You can add tags using @ sign, like this @tag
+  URLs:
+   ☐ Pressing ⌘+shift+U (ctrl+shift+U on Windows) will open the url under the cursor in your default browser
+  File links:
+   ☐ You can create a link to a file within your project by prefixing the file name with a dot and (back)slash sign like: .\filename\
+    ./another filename/ it supports only one filename per line
+   ☐ The line and column can be specified by colons: .\filename:11:8
+   ☐ In SublimeText 3 you can specify a symbol inside that file by using > character like: .\filename>symbol
+   ☐ In SublimeText 2 you can specify a text inside that file by using inch characters like: .\filename"any text"
+   ☐ Pressing ctrl+o (alt+o on Windows) will open the file in Sublime
+
+  Archiving:
+   ☐ Pressing ⌘+shift+A (ctrl+shift+A on Windows) will archive the done task.
+      By removing them from your list and appending them to the bottom of the file under Archive project.
+      The archive project is separated from the other list of projects with a line. see bottom of this file.
+
+  Starting a new todo-list:
+   ☐ Bring up the command palette (it's ⌘+shift+p in Mac and ctrl+shift+p in Windows)
+   ☐ type `task` and select `Tasks: New document` command
+
+--- ✄ -----------------------
+You can use separator snippet to separate your todo lists, type -- and press tab
+Couple of tags are in completion rules:
+  ☐ type s, press tab key twice — it'll become @started(13-10-25 15:20)
+    you'll get a current date;
+    when a task with such tag is completed/cancelled, you'll know how many time has passed since start.
+  ☐ type t, press tab key — it'll become @today
+    easy to spot, eh?
+
+FileType Support:
+ PlainTasks support these file types out of the box
+ ☐ TODO
+ ☐ *.todo
+ ☐ *.todolist
+ ☐ *.taskpaper
+ ☐ *.tasks
+
+You can customize:
+ ☐ New and done bullets
+ ☐ List of file-types that should be considered todo lists
+ ☐ Key-bindings if you don't like the default ones
+ ☐ Date formating for done tasks
+ See the readme file on github on how to do these customizations. https://github.com/aziz/PlainTasks
+
+Editor Useful Tools:
+ ☐ Use ⌘+control+up/down (ctrl+shift+up/down on Windows) to move tasks up and down.
+ ☐ Use ⌘+R (ctrl+R on Windows) to see a list of projects and quickly jump between them
+
+＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
+Archive:
+ ✔ learn how to use PlainTasks @done (2012-09-07 07:30)

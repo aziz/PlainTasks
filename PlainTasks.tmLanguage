@@ -20,7 +20,6 @@
 			<key>name</key>
 			<string>keyword.control.header.todo</string>
 		</dict>
-
 		<dict>
 			<key>captures</key>
 			<dict>
