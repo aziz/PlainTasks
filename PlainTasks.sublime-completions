@@ -1,7 +1,8 @@
 {
     "scope": "text.todo",
     "completions": [
-        { "trigger": "s", "contents": "@started" },
-        { "trigger": "t", "contents": "@today" }
+        { "trigger": "s", "contents": "@STARTED" },
+        { "trigger": "t", "contents": "@TODAY" },
+        { "trigger": "p", "contents": "@PRIORITY" }
     ]
 }
