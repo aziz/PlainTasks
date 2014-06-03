@@ -433,6 +433,7 @@ class PlainTasksConvertToHtml(PlainTasksBase):
         return self.view.score_selector(0, "text.todo") > 0
 
     def runCommand(self, edit):
+        import cgi
         all_lines_regions = self.view.split_by_newlines(sublime.Region(0, self.view.size()))
         html_doc = []
         patterns = {'HEADER'    : 'text.todo keyword.control.header.todo ',
@@ -448,7 +449,7 @@ class PlainTasksConvertToHtml(PlainTasksBase):
             i = self.view.scope_name(r.a)
 
             if patterns['HEADER'] in i:
-                ht = '<span class="header">%s</span>' % self.view.substr(r)
+                ht = '<span class="header">%s</span>' % cgi.escape(self.view.substr(r))
 
             elif i == patterns['EMPTY']:
                 # these are empty lines
@@ -460,11 +461,11 @@ class PlainTasksConvertToHtml(PlainTasksBase):
                 for s in scopes:
                     sn = self.view.scope_name(s.a)
                     if 'italic' in sn:
-                        note += '<i>%s</i>' % self.view.substr(s).replace('_', '').replace('*', '')
+                        note += '<i>%s</i>' % cgi.escape(self.view.substr(s).replace('_', '').replace('*', ''))
                     elif 'bold' in sn:
-                        note += '<b>%s</b>' % self.view.substr(s).replace('_', '').replace('*', '')
+                        note += '<b>%s</b>' % cgi.escape(self.view.substr(s).replace('_', '').replace('*', ''))
                     else:
-                        note += self.view.substr(s)
+                        note += cgi.escape(self.view.substr(s))
                 ht = note + '</span>'
 
             elif patterns['OPEN'] in i:
@@ -476,11 +477,11 @@ class PlainTasksConvertToHtml(PlainTasksBase):
                     if 'bullet' in sn:
                         pending += '<span class="bullet-pending">%s</span>' % self.view.substr(s)
                     elif 'meta.tag' in sn:
-                        pending += '<span class="tag">%s</span>' % self.view.substr(s)
+                        pending += '<span class="tag">%s</span>' % cgi.escape(self.view.substr(s))
                     elif 'tag.todo.today' in sn:
                         pending += '<span class="tag-today">%s</span>' % self.view.substr(s)
                     else:
-                        pending += self.view.substr(s)
+                        pending += cgi.escape(self.view.substr(s))
                 ht = pending + '</span>'
 
             elif patterns['DONE'] in i:
@@ -492,9 +493,9 @@ class PlainTasksConvertToHtml(PlainTasksBase):
                     if 'bullet' in sn:
                         done += '<span class="bullet-done">%s</span>' % self.view.substr(s)
                     elif 'tag.todo.completed' in sn:
-                        done += '<span class="tag-done">%s</span>' % self.view.substr(s)
+                        done += '<span class="tag-done">%s</span>' % cgi.escape(self.view.substr(s))
                     else:
-                        done += self.view.substr(s)
+                        done += cgi.escape(self.view.substr(s))
                 ht = done + '</span>'
 
             elif patterns['CANCELLED'] in i:
@@ -506,16 +507,16 @@ class PlainTasksConvertToHtml(PlainTasksBase):
                     if 'bullet' in sn:
                         cancelled += '<span class="bullet-cancelled">%s</span>' % self.view.substr(s)
                     elif 'tag.todo.cancelled' in sn:
-                        cancelled += '<span class="tag-cancelled">%s</span>' % self.view.substr(s)
+                        cancelled += '<span class="tag-cancelled">%s</span>' % cgi.escape(self.view.substr(s))
                     else:
-                        cancelled += self.view.substr(s)
+                        cancelled += cgi.escape(self.view.substr(s))
                 ht = cancelled + '</span>'
 
             elif patterns['SEPARATOR'] in i:
-                ht = sep = '<span class="sep">%s</span>' % self.view.substr(r)
+                ht = '<span class="sep">%s</span>' % cgi.escape(self.view.substr(r))
 
             elif patterns['ARCHIVE'] in i:
-                ht = sep_archive = '<span class="sep-archive">%s</span>' % self.view.substr(r)
+                ht = '<span class="sep-archive">%s</span>' % cgi.escape(self.view.substr(r))
 
             else:
                 sublime.error_message('Hey! you are not supposed to see this message.\n'
