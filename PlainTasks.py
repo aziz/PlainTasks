@@ -220,7 +220,8 @@ class PlainTasksArchiveCommand(PlainTasksBase):
                 self.view.insert(edit, self.view.size(), create_archive)
                 line = self.view.size()
 
-            projects = self.view.find_all('^\s*(\w+.+:\s*(\@[^\s]+(\(.*?\))?\s*)*$\n?)|^\s*---.{3,5}---+$', 0)
+            projects = sorted(self.view.find_by_selector('keyword.control.header.todo') +
+                              self.view.find_by_selector('meta.punctuation.separator.todo'))
 
             # adding tasks to archive section
             for task in all_tasks:
