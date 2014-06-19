@@ -138,7 +138,10 @@ class PlainTasksCompleteCommand(PlainTasksBase):
     def calc_end_start_time(self, edit, line, started_matches, done_line_end, eol, tag='lasted'):
         start = datetime.strptime(started_matches, self.date_format)
         end = datetime.strptime(done_line_end.replace('@done', '').replace('@cancelled', '').strip(), self.date_format)
-        self.view.insert(edit, line.end() + eol, ' @%s(%s)' % (tag, str(end - start)))
+        delta = str(end - start)
+        if delta[~2:] == ':00': # strip meaningless seconds
+            delta = delta[:~2]
+        self.view.insert(edit, line.end() + eol, ' @%s(%s)' % (tag, delta))
 
 
 class PlainTasksCancelCommand(PlainTasksBase):
