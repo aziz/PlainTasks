@@ -466,7 +466,7 @@ class PlainTasksConvertToHtml(PlainTasksBase):
                 ht = '<span class="header">%s</span>' % cgi.escape(self.view.substr(r))
 
             elif i == patterns['EMPTY']:
-                # these are empty lines
+                # these are empty lines (i.e. linebreaks, but span can be {display:none})
                 ht = '<span class="empty-line">%s</span>' % self.view.substr(r)
 
             elif patterns['NOTE'] in i:
@@ -475,9 +475,9 @@ class PlainTasksConvertToHtml(PlainTasksBase):
                 for s in scopes:
                     sn = self.view.scope_name(s.a)
                     if 'italic' in sn:
-                        note += '<i>%s</i>' % cgi.escape(self.view.substr(s).replace('_', '').replace('*', ''))
+                        note += '<i>%s</i>' % cgi.escape(self.view.substr(s).strip('_*'))
                     elif 'bold' in sn:
-                        note += '<b>%s</b>' % cgi.escape(self.view.substr(s).replace('_', '').replace('*', ''))
+                        note += '<b>%s</b>' % cgi.escape(self.view.substr(s).strip('_*'))
                     else:
                         note += cgi.escape(self.view.substr(s))
                 ht = note + '</span>'
@@ -560,12 +560,13 @@ class PlainTasksConvertToHtml(PlainTasksBase):
                 else: # multi-line
                     sr = sublime.Region(region.a, region.b + 1)
             # main block, add unique entity to the list
-            if sr != region and sr.b - 1 <= region.b and sr not in scopes:
+            if sr not in scopes:
                 scopes.append(sr)
             # fix intersecting regions, e.g. markup in notes
             if scopes and sr.a < scopes[~0].b and p - 1 == scopes[~0].b:
                 scopes.append(sublime.Region(scopes[~0].b, sr.b))
-        if len(scopes) > 1:
+        ln = len(scopes)
+        if ('note' in scope_name and ln > 1) or ln > 2:
             # fix bullet
             if scopes[0].intersects(scopes[1]):
                 scopes[0] = sublime.Region(scopes[0].a, scopes[1].a)
