@@ -200,9 +200,9 @@
 				</dict>
 			</dict>
 			<key>begin</key>
-			<string>(?&lt;=\s|^)(\*|_)(?=\S)(?=(\1\1|(?!(?&lt;=\S)\1).)++(?&lt;=\S)\1)(?=[^\n]+(?&lt;=\S)(\1)(?!\1|[\w\d])(?=\s|$))</string>
+			<string>(?&lt;=\s|^)(\*|_)(?=\S)(?=(\1\1|(?!(?&lt;=\S)\1).)++(?&lt;=\S)\1)(?=[^\n]+(?&lt;=\S)(\1)(?!\1|[\w\d]))</string>
 			<key>end</key>
-			<string>(?&lt;=\S)(\1)(?!\1|[\w\d])(?=\s|$)</string>
+			<string>(?&lt;=\S)(\1)(?!\1|[\w\d])</string>
 			<key>name</key>
 			<string>todo.italic</string>
 		</dict>

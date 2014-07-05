@@ -377,14 +377,14 @@ class PlainTasksOpenLinkCommand(sublime_plugin.TextCommand):
             fn = fn.replace('/', os.sep)
             all_folders = win.folders() + [os.path.dirname(v.file_name()) for v in win.views() if v.file_name()]
             for folder in set(all_folders):
-                for root, dirnames, filenames in os.walk(folder):
+                for root, _, filenames in os.walk(folder):
                     filenames = [os.path.join(root, f) for f in filenames]
                     for name in filenames:
                         if name.lower().endswith(fn.lower()):
                             self._current_res.append((name, line or 0, col or 0))
-            self._current_res = list(set(self._current_res))
             if os.path.isfile(fn): # check for full path
                 self._current_res.append((fn, line or 0, col or 0))
+            self._current_res = list(set(self._current_res))
         if len(self._current_res) == 1:
             self._on_panel_selection(0)
         else:
