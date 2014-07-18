@@ -11,8 +11,8 @@
   "new_on_top": true, // how to sort archived tasks
 
   "color_scheme": "Packages/PlainTasks/tasks.hidden-tmTheme",
-  "font_size": 15,
-  "font_face": "Consolas",
+  "font_size": 14,
+  "font_face": "Inconsolata",
   "draw_indent_guides": false,
   "line_numbers": false,
   "gutter": true,
