@@ -63,6 +63,7 @@ You can customize:
  ☐ List of file-types that should be considered todo lists
  ☐ Key-bindings if you don't like the default ones
  ☐ Date formating for done tasks
+ ☐ Colour scheme
  See the Readme file on github on how to do these customizations. https://github.com/aziz/PlainTasks
 
 Editor Useful Tools:

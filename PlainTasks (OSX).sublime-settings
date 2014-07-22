@@ -11,6 +11,12 @@
   "new_on_top": true, // how to sort archived tasks
 
   "color_scheme": "Packages/PlainTasks/tasks.hidden-tmTheme",
+    // other bundled schemes:
+    //   Packages/PlainTasks/tasks-dark.hidden-tmTheme
+    //   Packages/PlainTasks/tasks-eighties-dark.hidden-tmTheme
+    //   Packages/PlainTasks/tasks-gray.hidden-tmTheme
+    //   Packages/PlainTasks/tasks-solarized-dark.hidden-tmTheme
+    //   Packages/PlainTasks/tasks-solarized-light.hidden-tmTheme
   "font_size": 15,
   "font_face": "Consolas",
   "draw_indent_guides": false,
