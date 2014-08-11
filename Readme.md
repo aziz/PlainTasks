@@ -123,4 +123,4 @@ You can contribute on [github](https://github.com/aziz/PlainTasks)
 - Thanks to [TaskPaper Mac application from hogbaysoftware.com](http://www.hogbaysoftware.com/products/taskpaper)
 
 ## License
-Copyright 2012-2013 [Allen Bargi](https://twitter.com/aziz). Licensed under the MIT License
+Copyright 2012-2014 [Allen Bargi](https://twitter.com/aziz). Licensed under the MIT License
