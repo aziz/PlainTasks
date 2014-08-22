@@ -6,6 +6,7 @@ import re
 import sublime
 import sublime_plugin
 import webbrowser
+import itertools
 from datetime import datetime
 if int(sublime.version()) < 3000:
     import locale
@@ -41,10 +42,10 @@ class PlainTasksBase(sublime_plugin.TextCommand):
 
 class PlainTasksNewCommand(PlainTasksBase):
     def runCommand(self, edit):
-        selections = list(self.view.sel()) # for ST3 support
-        selections.reverse() # because with multiple selections regions would be messed up after first iteration
-        for region in selections:
-            line = self.view.line(region)
+        # list for ST3 support;
+        # reversed because with multiple selections regions would be messed up after first iteration
+        regions = itertools.chain(*(reversed(self.view.lines(region)) for region in reversed(list(self.view.sel()))))
+        for line in regions:
             line_contents = self.view.substr(line).rstrip()
             not_empty_line = re.match('^(\s*)(\S.+)$', self.view.substr(line))
             empty_line     = re.match('^(\s+)$', self.view.substr(line))
@@ -103,8 +104,8 @@ class PlainTasksCompleteCommand(PlainTasksBase):
             '''  # rcm is the same, except bullet & ending
         rcm = r'^(\s*)(\[\-\]|.)(\s*[^\b]*?(?:[^\@]|(?<!\s)\@|\@(?=\s))*?\s*)(?=((?:\s@cancelled|@project|$).*)|(?:(\([^()]*\))\s*([^@]*|@project.*))?$)'
         started = r'^\s*[^\b]*?\s*@started(\([\d\w,\.:\-\/ @]*\)).*$'
-        for region in self.view.sel():
-            line = self.view.line(region)
+        regions = itertools.chain(*(reversed(self.view.lines(region)) for region in reversed(list(self.view.sel()))))
+        for line in regions:
             line_contents = self.view.substr(line).rstrip()
             open_matches = re.match(rom, line_contents, re.U)
             done_matches = re.match(rdm, line_contents, re.U)
@@ -174,8 +175,8 @@ class PlainTasksCancelCommand(PlainTasksBase):
         rdm = r'^(\s*)(\[x\]|.)(\s*[^\b]*?(?:[^\@]|(?<!\s)\@|\@(?=\s))*?\s*)(?=((?:\s@done|@project|$).*)|(?:(\([^()]*\))\s*([^@]*|@project.*))?$)'
         rcm = r'^(\s*)(\[\-\]|.)(\s*[^\b]*?(?:[^\@]|(?<!\s)\@|\@(?=\s))*?\s*)(?=((?:\s@cancelled|@project|$).*)|(?:(\([^()]*\))\s*([^@]*|@project.*))?$)'
         started = '^\s*[^\b]*?\s*@started(\([\d\w,\.:\-\/ @]*\)).*$'
-        for region in self.view.sel():
-            line = self.view.line(region)
+        regions = itertools.chain(*(reversed(self.view.lines(region)) for region in reversed(list(self.view.sel()))))
+        for line in regions:
             line_contents = self.view.substr(line).rstrip()
             open_matches = re.match(rom, line_contents, re.U)
             done_matches = re.match(rdm, line_contents, re.U)
