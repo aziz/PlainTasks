@@ -103,6 +103,43 @@ PlainTasks comes with a custom todo icon that you can find in the `icons` folder
 
 ![](http://f.cl.ly/items/2t312B30121l2X1l0927/todo-icon.png)
 
+## [BONUS] Custom Statistics
+Statistics of current file are represented in status-bar, based on `stats_format`, which is `"$n/$a done ($percent%) $progress Last task @done $last"` by default — as you can see it’s just a string containing special directives (see table bellow) and regular chars.
+
+| Directive    | Description                                           |
+| ------------ | ----------------------------------------------------- |
+| `$o`         | Amount of pending tasks                               |
+| `$d`         | Amount of completed tasks                             |
+| `$c`         | Amount of cancelled tasks                             |
+| `$n`         | Sum of completed and cancelled tasks                  |
+| `$a`         | Sum of all tasks                                      |
+| `$percent`   | Ratio of `$n` to `$a`                                 |
+| `$progress`  | Percent as pseudo graphics (absents if less than 10%) |
+| `$last`      | Date of lastly completed task                         |
+
+So you can customise it as you like, by adding to `Settings - User`, e.g.
+
+```json
+{
+    "stats_format": "☐$o ✔$d ✘$c"
+}
+```
+
+### Copy statistics
+Bring up the command palette and type `Tasks: Copy Statistics`.
+
+### Additional settings for progress bar
+```json
+{
+    "bar_full": "■",   // any char
+    "bar_empty": "☐", // any char
+
+    // if you want to avoid Unicode when copy stats — you can define replacements
+    // e.g. to convert ■■■■■■☐☐☐☐ to [======    ]
+    "replace_stats_chars": [[" ■", " [="], ["■", "="], ["☐ ", " ] "], ["☐", " "]]
+}
+```
+
 ## [Introduction to PlainTasks Screencast](https://tutsplus.com/lesson/pretty-task-management/)
 [![](http://i46.tinypic.com/9ggbd3.png)](https://tutsplus.com/lesson/pretty-task-management/)
 

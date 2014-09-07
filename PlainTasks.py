@@ -83,6 +83,8 @@ class PlainTasksNewCommand(PlainTasksBase):
         for sel in new_selections:
             self.view.sel().add(sel)
 
+        PlainTasksStatsStatus.set_stats(self.view)
+
 
 class PlainTasksCompleteCommand(PlainTasksBase):
     def runCommand(self, edit):
@@ -144,6 +146,8 @@ class PlainTasksCompleteCommand(PlainTasksBase):
             ofs = ind * offset
             new_pt = sublime.Region(pt.a + ofs, pt.b + ofs)
             self.view.sel().add(new_pt)
+
+        PlainTasksStatsStatus.set_stats(self.view)
 
     @staticmethod
     def calc_end_start_time(self, edit, line, started_matches, done_line_end, eol, tag='lasted'):
@@ -215,6 +219,8 @@ class PlainTasksCancelCommand(PlainTasksBase):
             ofs = ind * offset
             new_pt = sublime.Region(pt.a + ofs, pt.b + ofs)
             self.view.sel().add(new_pt)
+
+        PlainTasksStatsStatus.set_stats(self.view)
 
 
 class PlainTasksArchiveCommand(PlainTasksBase):
@@ -602,3 +608,56 @@ class PlainTasksConvertToHtml(PlainTasksBase):
                     else:
                         scopes[~(i + 1)] = sublime.Region(scopes[~(i + 1)].a, s.a)
         return scopes
+
+
+class PlainTasksStatsStatus(sublime_plugin.EventListener):
+    def on_activated(self, view):
+        if not view.score_selector(0, "text.todo") > 0:
+            return
+        self.set_stats(view)
+
+    @staticmethod
+    def set_stats(view):
+        view.set_status('PlainTasks', PlainTasksStatsStatus.get_stats(view))
+
+    @staticmethod
+    def get_stats(view):
+        msgf = view.settings().get('stats_format', '$n/$a done ($percent%) $progress Last task @done $last')
+        pend = len(view.find_by_selector('meta.item.todo.pending'))
+        done = len(view.find_by_selector('meta.item.todo.completed'))
+        canc = len(view.find_by_selector('meta.item.todo.cancelled'))
+        allt = pend + done + canc
+        percent  = ((done+canc)/float(allt))*100 if allt>0 else 0
+        factor   = int(round(10*percent/100))
+        barfull  = view.settings().get('bar_full', u'■')
+        barempty = view.settings().get('bar_empty', u'☐')
+        progress = ''.join(barfull*factor + barempty*(10-factor)) if factor else ''
+        tasks_prefixed_date = []
+        view.find_all('(^\s*[^\n]*?\s\@(?:done)\s*(\([\d\w,\.:\-\/ ]*\))[^\n]*$)', 0, "\\2", tasks_prefixed_date)
+        tasks_prefixed_date.sort()
+        last = tasks_prefixed_date[0] if tasks_prefixed_date else '(UNKOWN)'
+
+        msg = (msgf.replace('$o', str(pend))
+                   .replace('$d', str(done))
+                   .replace('$c', str(canc))
+                   .replace('$n', str(done+canc))
+                   .replace('$a', str(pend+done+canc))
+                   .replace('$percent', str(int(percent)))
+                   .replace('$progress', progress)
+                   .replace('$last', last)
+                )
+        return msg
+
+
+class PlainTasksCopyStats(sublime_plugin.TextCommand):
+    def is_enabled(self):
+        return self.view.score_selector(0, "text.todo") > 0
+
+    def run(self, edit):
+        msg = self.view.get_status('PlainTasks')
+        replacements = self.view.settings().get('replace_stats_chars', [])
+        if replacements:
+            for o, r in replacements:
+                msg = msg.replace(o, r)
+
+        sublime.set_clipboard(msg)
