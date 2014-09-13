@@ -108,7 +108,7 @@ class PlainTasksCompleteCommand(PlainTasksBase):
         started = r'^\s*[^\b]*?\s*@started(\([\d\w,\.:\-\/ @]*\)).*$'
         regions = itertools.chain(*(reversed(self.view.lines(region)) for region in reversed(list(self.view.sel()))))
         for line in regions:
-            line_contents = self.view.substr(line).rstrip()
+            line_contents = self.view.substr(line)
             open_matches = re.match(rom, line_contents, re.U)
             done_matches = re.match(rdm, line_contents, re.U)
             canc_matches = re.match(rcm, line_contents, re.U)
@@ -117,7 +117,7 @@ class PlainTasksCompleteCommand(PlainTasksBase):
             if 'pending' in current_scope:
                 grps = open_matches.groups()
                 eol = self.view.insert(edit, line.end(), done_line_end)
-                replacement = u'%s%s%s' % (grps[0], self.done_tasks_bullet, grps[2].rstrip())
+                replacement = u'%s%s%s' % (grps[0], self.done_tasks_bullet, grps[2])
                 self.view.replace(edit, line, replacement)
                 if started_matches:
                     eol -= len(grps[1]) - len(self.done_tasks_bullet)
@@ -181,7 +181,7 @@ class PlainTasksCancelCommand(PlainTasksBase):
         started = '^\s*[^\b]*?\s*@started(\([\d\w,\.:\-\/ @]*\)).*$'
         regions = itertools.chain(*(reversed(self.view.lines(region)) for region in reversed(list(self.view.sel()))))
         for line in regions:
-            line_contents = self.view.substr(line).rstrip()
+            line_contents = self.view.substr(line)
             open_matches = re.match(rom, line_contents, re.U)
             done_matches = re.match(rdm, line_contents, re.U)
             canc_matches = re.match(rcm, line_contents, re.U)
@@ -190,7 +190,7 @@ class PlainTasksCancelCommand(PlainTasksBase):
             if 'pending' in current_scope:
                 grps = open_matches.groups()
                 eol = self.view.insert(edit, line.end(), canc_line_end)
-                replacement = u'%s%s%s' % (grps[0], self.canc_tasks_bullet, grps[2].rstrip())
+                replacement = u'%s%s%s' % (grps[0], self.canc_tasks_bullet, grps[2])
                 self.view.replace(edit, line, replacement)
                 if started_matches:
                     eol -= len(grps[1]) - len(self.canc_tasks_bullet)
