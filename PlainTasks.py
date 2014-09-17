@@ -130,14 +130,14 @@ class PlainTasksCompleteCommand(PlainTasksBase):
                 self.view.insert(edit, line.begin() + len(indent.group(1)), '%s ' % self.done_tasks_bullet)
             elif 'completed' in current_scope:
                 grps = done_matches.groups()
-                parentheses = self.check_parentheses(self, grps[4] or '')
+                parentheses = self.check_parentheses(self.date_format, grps[4] or '')
                 replacement = u'%s%s%s%s' % (grps[0], self.open_tasks_bullet, grps[2], parentheses)
                 self.view.replace(edit, line, replacement)
                 offset = -offset
             elif 'cancelled' in current_scope:
                 grps = canc_matches.groups()
                 self.view.insert(edit, line.end(), done_line_end)
-                parentheses = self.check_parentheses(self, grps[4] or '')
+                parentheses = self.check_parentheses(self.date_format, grps[4] or '')
                 replacement = u'%s%s%s%s' % (grps[0], self.done_tasks_bullet, grps[2], parentheses)
                 self.view.replace(edit, line, replacement)
                 offset = -offset
@@ -159,11 +159,17 @@ class PlainTasksCompleteCommand(PlainTasksBase):
         self.view.insert(edit, line.end() + eol, ' @%s(%s)' % (tag, delta))
 
     @staticmethod
-    def check_parentheses(self, regex_group):
-        try:
-            parentheses = '' if datetime.strptime(regex_group.strip(), self.date_format) else regex_group
-        except ValueError:
-            parentheses = regex_group
+    def check_parentheses(date_format, regex_group, is_date=False):
+        if is_date:
+            try:
+                parentheses = regex_group if datetime.strptime(regex_group.strip(), date_format) else ''
+            except ValueError:
+                parentheses = ''
+        else:
+            try:
+                parentheses = '' if datetime.strptime(regex_group.strip(), date_format) else regex_group
+            except ValueError:
+                parentheses = regex_group
         return parentheses
 
 
@@ -204,13 +210,13 @@ class PlainTasksCancelCommand(PlainTasksBase):
             elif 'completed' in current_scope:
                 sublime.status_message('You cannot cancel what have been done, can you?')
                 # grps = done_matches.groups()
-                # parentheses = PlainTasksCompleteCommand.check_parentheses(self, grps[4] or '')
+                # parentheses = PlainTasksCompleteCommand.check_parentheses(self.date_format, grps[4] or '')
                 # replacement = u'%s%s%s%s' % (grps[0], self.canc_tasks_bullet, grps[2], parentheses)
                 # self.view.replace(edit, line, replacement)
                 # offset = -offset
             elif 'cancelled' in current_scope:
                 grps = canc_matches.groups()
-                parentheses = PlainTasksCompleteCommand.check_parentheses(self, grps[4] or '')
+                parentheses = PlainTasksCompleteCommand.check_parentheses(self.date_format, grps[4] or '')
                 replacement = u'%s%s%s%s' % (grps[0], self.open_tasks_bullet, grps[2], parentheses)
                 self.view.replace(edit, line, replacement)
                 offset = -offset
@@ -627,21 +633,24 @@ class PlainTasksStatsStatus(sublime_plugin.EventListener):
         done = len(view.find_by_selector('meta.item.todo.completed'))
         canc = len(view.find_by_selector('meta.item.todo.cancelled'))
         allt = pend + done + canc
-        percent  = ((done+canc)/float(allt))*100 if allt>0 else 0
+        percent  = ((done+canc)/float(allt))*100 if allt else 0
         factor   = int(round(10*percent/100))
         barfull  = view.settings().get('bar_full', u'■')
         barempty = view.settings().get('bar_empty', u'☐')
-        progress = ''.join(barfull*factor + barempty*(10-factor)) if factor else ''
-        tasks_prefixed_date = []
-        view.find_all('(^\s*[^\n]*?\s\@(?:done)\s*(\([\d\w,\.:\-\/ ]*\))[^\n]*$)', 0, "\\2", tasks_prefixed_date)
-        tasks_prefixed_date.sort()
-        last = tasks_prefixed_date[0] if tasks_prefixed_date else '(UNKOWN)'
+        progress = '%s%s' % (barfull*factor, barempty*(10-factor)) if factor else ''
+
+        tasks_dates = []
+        view.find_all('(^\s*[^\n]*?\s\@(?:done)\s*(\([\d\w,\.:\-\/ ]*\))[^\n]*$)', 0, "\\2", tasks_dates)
+        date_format = view.settings().get('date_format')
+        tasks_dates = [PlainTasksCompleteCommand.check_parentheses(date_format, t, is_date=True) for t in tasks_dates]
+        tasks_dates.sort(reverse=True)
+        last = tasks_dates[0] if tasks_dates else '(UNKOWN)'
 
         msg = (msgf.replace('$o', str(pend))
                    .replace('$d', str(done))
                    .replace('$c', str(canc))
                    .replace('$n', str(done+canc))
-                   .replace('$a', str(pend+done+canc))
+                   .replace('$a', str(allt))
                    .replace('$percent', str(int(percent)))
                    .replace('$progress', progress)
                    .replace('$last', last)
