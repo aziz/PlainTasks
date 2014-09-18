@@ -46,7 +46,7 @@ class PlainTasksNewCommand(PlainTasksBase):
         # reversed because with multiple selections regions would be messed up after first iteration
         regions = itertools.chain(*(reversed(self.view.lines(region)) for region in reversed(list(self.view.sel()))))
         for line in regions:
-            line_contents = self.view.substr(line).rstrip()
+            line_contents  = self.view.substr(line).rstrip()
             not_empty_line = re.match('^(\s*)(\S.+)$', self.view.substr(line))
             empty_line     = re.match('^(\s+)$', self.view.substr(line))
             current_scope  = self.view.scope_name(line.a)
@@ -75,10 +75,8 @@ class PlainTasksNewCommand(PlainTasksBase):
         # convert each selection to single cursor, ready to type
         new_selections = []
         for sel in list(self.view.sel()):
-            if not sel.empty():
-                new_selections.append(sublime.Region(sel.b, sel.b))
-            else:
-                new_selections.append(sel)
+            eol = self.view.line(sel).b
+            new_selections.append(sublime.Region(eol, eol))
         self.view.sel().clear()
         for sel in new_selections:
             self.view.sel().add(sel)
