@@ -121,7 +121,10 @@ So you can customise it as you like, by adding to `Settings - User`, e.g.
 
 ```json
 {
-    "stats_format": "☐$o ✔$d ✘$c"
+    "stats_format": "☐$o ✔$d ✘$c",
+
+    // if you want the statistics do not include the archived tasks:
+    "stats_ignore_archive": true
 }
 ```
 

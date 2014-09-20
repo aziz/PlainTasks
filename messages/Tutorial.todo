@@ -61,9 +61,12 @@ FileType Support:
 You can customize:
  ☐ New and done bullets
  ☐ List of file-types that should be considered todo lists
- ☐ Key-bindings if you don't like the default ones
+ ☐ Key-bindings if you don’t like the default ones
  ☐ Date formating for done tasks
  ☐ Colour scheme
+ ☐ Stastics’ apperance
+ ☐ Icon for file-type
+ ☐ and more
  See the Readme file on github on how to do these customizations. https://github.com/aziz/PlainTasks
 
 Editor Useful Tools:

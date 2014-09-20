@@ -627,12 +627,20 @@ class PlainTasksStatsStatus(sublime_plugin.EventListener):
     @staticmethod
     def get_stats(view):
         msgf = view.settings().get('stats_format', '$n/$a done ($percent%) $progress Last task @done $last')
-        pend = len(view.find_by_selector('meta.item.todo.pending'))
-        done = len(view.find_by_selector('meta.item.todo.completed'))
-        canc = len(view.find_by_selector('meta.item.todo.cancelled'))
+        ignore_archive = view.settings().get('stats_ignore_archive', False)
+        if ignore_archive:
+            archive_pos = view.find(view.settings().get('archive_name'), 0, sublime.LITERAL)
+            pend = len([i for i in view.find_by_selector('meta.item.todo.pending') if i.a < (archive_pos.a if archive_pos and archive_pos.a > 0 else view.size())])
+            done = len([i for i in view.find_by_selector('meta.item.todo.completed') if i.a < (archive_pos.a if archive_pos and archive_pos.a > 0 else view.size())])
+            canc = len([i for i in view.find_by_selector('meta.item.todo.cancelled') if i.a < (archive_pos.a if archive_pos and archive_pos.a > 0 else view.size())])
+        else:
+            pend = len(view.find_by_selector('meta.item.todo.pending'))
+            done = len(view.find_by_selector('meta.item.todo.completed'))
+            canc = len(view.find_by_selector('meta.item.todo.cancelled'))
         allt = pend + done + canc
         percent  = ((done+canc)/float(allt))*100 if allt else 0
-        factor   = int(round(10*percent/100))
+        factor   = int(round(percent/10)) if percent<90 else int(percent/10)
+
         barfull  = view.settings().get('bar_full', u'■')
         barempty = view.settings().get('bar_empty', u'☐')
         progress = '%s%s' % (barfull*factor, barempty*(10-factor)) if factor else ''
