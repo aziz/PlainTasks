@@ -8,6 +8,7 @@ import sublime_plugin
 import webbrowser
 import itertools
 from datetime import datetime
+from datetime import timedelta
 if int(sublime.version()) < 3000:
     import locale
 
@@ -104,6 +105,8 @@ class PlainTasksCompleteCommand(PlainTasksBase):
             '''  # rcm is the same, except bullet & ending
         rcm = r'^(\s*)(\[\-\]|.)(\s*[^\b]*?(?:[^\@]|(?<!\s)\@|\@(?=\s))*?\s*)(?=((?:\s@cancelled|@project|$).*)|(?:(\([^()]*\))\s*([^@]*|@project.*))?$)'
         started = r'^\s*[^\b]*?\s*@started(\([\d\w,\.:\-\/ @]*\)).*$'
+        toggle = r'@toggle(\([\d\w,\.:\-\/ @]*\))'
+
         regions = itertools.chain(*(reversed(self.view.lines(region)) for region in reversed(list(self.view.sel()))))
         for line in regions:
             line_contents = self.view.substr(line)
@@ -111,6 +114,8 @@ class PlainTasksCompleteCommand(PlainTasksBase):
             done_matches = re.match(rdm, line_contents, re.U)
             canc_matches = re.match(rcm, line_contents, re.U)
             started_matches = re.match(started, line_contents, re.U)
+            toggle_matches = re.findall(toggle,line_contents, re.U)
+
             current_scope = self.view.scope_name(line.a)
             if 'pending' in current_scope:
                 grps = open_matches.groups()
@@ -119,11 +124,11 @@ class PlainTasksCompleteCommand(PlainTasksBase):
                 self.view.replace(edit, line, replacement)
                 if started_matches:
                     eol -= len(grps[1]) - len(self.done_tasks_bullet)
-                    self.calc_end_start_time(self, edit, line, started_matches.group(1), done_line_end, eol)
+                    self.calc_end_start_time(self, edit, line, started_matches.group(1), toggle_matches, done_line_end, eol)
             elif 'header' in current_scope:
                 eol = self.view.insert(edit, line.end(), done_line_end)
                 if started_matches:
-                    self.calc_end_start_time(self, edit, line, started_matches.group(1), done_line_end, eol)
+                    self.calc_end_start_time(self, edit, line, started_matches.group(1), toggle_matches, done_line_end, eol)
                 indent = re.match('^(\s*)\S', line_contents, re.U)
                 self.view.insert(edit, line.begin() + len(indent.group(1)), '%s ' % self.done_tasks_bullet)
             elif 'completed' in current_scope:
@@ -148,10 +153,16 @@ class PlainTasksCompleteCommand(PlainTasksBase):
         PlainTasksStatsStatus.set_stats(self.view)
 
     @staticmethod
-    def calc_end_start_time(self, edit, line, started_matches, done_line_end, eol, tag='lasted'):
+    def calc_end_start_time(self, edit, line, started_matches, toggle_matches, done_line_end, eol, tag='lasted'):
         start = datetime.strptime(started_matches, self.date_format)
         end = datetime.strptime(done_line_end.replace('@done', '').replace('@cancelled', '').strip(), self.date_format)
-        delta = str(end - start)
+
+        toggle_times = [datetime.strptime(toggle,self.date_format) for toggle in toggle_matches]
+        all_times = [start] + toggle_times + [end]
+        pairs = zip(all_times[::2], all_times[1::2])
+        deltas = [pair[1] - pair[0] for pair in pairs]
+
+        delta = str(sum(deltas, timedelta()))
         if delta[~2:] == ':00': # strip meaningless seconds
             delta = delta[:~2]
         self.view.insert(edit, line.end() + eol, ' @%s(%s)' % (tag, delta))
@@ -183,6 +194,7 @@ class PlainTasksCancelCommand(PlainTasksBase):
         rdm = r'^(\s*)(\[x\]|.)(\s*[^\b]*?(?:[^\@]|(?<!\s)\@|\@(?=\s))*?\s*)(?=((?:\s@done|@project|$).*)|(?:(\([^()]*\))\s*([^@]*|@project.*))?$)'
         rcm = r'^(\s*)(\[\-\]|.)(\s*[^\b]*?(?:[^\@]|(?<!\s)\@|\@(?=\s))*?\s*)(?=((?:\s@cancelled|@project|$).*)|(?:(\([^()]*\))\s*([^@]*|@project.*))?$)'
         started = '^\s*[^\b]*?\s*@started(\([\d\w,\.:\-\/ @]*\)).*$'
+        toggle = r'@toggle(\([\d\w,\.:\-\/ @]*\))'
         regions = itertools.chain(*(reversed(self.view.lines(region)) for region in reversed(list(self.view.sel()))))
         for line in regions:
             line_contents = self.view.substr(line)
@@ -190,6 +202,8 @@ class PlainTasksCancelCommand(PlainTasksBase):
             done_matches = re.match(rdm, line_contents, re.U)
             canc_matches = re.match(rcm, line_contents, re.U)
             started_matches = re.match(started, line_contents, re.U)
+            toggle_matches = re.findall(toggle,line_contents, re.U)
+
             current_scope = self.view.scope_name(line.a)
             if 'pending' in current_scope:
                 grps = open_matches.groups()
@@ -198,11 +212,11 @@ class PlainTasksCancelCommand(PlainTasksBase):
                 self.view.replace(edit, line, replacement)
                 if started_matches:
                     eol -= len(grps[1]) - len(self.canc_tasks_bullet)
-                    PlainTasksCompleteCommand.calc_end_start_time(self, edit, line, started_matches.group(1), canc_line_end, eol, tag='wasted')
+                    PlainTasksCompleteCommand.calc_end_start_time(self, edit, line, started_matches.group(1), toggle_matches, canc_line_end, eol, tag='wasted')
             elif 'header' in current_scope:
                 eol = self.view.insert(edit, line.end(), canc_line_end)
                 if started_matches:
-                    PlainTasksCompleteCommand.calc_end_start_time(self, edit, line, started_matches.group(1), canc_line_end, eol, tag='wasted')
+                    PlainTasksCompleteCommand.calc_end_start_time(self, edit, line, started_matches.group(1), toggle_matches, canc_line_end, eol, tag='wasted')
                 indent = re.match('^(\s*)\S', line_contents, re.U)
                 self.view.insert(edit, line.begin() + len(indent.group(1)), '%s ' % self.canc_tasks_bullet)
             elif 'completed' in current_scope:
