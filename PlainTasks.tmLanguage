@@ -16,7 +16,7 @@
 	<array>
 		<dict>
 			<key>match</key>
-			<string>^\s*(\w+.+:\s*(\@[^\s]+(\(.*?\))?\s*)*$\n?)</string>
+			<string>^\s*(\w+.+:\s*?(\@[^\s]+(\(.*?\))?\s*?)*$)</string>
 			<key>name</key>
 			<string>keyword.control.header.todo</string>
 		</dict>
