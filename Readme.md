@@ -34,16 +34,20 @@ For more portability you can use `todolist.txt` either as a filename or as suffi
 
 ☐ You can add tags using **`@`** sign
 
+☐ You can use @critical @high @low tags to define priority of your tasks
+
 ☐ PlainTasks comes with a simple snippet for creating separators, if you feel that your task list is becoming too long you can split it into several sections (and fold some of them) using this snippet:
 
 `--` and then `tab key` will give you this: `--- ✄ -----------------------`
 
 ☐ Completion rules:  
 
-- type `s`, press tab key — it'll become `@started` — press tab again and current date will be inserted, when you'll complete or cancel a task with such tag, you'll know how many time has passed since start;
-- type `t`, press tab key — it'll become `@today` — this one is highlighted differently than other tags, you can easily spot which task is important.
-- `tg` and twice tab key work in the same manner as `s`, but inserts `@toggle(current date)` — so you can pause and resume to get more correct result when done/cancel; each toggle tag is either pause or resume depending on its place in sequence.
-
+- type `s`, press `tab key` — it'll become `@started` — press tab again and current date will be inserted, when you'll complete or cancel a task with such tag, you'll know how many time has passed since start;
+- type `t`, press `tab key` — it'll become `@today` — this one is highlighted differently than other tags, you can easily spot which task is important.
+- `tg` and twice `tab key` work in the same manner as `s`, but inserts `@toggle(current date)` — so you can pause and resume to get more correct result when done/cancel; each toggle tag is either pause or resume depending on its place in sequence.
+- type `c`, press `tab key` — it'll become `@critical`
+- type `h`, press `tab key` — it'll become `@high`
+- type `l`, press `tab key` — it'll become `@low`
 ☐ You can create a link to a file within your project by prefixing the file name with a dot and (back)slash like: `.\filename\` or `./another filename/`.  
   The line and column can be specified by colons: `.\filename:11:8`.  
   In SublimeText 3 you can specify a symbol inside that file by using \> character like: `.\filename>symbol`.  
