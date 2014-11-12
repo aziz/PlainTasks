@@ -41,6 +41,10 @@ Tasks:
    ☐ Bring up the command palette (it's ⌘+shift+p in Mac and ctrl+shift+p in Windows)
    ☐ type `task` and select `Tasks: New document` command
 
+  Priority:
+   ☐ You can use @critical @high @low tag to define priority of your tasks
+   ☐ You can also use c + tab key, h + tab key, l + tab key shortcut to insert those tags easily
+
 --- ✄ -----------------------
 You can use separator snippet to separate your todo lists, type -- and press tab
 Time Tracking:
