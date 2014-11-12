@@ -491,6 +491,51 @@
 				<string>bold</string>
 			</dict>
 		</dict>
+		<dict>
+			<key>name</key>
+			<string>High</string>
+			<key>scope</key>
+			<string>string.other.tag.todo.high</string>
+			<key>settings</key>
+			<dict>
+				<key>background</key>
+				<string>#FF7F00</string>
+				<key>foreground</key>
+				<string>#000000</string>
+				<key>fontStyle</key>
+				<string>bold</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Low</string>
+			<key>scope</key>
+			<string>string.other.tag.todo.low</string>
+			<key>settings</key>
+			<dict>
+				<key>background</key>
+				<string>#222222</string>
+				<key>foreground</key>
+				<string>#ffffff</string>
+				<key>fontStyle</key>
+				<string>bold</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Critical</string>
+			<key>scope</key>
+			<string>string.other.tag.todo.critical</string>
+			<key>settings</key>
+			<dict>
+				<key>background</key>
+				<string>#FF0000</string>
+				<key>foreground</key>
+				<string>#000000</string>
+				<key>fontStyle</key>
+				<string>bold</string>
+			</dict>
+		</dict>
 	</array>
 	<key>uuid</key>
 	<string>FE674D9A-27B3-4A5A-84F7-1CC67BD29531</string>

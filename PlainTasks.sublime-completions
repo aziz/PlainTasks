@@ -1,8 +1,11 @@
 {
-    "scope": "text.todo",
-    "completions": [
-        { "trigger": "s", "contents": "@started" },
-        { "trigger": "t", "contents": "@today" },
-        { "trigger": "tg", "contents": "@toggle"}
-    ]
+ "scope": "text.todo",
+ "completions": [
+  { "trigger": "l\t@low", "contents": "@low"},
+  { "trigger": "h\t@high", "contents": "@high"},
+  { "trigger": "c\t@critical", "contents": "@critical"},
+  { "trigger": "t\t@today", "contents": "@today" },
+  { "trigger": "s\t@started", "contents": "@started" },
+  { "trigger": "tg\t@toggle", "contents": "@toggle"}
+ ]
 }
