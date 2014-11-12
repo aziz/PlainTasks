@@ -16,7 +16,7 @@
 	<array>
 		<dict>
 			<key>match</key>
-			<string>^\s*(\w+.+:\s*?(\@[^\s]+(\(.*?\))?\s*?)*$)</string>
+			<string>^\s*(\w+.+:\s*(\@[^\s]+(\(.*?\))?\s*)*$\n?)</string>
 			<key>name</key>
 			<string>keyword.control.header.todo</string>
 		</dict>
@@ -143,7 +143,7 @@
 
 		<dict>
 			<key>match</key>
-			<string>(?&lt;=\s)\@(?!today|completed|done)[\w\d\.\(\)\-!? :]+\s*</string>
+			<string>(?&lt;=\s)\@(?!high|today|critical|low|completed|done)[\w\d\.\(\)\-!? :]+\s*</string>
 			<key>name</key>
 			<string>meta.tag.todo</string>
 		</dict>
@@ -167,6 +167,27 @@
 			<string>(?&lt;=\s)\@today|✭ᴛᴏᴅᴀʏ</string>
 			<key>name</key>
 			<string>string.other.tag.todo.today</string>
+		</dict>
+
+		<dict>
+			<key>match</key>
+			<string>(?&lt;=\s)\@low|✭low</string>
+			<key>name</key>
+			<string>string.other.tag.todo.low</string>
+		</dict>
+
+		<dict>
+			<key>match</key>
+			<string>(?&lt;=\s)\@high|✭high</string>
+			<key>name</key>
+			<string>string.other.tag.todo.high</string>
+		</dict>
+
+		<dict>
+			<key>match</key>
+			<string>(?&lt;=\s)\@critical|✭critical</string>
+			<key>name</key>
+			<string>string.other.tag.todo.critical</string>
 		</dict>
 	</array>
 

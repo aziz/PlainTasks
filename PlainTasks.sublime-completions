@@ -3,6 +3,9 @@
     "completions": [
         { "trigger": "s", "contents": "@started" },
         { "trigger": "t", "contents": "@today" },
-        { "trigger": "tg", "contents": "@toggle"}
+        { "trigger": "tg", "contents": "@toggle"},
+        { "trigger": "h", "contents": "@high"},
+        { "trigger": "c", "contents": "@critical"},
+        { "trigger": "l", "contents": "@low"}
     ]
 }
