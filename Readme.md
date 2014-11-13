@@ -10,23 +10,23 @@ To install this plugin, you have two options:
 2. Clone source code to Sublime Text packages folder.
 
 ## Start a new todo-list
-Bring up the command palette (it's `⌘ + shift + p`  in OS X and `ctrl + shift + p` in Windows) and type `task` and select `Tasks: New document` command. 
+Bring up the command palette (it’s <kbd>⌘ + shift + p</kbd> in OS X and <kbd>ctrl + shift + p</kbd> in Windows) and type `task` and select `Tasks: New document` command. 
 
 **NOTE:** Save your todo files with `todo`, `todolist`, `tasks` or `taskpaper` file extensions or just name them `TODO` with no extension.
 For more portability you can use `todolist.txt` either as a filename or as suffix for any arbitrary filename.
 
 ## Usage
-**NOTE:** In Windows or Linux use `ctrl` instead of `⌘`
+**NOTE:** In Windows or Linux use <kbd>ctrl</kbd> instead of <kbd>⌘</kbd>
 
-☐ `⌘ + enter` or `⌘ + i`: new task
+☐ <kbd>⌘ + enter</kbd> or <kbd>⌘ + i</kbd>: new task
 
-☐ `⌘ + d`: toggle task as completed. You can also use your mouse to mark a task a completed. just hold down `⌘` (or `ctrl` if you're on Windows or Linux) and click the task. Clicking again will toggle the task back to the pending state.
+☐ <kbd>⌘ + d</kbd>: toggle task as completed.
 
-☐ `ctrl + c`: toggle task as cancelled on Mac. `alt + c` on Windows/Linux.
+☐ <kbd>ctrl + c</kbd>: toggle task as cancelled on Mac. <kbd>alt + c</kbd> on Windows/Linux.
 
-☐ `⌘ + shift + a` will archive the done tasks, by removing them from your list and appending them to the bottom of the file under Archive project
+☐ <kbd>⌘ + shift + a</kbd> will archive the done tasks, by removing them from your list and appending them to the bottom of the file under Archive project
 
-☐ `⌘ + shift + u` will open the url under the cursor in your default browser
+☐ <kbd>⌘ + shift + u</kbd> will open the url under the cursor in your default browser
 
 ☐ Anything with colon at the end of the line is a project title, you can also nest projects by indenting them. 
 
@@ -36,30 +36,30 @@ For more portability you can use `todolist.txt` either as a filename or as suffi
 
 ☐ PlainTasks comes with a simple snippet for creating separators, if you feel that your task list is becoming too long you can split it into several sections (and fold some of them) using this snippet:
 
-`--` and then `tab key` will give you this: `--- ✄ -----------------------`
+`--` and then <kbd>tab</kbd> will give you this: `--- ✄ -----------------------`
 
-☐ Completion rules (`ctrl+space` to see list of them):  
+☐ Completion rules (<kbd>ctrl+space</kbd> to see list of them):  
 
-- type `s`, press `tab key` — it’ll become `@started` — press tab again and current date will be inserted, when you’ll complete or cancel a task with such tag, you’ll know how many time has passed since start;
-- `tg` and twice `tab key` work in the same manner as `s`, but inserts `@toggle(current date)` — so you can pause and resume to get more correct result when done/cancel; each toggle tag is either pause or resume depending on its place in sequence;
-- type `t`, press `tab key` — it’ll become `@today` — this one is highlighted differently than other tags, you can easily spot which task is important;
-- type `c`, press `tab key` — it’ll become `@critical`;
-- type `h`, press `tab key` — it’ll become `@high`;
-- type `l`, press `tab key` — it’ll become `@low`.
+- type `s`, press <kbd>tab</kbd> — it’ll become `@started` — press tab again and current date will be inserted, when you’ll complete or cancel a task with such tag, you’ll know how many time has passed since start;
+- `tg` and twice <kbd>tab</kbd> work in the same manner as `s`, but inserts `@toggle(current date)` — so you can pause and resume to get more correct result when done/cancel; each toggle tag is either pause or resume depending on its place in sequence;
+- type `t`, press <kbd>tab</kbd> — it’ll become `@today` — this one is highlighted differently than other tags;
+- type `c`, press <kbd>tab</kbd> — it’ll become `@critical`;
+- type `h`, press <kbd>tab</kbd> — it’ll become `@high`;
+- type `l`, press <kbd>tab</kbd> — it’ll become `@low`.
 
 ☐ You can create a link to a file within your project by prefixing the file name with a dot and (back)slash like: `.\filename\` or `./another filename/`.  
   The line and column can be specified by colons: `.\filename:11:8`.  
   In SublimeText 3 you can specify a symbol inside that file by using \> character like: `.\filename>symbol`.  
   In SublimeText 2 you can specify a text inside that file by using inch characters like: `.\filename"any text"`.  
-  Pressing `ctrl + o` (`alt + o` on Windows/Linux) will open the file in Sublime and scroll to specific position if any.
+  Pressing <kbd>ctrl + o</kbd> (<kbd>alt + o</kbd> on Windows/Linux) will open the file in Sublime and scroll to specific position if any.
 
-☐ To convert current document to HTML, bring up the command palette `⌘ + shift + p` and type `Tasks: View as HTML` — it will be opened in default webbrowser, so you can view and save it.
+☐ To convert current document to HTML, bring up the command palette <kbd>⌘ + shift + p</kbd> and type `Tasks: View as HTML` — it will be opened in default webbrowser, so you can view and save it.
 
 ### Editor Useful Tools:
 
-☐ Use **`⌘ + control + up/down`** (**`ctrl + shift + up/down`** on Windows) to move tasks up and down.
+☐ Use **<kbd>⌘ + control + up/down</kbd>** (**<kbd>ctrl + shift + up/down</kbd>** on Windows) to move tasks up and down.
 
-☐ Use **`⌘ + r`** to see a list of projects and quickly jump between them
+☐ Use **<kbd>⌘ + r</kbd>** to see a list of projects and quickly jump between them
 
 
 ★ See the [Tutorial](https://github.com/aziz/PlainTasks/blob/master/messages/Tutorial.todo) for more detailed information.
@@ -67,9 +67,9 @@ For more portability you can use `todolist.txt` either as a filename or as suffi
 ## Settings
 PlainTasks is an opinionated plugin, which means that it is highly configured to look in a specific way, but this does not mean that you can not customize it. If you feel that something does not look right and you want to change it, you can easily do it in your user settings file. 
 
-Go to `Preferences > Package Settings > PlainTasks` and open `Settings - User`, there you can override all the default settings, to get an idea you can take a look at `Settings - Default`.
+Go to `Preferences → Package Settings → PlainTasks` and open `Settings - User`, there you can override all the default settings, to get an idea you can take a look at `Settings - Default`.
 
-Here is a list of PlainTasks' specific settings:
+Here is a list of PlainTasks’ specific settings:
 
 |            Setting             |     Default      |                                 Options/Description                                 |
 | ------------------------------ | ---------------- | ----------------------------------------------------------------------- |
@@ -89,7 +89,7 @@ Here is a list of PlainTasks' specific settings:
 
 
 ## Taskpaper Compatibility
-Go to `Preferences > Package Settings > PlainTasks` and open `Settings - User`, then
+Go to `Preferences → Package Settings → PlainTasks` and open `Settings - User`, then
 add these settings to the json file:
 
 ```json
@@ -152,9 +152,17 @@ Bring up the command palette and type `Tasks: Copy Statistics`.
 
 
 ## Contributors
+- @antonioriva
+- @binaryannie
+- [Ben Johnson](https://github.com/benjohnson)
+- [Craig Campbell](https://github.com/ccampbell)
 - [Dominique Wahli](https://github.com/bizoo)
+- [Germán M. Bravo](https://github.com/Kronuz)
+- [Hindol Adhya](https://github.com/Hindol)
 - [Jesse Robertson](https://github.com/speilberg0)
 - [Marc Schlaich](https://github.com/schlamar)
+- [Michael McFarland](https://github.com/mikedmcfarland)
+- [Pablo Barrios](https://github.com/sauron)
 - [Stanislav Parfeniuk](https://github.com/travmik)
 - [Vova Kolobok](https://github.com/vovkkk)
 
