@@ -54,7 +54,7 @@ class PlainTasksNewCommand(PlainTasksBase):
             if 'item' in current_scope:
                 grps = not_empty_line.groups()
                 line_contents = self.view.substr(line) + '\n' + grps[0] + self.open_tasks_bullet + self.tasks_bullet_space
-            elif 'header' in current_scope and not self.view.settings().get('header_to_task'):
+            elif 'header' in current_scope and line_contents and not self.view.settings().get('header_to_task'):
                 grps = not_empty_line.groups()
                 line_contents = self.view.substr(line) + '\n' + grps[0] + self.before_tasks_bullet_spaces + self.open_tasks_bullet + self.tasks_bullet_space
             elif 'separator' in current_scope:
@@ -268,7 +268,11 @@ class PlainTasksArchiveCommand(PlainTasksBase):
                 self.view.insert(edit, self.view.size(), create_archive)
                 line = self.view.size()
 
-            projects = sorted(self.view.find_by_selector('keyword.control.header.todo') +
+            # because tmLanguage need \n to make background full width of window
+            # multiline headers are possible, thus we have to split em to be sure that
+            # one header == one line
+            projects = itertools.chain(*[self.view.lines(r) for r in self.view.find_by_selector('keyword.control.header.todo')])
+            projects = sorted(list(projects) +
                               self.view.find_by_selector('meta.punctuation.separator.todo'))
 
             # adding tasks to archive section
