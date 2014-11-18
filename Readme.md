@@ -88,7 +88,7 @@ Here is a list of PlainTasks’ specific settings:
 
 
 
-## Taskpaper Compatibility
+### Taskpaper Compatibility
 Go to `Preferences → Package Settings → PlainTasks` and open `Settings - User`, then
 add these settings to the json file:
 
@@ -101,6 +101,16 @@ add these settings to the json file:
 ```
 
 *Note*, `"translate_tabs_to_spaces": false` will cause tab character *after* bullet as well as before, if you need whitespace add `"tasks_bullet_space": " "`.
+
+### Spell check
+It is build-in feature of Sublime, you can toggle spell check with <kbd>F6</kbd>.  
+For convinience, you may add bullets in list of ignored words into **`Preferences → Settings - User`**, e.g.
+
+```json
+{
+  "ignored_words": [ "☐", "✔", "✘", "✄" ]
+}
+```
 
 ## [BONUS] Custom todo icon
 PlainTasks comes with a custom todo icon that you can find in the `icons` folder. You can assign it to your todo files to give them a better look and distinguish them from other plain text files. Google and find out how to assign a custom icon to a file type in your operating system.

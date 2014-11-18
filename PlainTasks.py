@@ -15,20 +15,20 @@ if int(sublime.version()) < 3000:
 
 class PlainTasksBase(sublime_plugin.TextCommand):
     def run(self, edit):
-        self.taskpaper_compatible = self.view.settings().get('taskpaper_compatible')
+        self.taskpaper_compatible = self.view.settings().get('taskpaper_compatible', False)
         if self.taskpaper_compatible:
             self.open_tasks_bullet = self.done_tasks_bullet = self.canc_tasks_bullet = '-'
             self.before_date_space = ''
         else:
-            self.open_tasks_bullet = self.view.settings().get('open_tasks_bullet')
-            self.done_tasks_bullet = self.view.settings().get('done_tasks_bullet')
-            self.canc_tasks_bullet = self.view.settings().get('cancelled_tasks_bullet')
+            self.open_tasks_bullet = self.view.settings().get('open_tasks_bullet', u'☐')
+            self.done_tasks_bullet = self.view.settings().get('done_tasks_bullet', u'✔')
+            self.canc_tasks_bullet = self.view.settings().get('cancelled_tasks_bullet', u'✘')
             self.before_date_space = ' '
-        translate_tabs_to_spaces = self.view.settings().get('translate_tabs_to_spaces')
-        self.before_tasks_bullet_spaces = ' ' * self.view.settings().get('before_tasks_bullet_margin') if translate_tabs_to_spaces else '\t'
+        translate_tabs_to_spaces = self.view.settings().get('translate_tabs_to_spaces', False)
+        self.before_tasks_bullet_spaces = ' ' * self.view.settings().get('before_tasks_bullet_margin', 1) if translate_tabs_to_spaces else '\t'
         self.tasks_bullet_space = self.view.settings().get('tasks_bullet_space', ' ' if translate_tabs_to_spaces else '\t')
-        self.date_format = self.view.settings().get('date_format')
-        if self.view.settings().get('done_tag') or self.taskpaper_compatible:
+        self.date_format = self.view.settings().get('date_format', '(%y-%m-%d %H:%M)')
+        if self.view.settings().get('done_tag', True) or self.taskpaper_compatible:
             self.done_tag = "@done"
             self.canc_tag = "@cancelled"
         else:
@@ -36,8 +36,8 @@ class PlainTasksBase(sublime_plugin.TextCommand):
             self.canc_tag = ""
         if int(sublime.version()) < 3000:
             self.sys_enc = locale.getpreferredencoding()
-        self.project_postfix = self.view.settings().get('project_tag')
-        self.archive_name = self.view.settings().get('archive_name')
+        self.project_postfix = self.view.settings().get('project_tag', True)
+        self.archive_name = self.view.settings().get('archive_name', 'Archive:')
         self.runCommand(edit)
 
 
@@ -46,6 +46,7 @@ class PlainTasksNewCommand(PlainTasksBase):
         # list for ST3 support;
         # reversed because with multiple selections regions would be messed up after first iteration
         regions = itertools.chain(*(reversed(self.view.lines(region)) for region in reversed(list(self.view.sel()))))
+        header_to_task = self.view.settings().get('header_to_task', False)
         for line in regions:
             line_contents  = self.view.substr(line).rstrip()
             not_empty_line = re.match('^(\s*)(\S.+)$', self.view.substr(line))
@@ -54,13 +55,13 @@ class PlainTasksNewCommand(PlainTasksBase):
             if 'item' in current_scope:
                 grps = not_empty_line.groups()
                 line_contents = self.view.substr(line) + '\n' + grps[0] + self.open_tasks_bullet + self.tasks_bullet_space
-            elif 'header' in current_scope and line_contents and not self.view.settings().get('header_to_task'):
+            elif 'header' in current_scope and line_contents and not header_to_task:
                 grps = not_empty_line.groups()
                 line_contents = self.view.substr(line) + '\n' + grps[0] + self.before_tasks_bullet_spaces + self.open_tasks_bullet + self.tasks_bullet_space
             elif 'separator' in current_scope:
                 grps = not_empty_line.groups()
                 line_contents = self.view.substr(line) + '\n' + grps[0] + self.before_tasks_bullet_spaces + self.open_tasks_bullet + self.tasks_bullet_space
-            elif not ('header' and 'separator') in current_scope or self.view.settings().get('header_to_task'):
+            elif not ('header' and 'separator') in current_scope or header_to_task:
                 if not_empty_line:
                     grps = not_empty_line.groups()
                     line_contents = (grps[0] if len(grps[0]) > 0 else self.before_tasks_bullet_spaces) + self.open_tasks_bullet + self.tasks_bullet_space + grps[1]
@@ -477,7 +478,7 @@ class PlainTasksSortByDate(PlainTasksBase):
             to_remove.sort()
             for i in reversed(to_remove):
                 self.view.erase(edit, self.view.full_line(i))
-            tasks_prefixed_date.sort(reverse=self.view.settings().get('new_on_top'))
+            tasks_prefixed_date.sort(reverse=self.view.settings().get('new_on_top', True))
             eol = archive_pos.end()
             for a in tasks_prefixed_date:
                 eol += self.view.insert(edit, eol, '\n' + re.sub('^\([\d\w,\.:\-\/ ]*\)([^\b]*$)', '\\1', a))
@@ -647,7 +648,7 @@ class PlainTasksStatsStatus(sublime_plugin.EventListener):
         msgf = view.settings().get('stats_format', '$n/$a done ($percent%) $progress Last task @done $last')
         ignore_archive = view.settings().get('stats_ignore_archive', False)
         if ignore_archive:
-            archive_pos = view.find(view.settings().get('archive_name'), 0, sublime.LITERAL)
+            archive_pos = view.find(view.settings().get('archive_name', 'Archive:'), 0, sublime.LITERAL)
             pend = len([i for i in view.find_by_selector('meta.item.todo.pending') if i.a < (archive_pos.a if archive_pos and archive_pos.a > 0 else view.size())])
             done = len([i for i in view.find_by_selector('meta.item.todo.completed') if i.a < (archive_pos.a if archive_pos and archive_pos.a > 0 else view.size())])
             canc = len([i for i in view.find_by_selector('meta.item.todo.cancelled') if i.a < (archive_pos.a if archive_pos and archive_pos.a > 0 else view.size())])
@@ -665,7 +666,7 @@ class PlainTasksStatsStatus(sublime_plugin.EventListener):
 
         tasks_dates = []
         view.find_all('(^\s*[^\n]*?\s\@(?:done)\s*(\([\d\w,\.:\-\/ ]*\))[^\n]*$)', 0, "\\2", tasks_dates)
-        date_format = view.settings().get('date_format')
+        date_format = view.settings().get('date_format', '(%y-%m-%d %H:%M)')
         tasks_dates = [PlainTasksCompleteCommand.check_parentheses(date_format, t, is_date=True) for t in tasks_dates]
         tasks_dates.sort(reverse=True)
         last = tasks_dates[0] if tasks_dates else '(UNKOWN)'
