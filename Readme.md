@@ -40,12 +40,71 @@ For more portability you can use `todolist.txt` either as a filename or as suffi
 
 ☐ Completion rules (<kbd>ctrl+space</kbd> to see list of them):  
 
-- type `s`, press <kbd>tab</kbd> — it’ll become `@started` — press tab again and current date will be inserted, when you’ll complete or cancel a task with such tag, you’ll know how many time has passed since start;
-- `tg` and twice <kbd>tab</kbd> work in the same manner as `s`, but inserts `@toggle(current date)` — so you can pause and resume to get more correct result when done/cancel; each toggle tag is either pause or resume depending on its place in sequence;
 - type `t`, press <kbd>tab</kbd> — it’ll become `@today` — this one is highlighted differently than other tags;
-- type `c`, press <kbd>tab</kbd> — it’ll become `@critical`;
-- type `h`, press <kbd>tab</kbd> — it’ll become `@high`;
-- type `l`, press <kbd>tab</kbd> — it’ll become `@low`.
+- `c`, <kbd>tab</kbd> — `@critical`;
+- `h`, <kbd>tab</kbd> — `@high`;
+- `l`, <kbd>tab</kbd> — `@low`;
+- `s`, <kbd>tab</kbd> — `@started` — press <kbd>tab</kbd> again and current date will be inserted, when you’ll complete or cancel a task with such tag, you’ll know how many time has passed since start;
+- `tg`, <kbd>tab</kbd>, <kbd>tab</kbd> work in the same manner as `s`, but inserts `@toggle(current date)` — so you can pause and resume to get more correct result when done/cancel; each toggle tag is either pause or resume depending on its place in sequence;
+- `cr`, <kbd>tab</kbd>, <kbd>tab</kbd> — `@created(current date)`;
+- `d`, <kbd>tab</kbd> — `@due( )`  
+  If you press <kbd>tab</kbd> again, it’ll insert current date, same for `@due( 0)`.  
+  You can type short date (similar to [OrgMode’s date prompt](http://orgmode.org/manual/The-date_002ftime-prompt.html), but not the same) and then press <kbd>tab</kbd> to expand it into default format.  
+  Short date should be __`@due(year-month-day hour:minute)`__  
+  Dot can be used instead of hyphen, but should be consistent _`year.month.day`_
+
+    - year, month, minute, hour can be omitted:
+
+        <table>
+         <tr>
+          <th>  Notation    </th><th>   Meaning     </th>
+         </tr>
+         <tr>
+          <td>  <code>@due(1)</code>    </td>
+          <td>  1st day of next month always    </td>
+         </tr>
+         <tr>
+          <td>  <code>@due(5)</code>    </td>
+          <td>  5th day of current month (or next month if current day is 5th or older) </td>
+         </tr>
+         <tr>
+          <td>  <code>@due(2-3)</code>  </td>
+          <td>  February 3rd of current year or next one    </td>
+         </tr>
+         <tr>
+          <td>  <code>@due(31 23:)</code>   </td>
+          <td>  31st day of current/next month at 23 hours and minutes are equal to current moment  </td>
+         </tr>
+         <tr>
+          <td>  <code>@due(16.1.1 1:1)</code>   </td>
+          <td>  January 1st of 2016 at 01:01    <code>@due(16-01-01 01:01)</code>  </td>
+         </tr>
+        </table>
+
+    - relative period of time starts with a plus sign or two  
+      __`+[+][number][DdWw]`__ — number is optional as well as letter `d` for days or letter `w` for weeks.
+
+        <table>
+         <tr>
+          <th>  Notation    </th><th>   Meaning     </th>
+         </tr>
+         <tr>
+          <td>  <code>@due(+)</code>    </td>
+          <td>  tomorrow as well as <code>@due( +1)</code> or <code>@due( +1d)</code></td>
+         </tr>
+         <tr>
+          <td>  <code>@due(+w)</code>    </td>
+          <td>  one week since current date, i.e. <code>@due( +7)</code></td>
+         </tr>
+         <tr>
+          <td>  <code>@due(+3w)</code>  </td>
+          <td>  3 weeks since current date, i.e. <code>@due( +21d)</code></td>
+         </tr>
+         <tr>
+          <td>  <code>@due(++)</code>   </td>
+          <td>  one day since <code>@created(date)</code> if any, otherwise it is equal to <code>@due(+)</code></td>
+         </tr>
+        </table>
 
 ☐ You can create a link to a file within your project by prefixing the file name with a dot and (back)slash like: `.\filename\` or `./another filename/`.  
   The line and column can be specified by colons: `.\filename:11:8`.  

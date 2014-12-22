@@ -492,6 +492,117 @@ class PlainTaskInsertDate(PlainTasksBase):
             self.view.insert(edit, s.b, datetime.now().strftime(self.date_format))
 
 
+class PlainTasksReplaceShortDate(PlainTasksBase):
+    def runCommand(self, edit):
+        self.date_format = self.date_format.strip('()')
+        now = datetime.now()
+
+        s = self.view.sel()[0]
+        start, end = s.a, s.b
+        while self.view.substr(start) != '(':
+            start -= 1
+        while self.view.substr(end) != ')':
+            end += 1
+        self.rgn = sublime.Region(start + 1, end)
+        matchstr = self.view.substr(self.rgn)
+        # print(matchstr)
+
+        if '+' in matchstr:
+            date = self.increase_date(matchstr, now)
+        else:
+            date = self.convert_date(matchstr, now)
+
+        self.view.replace(edit, self.rgn, date)
+        offset = start + len(date) + 2
+        self.view.sel().clear()
+        self.view.sel().add(sublime.Region(offset, offset))
+
+    def increase_date(self, matchstr, now):
+        # relative from date of creation if any
+        if '++' in matchstr:
+            line_content = self.view.substr(self.view.line(self.rgn))
+            created = re.search(r'(?mxu)@created\(([\d\w,\.:\-\/ @]*)\)', line_content)
+            if created:
+                try:
+                    now = datetime.strptime(created.group(1), self.date_format)
+                except ValueError as e:
+                    return sublime.error_message('PlainTasks:\n\n FAILED date convertion: %s' % e)
+
+        match_obj = re.search(r'''(?mxu)
+            \s*\+\+?\s*
+            (?P<number>\d*)\s*
+            (?P<days>[Dd])?
+            (?P<weeks>[Ww])?
+            ''', matchstr)
+        number = int(match_obj.group('number') or 0)
+        days   = match_obj.group('days')
+        weeks  = match_obj.group('weeks')
+        if not number:
+            # set 1 if number is ommited, i.e.
+            #   @due(+) == @due(+1) == @due(+1d)
+            #   @due(+w) == @due(+1w)
+            number = 1
+        delta = now + timedelta(days=(number*7 if weeks else number))
+        return delta.strftime(self.date_format)
+
+    def convert_date(self, matchstr, now):
+        match_obj = re.search(r'''(?mxu)
+            (?:\s*
+             (?P<yearORmonthORday>\d*(?!:))
+             (?P<sep>[-\.])?
+             (?P<monthORday>\d*)
+             (?P=sep)?
+             (?P<day>\d*)
+             (?! \d*:)(?# e.g. '23:' == hour, but '1 23:' == day=1, hour=23)
+            )?
+            \s*
+            (?:
+             (?P<hour>\d*)
+             :
+             (?P<minute>\d*)
+            )?''', matchstr)
+        year  = now.year
+        month = now.month
+        day   = int(match_obj.group('day') or 0)
+        # print(day)
+        if day:
+            year  = int(match_obj.group('yearORmonthORday'))
+            month = int(match_obj.group('monthORday'))
+        else:
+            day = int(match_obj.group('monthORday') or 0)
+            # print(day)
+            if day:
+                month = int(match_obj.group('yearORmonthORday'))
+                if month < now.month:
+                    year += 1
+            else:
+                day = int(match_obj.group('yearORmonthORday') or 0)
+                # print(day)
+                if 0 < day <= now.day:
+                    # expect next month
+                    month += 1
+                    if month == 13:
+                        year += 1
+                        month = 1
+                else: # @due(0) == today
+                    day = now.day
+        hour   = match_obj.group('hour')   or now.hour
+        minute = match_obj.group('minute') or now.minute
+        hour, minute = int(hour), int(minute)
+        if year < 100:
+            year += 2000
+
+        # print(year, month, day, hour, minute)
+        try:
+            date = datetime(year, month, day, hour, minute, 0).strftime(self.date_format)
+        except ValueError as e:
+            return sublime.error_message('PlainTasks:\n\n'
+                '%s:\n year:\t%d\n month:\t%d\n day:\t%d\n HH:\t%d\n MM:\t%d\n' %
+                (e, year, month, day, hour, minute))
+        else:
+            return date
+
+
 class PlainTasksConvertToHtml(PlainTasksBase):
     def is_enabled(self):
         return self.view.score_selector(0, "text.todo") > 0

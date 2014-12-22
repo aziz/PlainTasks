@@ -57,6 +57,24 @@ Time Tracking:
   ☐ type tg, press tab key twice — @toggle(14-10-13 16:14)
     That way you can pause and resume started task, so result of calculation will be more correct.
     First, you need start task, then toggle means pause, next toggle — resume, etc.
+  ☐ type cr, press tab key twice — @created(14-12-24 15:57)
+  ☐ type d, press tab key — @due( )
+    If you press tab key again — it’ll insert current date, same for @due( 0).
+    You can type short date and then press tab to expand it into default format.
+    Short date should be __@due(year-month-day hour:minute)__
+    Dot can be used instead of hyphen, but should be consistent _year.month.day_
+      - year, month, minute, hour can be omitted:
+        - @due(1)          → 1st day of next month always
+        - @due(5)          → 5th day of current month (or next month if current day is 5th or older)
+        - @due(2-3)        → February 3rd of current year or next one
+        - @due(31 23:)     → 31st day of current/next month at 23 hours and minutes are equal to current moment
+        - @due(16.1.1 1:1) → January 1st of 2016 at 01:01 @due(16-01-01 01:01)
+      - relative period of time starts with a plus sign or two
+        __+[+][number][DdWw]__ — number is optional as well as letter d for days or letter w for weeks
+        - @due(+)   → tomorrow as well as @due( +1) or @due( +1d)
+        - @due(+w)  = @due( +7)
+        - @due(+3w) = @due( +21d)
+        - @due(++)  → count time since date of creation if task contains @created(date), otherwise it is equal to @due(+)
 
 ☐ ctrl+space shows list of those tags
 
@@ -86,4 +104,4 @@ Editor Useful Tools:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
- ✔ learn how to use PlainTasks @done (2012-09-07 07:30)
+ ✔ learn how to use PlainTasks @done (12-09-07 07:30)

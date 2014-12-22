@@ -6,6 +6,8 @@
   { "trigger": "c\t@critical", "contents": "@critical"},
   { "trigger": "t\t@today", "contents": "@today" },
   { "trigger": "s\t@started", "contents": "@started" },
-  { "trigger": "tg\t@toggle", "contents": "@toggle"}
+  { "trigger": "tg\t@toggle", "contents": "@toggle"},
+  { "trigger": "d\t@due()", "contents": "@due( $0)"},
+  { "trigger": "cr\t@created", "contents": "@created"}
  ]
 }

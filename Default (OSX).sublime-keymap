@@ -20,7 +20,15 @@
     [
       { "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true },
       { "key": "selector", "operator": "equal", "operand": "text.todo" },
-      { "key": "preceding_text", "operator": "regex_contains", "operand": "(@started|@toggle)(?!\\([\\d\\w,\\.:\\-\/ @]*\\))", "match_all": true }
+      { "key": "preceding_text", "operator": "regex_contains", "operand": "(@started|@toggle|@created)(?!\\([\\d\\w,\\.:\\-\/ @]*\\))", "match_all": true }
+    ]
+  },
+  { "keys": ["tab"], "command": "plain_tasks_replace_short_date", "context":
+    [
+      { "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true },
+      { "key": "selector", "operator": "equal", "operand": "text.todo" },
+      { "key": "preceding_text", "operator": "regex_contains", "operand": "@due\\([^\\)]+(?!.*?\\))", "match_all": true },
+      { "key": "following_text", "operator": "regex_contains", "operand": "[ \t]*\\)", "match_all": true }
     ]
   }
 ]
