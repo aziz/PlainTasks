@@ -164,9 +164,13 @@ class PlainTasksCompleteCommand(PlainTasksBase):
         deltas = [pair[1] - pair[0] for pair in pairs]
 
         delta = str(sum(deltas, timedelta()))
-        if delta[~2:] == ':00': # strip meaningless seconds
+        if delta[~6:] == '0:00:00': # strip meaningless time
+            delta = delta[:~6]
+        elif delta[~2:] == ':00': # strip meaningless seconds
             delta = delta[:~2]
-        self.view.insert(edit, line.end() + eol, ' @%s(%s)' % (tag, delta))
+
+        tag = ' @%s(%s)' % (tag, delta.rstrip(', ') if delta else ('a bit' if '%H' in self.date_format else 'less than day'))
+        self.view.insert(edit, line.end() + eol, tag)
 
     @staticmethod
     def check_parentheses(date_format, regex_group, is_date=False):
