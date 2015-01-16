@@ -189,6 +189,7 @@ Statistics of current file are represented in status-bar, based on `stats_format
 | `$percent`   | Ratio of `$n` to `$a`                                 |
 | `$progress`  | Percent as pseudo graphics (absents if less than 10%) |
 | `$last`      | Date of lastly completed task                         |
+| `{{...}}`    | Return `pending/completed/cancelled` tasks which matched by regex `...`;<br> e.g. `{{@tag}}` — amounts of tasks with `@tag`; or `{{@a|@b}}` — tasks with either `@a` or `@b` or both.<br> You may add several `{{...}}` to get separate stats for different tags. |
 
 So you can customise it as you like, by adding to `Settings - User`, e.g.
 

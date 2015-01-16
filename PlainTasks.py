@@ -115,7 +115,7 @@ class PlainTasksCompleteCommand(PlainTasksBase):
             done_matches = re.match(rdm, line_contents, re.U)
             canc_matches = re.match(rcm, line_contents, re.U)
             started_matches = re.match(started, line_contents, re.U)
-            toggle_matches = re.findall(toggle,line_contents, re.U)
+            toggle_matches = re.findall(toggle, line_contents, re.U)
 
             current_scope = self.view.scope_name(line.a)
             if 'pending' in current_scope:
@@ -355,7 +355,13 @@ class PlainTasksArchiveCommand(PlainTasksBase):
 class PlainTasksNewTaskDocCommand(sublime_plugin.WindowCommand):
     def run(self):
         view = self.window.new_file()
+        view.settings().add_on_change('color_scheme', lambda: self.set_proper_scheme(view))
         view.set_syntax_file('Packages/PlainTasks/PlainTasks.tmLanguage')
+
+    def set_proper_scheme(self, view):
+        # Since we cannot create file with syntax, there is moment when view has no settings,
+        # but it is activated, so some plugins (e.g. Color Highlighter) set wrong color scheme
+        view.settings().set('color_scheme', sublime.load_settings('PlainTasks.sublime-settings').get('color_scheme'))
 
 
 class PlainTasksOpenUrlCommand(sublime_plugin.TextCommand):
@@ -761,6 +767,23 @@ class PlainTasksStatsStatus(sublime_plugin.EventListener):
     @staticmethod
     def get_stats(view):
         msgf = view.settings().get('stats_format', '$n/$a done ($percent%) $progress Last task @done $last')
+
+        special_interest = re.findall(r'{{.*?}}', msgf)
+        for i in special_interest:
+            matches = view.find_all(i.strip('{}'))
+            pend, done, canc = [], [], []
+            for t in matches:
+                # one task may contain same tag/word several times—we count amount of tasks, not tags
+                t = view.line(t).a
+                scope = view.scope_name(t)
+                if 'pending' in scope and t not in pend:
+                    pend.append(t)
+                elif 'completed' in scope and t not in done:
+                    done.append(t)
+                elif 'cancelled' in scope and t not in canc:
+                    canc.append(t)
+            msgf = msgf.replace(i, '%d/%d/%d'%(len(pend), len(done), len(canc)))
+
         ignore_archive = view.settings().get('stats_ignore_archive', False)
         if ignore_archive:
             archive_pos = view.find(view.settings().get('archive_name', 'Archive:'), 0, sublime.LITERAL)
