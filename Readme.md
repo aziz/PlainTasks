@@ -159,8 +159,6 @@ add these settings to the json file:
 }
 ```
 
-*Note*, `"translate_tabs_to_spaces": false` will cause tab character *after* bullet as well as before, if you need whitespace add `"tasks_bullet_space": " "`.
-
 ### Spell check
 It is build-in feature of Sublime, you can toggle spell check with <kbd>F6</kbd>.  
 For convinience, you may add bullets in list of ignored words into **`Preferences → Settings - User`**, e.g.
