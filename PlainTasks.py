@@ -25,8 +25,8 @@ class PlainTasksBase(sublime_plugin.TextCommand):
             self.canc_tasks_bullet = self.view.settings().get('cancelled_tasks_bullet', u'✘')
             self.before_date_space = ' '
         translate_tabs_to_spaces = self.view.settings().get('translate_tabs_to_spaces', False)
-        self.before_tasks_bullet_spaces = ' ' * self.view.settings().get('before_tasks_bullet_margin', 1) if translate_tabs_to_spaces else '\t'
-        self.tasks_bullet_space = self.view.settings().get('tasks_bullet_space', ' ' if translate_tabs_to_spaces else '\t')
+        self.before_tasks_bullet_spaces = ' ' * self.view.settings().get('before_tasks_bullet_margin', 1) if not self.taskpaper_compatible and translate_tabs_to_spaces else '\t'
+        self.tasks_bullet_space = self.view.settings().get('tasks_bullet_space', ' ' if self.taskpaper_compatible or translate_tabs_to_spaces else '\t')
         self.date_format = self.view.settings().get('date_format', '(%y-%m-%d %H:%M)')
         if self.view.settings().get('done_tag', True) or self.taskpaper_compatible:
             self.done_tag = "@done"
