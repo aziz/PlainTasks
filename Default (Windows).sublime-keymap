@@ -1,34 +1,34 @@
 [
-  { "keys": ["ctrl+d"], "command": "plain_tasks_complete","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },
-  { "keys": ["alt+c"], "command": "plain_tasks_cancel", "context": [{"key": "selector", "operator": "equal", "operand": "text.todo" }] },
-  { "keys": ["ctrl+enter"], "command": "plain_tasks_new","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },
-  { "keys": ["ctrl+i"], "command": "plain_tasks_new","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },
-  { "keys": ["ctrl+shift+a"], "command": "plain_tasks_archive","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },
-  { "keys": ["ctrl+shift+u"], "command": "plain_tasks_open_url","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },
-  { "keys": ["alt+o"], "command": "plain_tasks_open_link","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },
-  { "keys": ["enter"], "command": "insert", "args": {"characters": "\n\t"}, "context":
-    [
-      { "key": "setting.auto_indent", "operator": "equal", "operand": true },
-      { "key": "setting.indent_after_task", "operator": "equal", "operand": true },
-      { "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true },
-      { "key": "selector", "operator": "equal", "operand": "text.todo" },
-      { "key": "auto_complete_visible", "operator": "equal", "operand": false },
-      { "key": "preceding_text", "operator": "regex_contains", "operand": "^\\s*[-|+|✓|✔|❍|❑|■|□|☐|▪|▫|–|—|✘|x]\\s+.+", "match_all": true }
-    ]
-  },
-  { "keys": ["tab"], "command": "plain_task_insert_date", "context":
-    [
-      { "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true },
-      { "key": "selector", "operator": "equal", "operand": "text.todo" },
-      { "key": "preceding_text", "operator": "regex_contains", "operand": "(@started|@toggle|@created)(?!\\([\\d\\w,\\.:\\-\/ @]*\\))", "match_all": true }
-    ]
-  },
-  { "keys": ["tab"], "command": "plain_tasks_replace_short_date", "context":
-    [
-      { "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true },
-      { "key": "selector", "operator": "equal", "operand": "text.todo" },
-      { "key": "preceding_text", "operator": "regex_contains", "operand": "@due\\([^\\)]+(?!.*?\\))", "match_all": true },
-      { "key": "following_text", "operator": "regex_contains", "operand": "[ \t]*\\)", "match_all": true }
-    ]
-  }
+    { "keys": ["ctrl+d"], "command": "plain_tasks_complete","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },
+    { "keys": ["alt+c"], "command": "plain_tasks_cancel", "context": [{"key": "selector", "operator": "equal", "operand": "text.todo" }] },
+    { "keys": ["ctrl+enter"], "command": "plain_tasks_new","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },
+    { "keys": ["ctrl+i"], "command": "plain_tasks_new","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },
+    { "keys": ["ctrl+shift+a"], "command": "plain_tasks_archive","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },
+    { "keys": ["ctrl+shift+u"], "command": "plain_tasks_open_url","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },
+    { "keys": ["alt+o"], "command": "plain_tasks_open_link","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },
+    { "keys": ["enter"], "command": "insert", "args": {"characters": "\n\t"}, "context":
+        [
+            { "key": "setting.auto_indent", "operator": "equal", "operand": true },
+            { "key": "setting.indent_after_task", "operator": "equal", "operand": true },
+            { "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true },
+            { "key": "selector", "operator": "equal", "operand": "text.todo" },
+            { "key": "auto_complete_visible", "operator": "equal", "operand": false },
+            { "key": "preceding_text", "operator": "regex_contains", "operand": "^\\s*[-|+|✓|✔|❍|❑|■|□|☐|▪|▫|–|—|✘|x]\\s+.+", "match_all": true }
+        ]
+    },
+    { "keys": ["tab"], "command": "plain_task_insert_date", "context":
+        [
+            { "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true },
+            { "key": "selector", "operator": "equal", "operand": "text.todo" },
+            { "key": "preceding_text", "operator": "regex_contains", "operand": "(@started|@toggle|@created)(?!\\([\\d\\w,\\.:\\-\/ @]*\\))", "match_all": true }
+        ]
+    },
+    { "keys": ["tab"], "command": "plain_tasks_replace_short_date", "context":
+        [
+            { "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true },
+            { "key": "selector", "operator": "equal", "operand": "text.todo" },
+            { "key": "preceding_text", "operator": "regex_contains", "operand": "@due\\([^\\)]+(?!.*?\\))", "match_all": true },
+            { "key": "following_text", "operator": "regex_contains", "operand": "[ \t]*\\)", "match_all": true }
+        ]
+    }
 ]
