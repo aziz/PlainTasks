@@ -26,6 +26,8 @@ For more portability you can use `todolist.txt` either as a filename or as suffi
 
 ☐ <kbd>⌘ + shift + a</kbd> will archive the done tasks, by removing them from your list and appending them to the bottom of the file under Archive project
 
+☐ <kbd>⌘ + shift + o</kbd> will archive in Org-Mode style, removing the entire subtree after cursor and appending it to new file next to original one, e.g. if original is `filename.TODO` then new would be `filename_archive.TODO`
+
 ☐ <kbd>⌘ + shift + u</kbd> will open the url under the cursor in your default browser
 
 ☐ Anything with colon at the end of the line is a project title, you can also nest projects by indenting them. 

@@ -36,6 +36,9 @@ Tasks:
    ☐ ⌘+shift+A (ctrl+shift+A on Windows) archives tasks in done mode.
       It does it by removing them from your list and appending them to the bottom of the file under Archive project.
       The archive project is separated from the other list of projects with a line. See bottom of this file.
+   ☐ ⌘+shift+O (ctrl+shift+O) will archive in Org-Mode style.
+      Removing the entire subtree after cursor and appending it to new file next to original one,
+      e.g. filename.TODO → filename_archive.TODO
 
   Starting a new todo-list:
    ☐ Bring up the command palette (it's ⌘+shift+p in Mac and ctrl+shift+p in Windows)

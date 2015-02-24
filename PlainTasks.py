@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import os
+import os,io
 import re
 import sublime
 import sublime_plugin
@@ -38,6 +38,10 @@ class PlainTasksBase(sublime_plugin.TextCommand):
             self.sys_enc = locale.getpreferredencoding()
         self.project_postfix = self.view.settings().get('project_tag', True)
         self.archive_name = self.view.settings().get('archive_name', 'Archive:')
+        # org-mode style archive stuff
+        self.archive_org_default_filemask = u'{dir}{sep}{base}_archive{ext}'
+        self.archive_org_filemask = self.view.settings().get(
+                'archive_org_filemask', self.archive_org_default_filemask)
         self.runCommand(edit)
 
 
@@ -709,7 +713,7 @@ class PlainTasksConvertToHtml(PlainTasksBase):
             html_doc.append(ht)
 
         # create file
-        import tempfile, io
+        import tempfile
         tmp_html = tempfile.NamedTemporaryFile(delete=False, suffix='.html')
         with io.open('%s/PlainTasks/templates/template.html' % sublime.packages_path(), 'r', encoding='utf8') as template:
             title = os.path.basename(self.view.file_name()) if self.view.file_name() else 'Export'
@@ -833,3 +837,91 @@ class PlainTasksCopyStats(sublime_plugin.TextCommand):
                 msg = msg.replace(o, r)
 
         sublime.set_clipboard(msg)
+
+
+class PlainTasksArchiveOrgCommand(PlainTasksBase):
+    def runCommand(self, edit):
+        # Archive the curent subtree to our archive file, not just completed tasks.
+        # For now, it's mapped to ctrl-shift-o or super-shift-o
+
+        # TODO: Mark any tasks found as complete, or maybe warn.
+
+        # Get our archive filename
+        archive_filename = self.__createArchiveFilename()
+
+        # Figure out our subtree
+        region = self.__findCurrentSubtree()
+        if region.empty():
+            # How can we get here?
+            sublime.error_message("Error:\n\nCould not find a tree to archive.")
+            return
+
+        # Write our region or our archive file
+        success = self.__writeArchive(archive_filename, region)
+
+        # only erase our region if the write was successful
+        if success:
+            self.view.erase(edit,region)
+
+        return
+
+    def __writeArchive(self, filename, region):
+        # Write out the given region
+
+        sublime.status_message(u'Archiving tree to {0}'.format(filename))
+        try:
+            # Have to use io.open because windows doesn't like writing
+            # utf8 to regular filehandles
+            with io.open(filename, 'a', encoding='utf8') as fh:
+                data = self.view.substr(region)
+                # Is there a way to read this in?
+                fh.write(u"--- ✄ -----------------------\n")
+                fh.write(u"Archived {0}:\n".format(datetime.now().strftime(
+                    self.date_format)))
+                # And, finally, write our data
+                fh.write(u"{0}\n".format(data))
+            return True
+
+        except Exception as e:
+            sublime.error_message(u"Error:\n\nUnable to append to {0}\n{1}".format(
+                filename, str(e)))
+            return False
+
+    def __createArchiveFilename(self):
+        # Create our archive filename, from the mask in our settings.
+
+        # Split filename int dir, base, and extension, then apply our mask
+        path_base, extension = os.path.splitext(self.view.file_name())
+        dir  = os.path.dirname(path_base)
+        base = os.path.basename(path_base)
+        sep  = os.sep
+
+        # Now build our new filename
+        try:
+            # This could fail, if someone messed up the mask in the
+            # settings.  So, if it did fail, use our default.
+            archive_filename = self.archive_org_filemask.format(
+                dir=dir, base=base, ext=extension, sep=sep)
+        except:
+            # Use our default mask
+            archive_filename = self.archive_org_default_filemask.format(
+                    dir=dir, base=base, ext=extension, sep=sep)
+
+            # Display error, letting the user know
+            sublime.error_message(u"Error:\n\nInvalid filemask:{0}\nUsing default: {1}".format(
+                self.archive_org_filemask, self.archive_org_default_filemask))
+
+        return archive_filename
+
+    def __findCurrentSubtree(self):
+        # Return the region that starts at the cursor, or starts at
+        # the beginning of the selection
+
+        line = self.view.line(self.view.sel()[0].begin())
+        # Start finding the region at the beginning of the next line
+        region = self.view.indented_region(line.b + 2)
+
+        if not region.empty():
+            region = sublime.Region(line.a, region.b)
+
+        return region
