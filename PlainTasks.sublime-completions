@@ -8,6 +8,8 @@
   { "trigger": "s\t@started", "contents": "@started" },
   { "trigger": "tg\t@toggle", "contents": "@toggle"},
   { "trigger": "d\t@due()", "contents": "@due( $0)"},
-  { "trigger": "cr\t@created", "contents": "@created"}
+  { "trigger": "cr\t@created", "contents": "@created"},
+  { "trigger": "da\t@date", "contents": "@date"},
+  { "trigger": "no\t@now", "contents": "@now"},
  ]
 }

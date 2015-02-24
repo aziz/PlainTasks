@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import os
+import os,io
 import re
 import sublime
 import sublime_plugin
@@ -28,6 +28,7 @@ class PlainTasksBase(sublime_plugin.TextCommand):
         self.before_tasks_bullet_spaces = ' ' * self.view.settings().get('before_tasks_bullet_margin', 1) if not self.taskpaper_compatible and translate_tabs_to_spaces else '\t'
         self.tasks_bullet_space = self.view.settings().get('tasks_bullet_space', ' ' if self.taskpaper_compatible or translate_tabs_to_spaces else '\t')
         self.date_format = self.view.settings().get('date_format', '(%y-%m-%d %H:%M)')
+        self.date_only_format = self.view.settings().get('date_only_format', '(%d-%b-%Y)')
         if self.view.settings().get('done_tag', True) or self.taskpaper_compatible:
             self.done_tag = "@done"
             self.canc_tag = "@cancelled"
@@ -38,6 +39,10 @@ class PlainTasksBase(sublime_plugin.TextCommand):
             self.sys_enc = locale.getpreferredencoding()
         self.project_postfix = self.view.settings().get('project_tag', True)
         self.archive_name = self.view.settings().get('archive_name', 'Archive:')
+        # org-mode style archive stuff
+        self.archive_org_default_filemask = "{dir}{sep}{base}_archive{ext}"
+        self.archive_org_filemask = self.view.settings().get(
+                'archive_org_filemask', self.archive_org_default_filemask)
         self.runCommand(edit)
 
 
@@ -501,6 +506,10 @@ class PlainTaskInsertDate(PlainTasksBase):
         for s in reversed(list(self.view.sel())):
             self.view.insert(edit, s.b, datetime.now().strftime(self.date_format))
 
+class PlainTaskInsertDateOnly(PlainTasksBase):
+    def runCommand(self, edit):
+        for s in reversed(list(self.view.sel())):
+            self.view.insert(edit, s.b, datetime.now().strftime(self.date_only_format))
 
 class PlainTasksReplaceShortDate(PlainTasksBase):
     def runCommand(self, edit):
@@ -709,7 +718,7 @@ class PlainTasksConvertToHtml(PlainTasksBase):
             html_doc.append(ht)
 
         # create file
-        import tempfile, io
+        import tempfile
         tmp_html = tempfile.NamedTemporaryFile(delete=False, suffix='.html')
         with io.open('%s/PlainTasks/templates/template.html' % sublime.packages_path(), 'r', encoding='utf8') as template:
             title = os.path.basename(self.view.file_name()) if self.view.file_name() else 'Export'
@@ -833,3 +842,146 @@ class PlainTasksCopyStats(sublime_plugin.TextCommand):
                 msg = msg.replace(o, r)
 
         sublime.set_clipboard(msg)
+
+class PlainTasksArchiveOrgCommand(PlainTasksBase):
+    def runCommand(self, edit):
+        # Archive the curent subtree to our archive file, not just completed tasks.
+        # For now, it's mapped to ctrl-shift-o or super-shift-o
+
+        # TODO: Mark any tasks found as complete, or maybe warn.
+
+        # Get our archive filename
+        archive_filename = self.__createArchiveFilename()
+
+        # Figure out our subtree
+        start_line, end_line = self.__findCurrentSubtree()
+        if (start_line < 0 or end_line < 0):
+            # Errors would have been displayed already
+            return
+
+        # Write our region or our archive file
+        success, region = self.__writeArchive(archive_filename, start_line, end_line)
+
+        # only erase our region if the write was successful
+        if success is True:
+            self.view.erase(edit,region)
+
+        return
+
+    def __writeArchive(self, filename, start_line, end_line):
+        # Write out the given line numbers to a file.
+        # Since we need it to be in a region to delete, anyway, 
+        # go ahead and create the region and return it.
+
+        # Build our region
+        start_region=self.view.line(self.view.text_point(start_line,0))
+        region=start_region.cover(self.view.line(
+            self.view.text_point(end_line,0)))
+
+        # Write it out!
+        sublime.status_message('Archiving tree to {}'.format(filename))
+        try:
+            # Have to use io.open because windows doesn't like writing
+            # utf8 to regular filehandles
+            with io.open(filename, 'a', encoding='utf8') as fh:
+                data = self.view.substr(region)
+                # Is there a way to read this in?
+                fh.write("--- ✄ -----------------------\n")
+                fh.write("Archived {}:\n".format(datetime.now().strftime(
+                    self.date_format)))
+                # And, finally, write our data
+                fh.write("{}\n".format(data))
+            return True, region
+
+        except Exception as e:
+            sublime.error_message("Error:\n\nUnable to append to {}\n{}".format(
+                filename, str(e)))
+            return False, None
+
+    def __createArchiveFilename(self):
+        # Create our archive filename, from the mask in our settings.
+
+        # Split filename int dir, base, and extension, then apply our mask
+        path_base, extension=os.path.splitext(self.view.file_name())
+        dir=os.path.dirname(path_base)
+        base=os.path.basename(path_base)
+        sep=os.sep
+
+        # Now build our new filename
+        try:
+            # This could fail, if someone messed up the mask in the
+            # settings.  So, if it did fail, use our default.
+
+            archive_filename=self.archive_org_filemask.format(
+                dir=dir, base=base, ext=extension, sep=sep)
+        except:
+            # Use our default mask
+            archive_filename=self.archive_org_default_filemask.format(
+                    dir=dir, base=base, ext=extension, sep=sep)
+
+            # Display error, letting the user know
+            sublime.error_message("Error:\n\nInvalid filemask:{}\nUsing default: {}".format(
+                self.archive_org_filemask, self.archive_org_default_filemask))
+
+        return archive_filename
+
+    def __regionIndentLen(self, region):
+        # Compute how many spaces a given region is indented
+        # This is used to determine when we've left our subtree
+
+        line_contents  = self.view.substr(region).rstrip()
+        indent = re.match('^(\s*)\S', line_contents, re.U)
+        if indent is None or indent.group(1) is None:
+            return 0
+        return len(indent.group(1))
+
+    def __findCurrentSubtree(self):
+        # Return the starting and ending lines of the subtree that starts where
+        # the cursor is.
+
+        for region in self.view.sel():
+            if not region.empty():
+                sublime.error_message("Warning:  Regions not supported yet.  Ignoring selection")
+            # either way, leave with only our starting region
+            break
+
+        # Compute our region starting line and indent
+        start_region=self.view.line(region)
+        start_line, _ = self.view.rowcol(start_region.a)
+        start_indent=self.__regionIndentLen(start_region)
+
+        # Are we on a blank line?
+        # TODO - back up to first region, or, skip forward to next.
+        if (start_region.size() - start_indent) <=1:
+            # we're empty
+            sublime.error_message("Error:\n\n"
+                    "Can not start archiving a tree on a blank line")
+            return -1, -1, None
+
+        # build regexp that will match our end of indent.
+        # So, if we are currently indented 5 spaces, this regexp will
+        # trigger once we've left our subtree:
+        #
+        #  r'^[ \t]{0,5}\S'
+        #
+        #     Note, I'm not using \s, since that matches newlines
+        #
+        if start_indent < 1:
+            end_regexp="^\S"
+        else:
+            end_regexp="^[ \t]{{{},{}}}\S".format(0,start_indent)
+
+        # Find our next subtree, or, end of file.
+        end=self.view.find(end_regexp, start_region.b)
+        if end.a == -1 and end.b == -1:
+            # We found eof
+            end_point=self.view.size()
+            end_line, _ = self.view.rowcol(end_point)
+        else:
+            # we have our match
+            end_point=self.view.line(end).b
+            end_line, _ = self.view.rowcol(end.a)
+            end_line -= 1
+
+        return start_line, end_line
+
