@@ -38,6 +38,11 @@ class PlainTasksBase(sublime_plugin.TextCommand):
             self.sys_enc = locale.getpreferredencoding()
         self.project_postfix = self.view.settings().get('project_tag', True)
         self.archive_name = self.view.settings().get('archive_name', 'Archive:')
+        self.archive_org_default_filemask = "{dir}{sep}{base}_archive{ext}"
+        self.archive_org_filemask = self.view.settings().get(
+                'archive_org_filemask', self.archive_org_default_filemask)
+        self.archive_org_use_file = self.view.settings().get(
+                'archive_org_use_file', True)
         self.runCommand(edit)
 
 
@@ -833,3 +838,169 @@ class PlainTasksCopyStats(sublime_plugin.TextCommand):
                 msg = msg.replace(o, r)
 
         sublime.set_clipboard(msg)
+
+class PlainTasksArchiveOrgCommand(PlainTasksBase):
+    def runCommand(self, edit):
+        # Archive the subtree to our archive file, not just completed tasks.
+
+        archive_filename = self.__createArchiveFilename()
+
+        # Figure out our subtree
+        start_line, end_line = self.__findCurrentSubtree()
+        if (start_line < 0 or end_line < 0):
+            return
+
+        # Todo: Display it?
+        #sublime.message_dialog("Debug:\n\nstart:{} end:{}\n".format(
+        #    start_line, end_line))
+
+        # Write our region to our section, or to our file
+        success, region = self.__writeArchive(archive_filename, start_line, end_line)
+
+        if success is True:
+            self.view.erase(edit,region)
+
+        return
+
+    def __writeArchive(self, filename, start_line, end_line):
+        # Build our region
+        start_region=self.view.line(self.view.text_point(start_line,0))
+        region=start_region.cover(self.view.line(
+            self.view.text_point(end_line,0)))
+        #sublime.message_dialog("Debug:\n\nWriting: Region:({},{})".format(
+        #    region.a, region.b))
+        # Write it out!
+        try:
+            with open (filename, "a") as fh:
+                data = self.view.substr(region)
+                fh.write("--- ✄ -----------------------\n")
+                fh.write("Archived {}:\n".format(datetime.now().strftime(
+                    self.date_format)))
+                fh.write("{}\n".format(data))
+            return True, region
+        except Exception as e:
+            sublime.error_message("Error:\n\nUnable to append to {}\n{}".format(
+                filename, str(e)))
+            return False, None
+
+
+    def __createArchiveFilename(self):
+        # Compute archive filename
+        # Split filename int dir, base, and extension, then apply our mask
+        path_base, extension=os.path.splitext(self.view.file_name())
+        dir=os.path.dirname(path_base)
+        base=os.path.basename(path_base)
+        sep=os.sep
+        # Now build our new filename
+        try:
+            archive_filename=self.archive_org_filemask.format(
+                dir=dir, base=base, ext=extension, sep=sep)
+        except:
+            # Use our default mask
+            archive_filename=self.archive_org_default_filemask.format(
+                    dir=dir, base=base, ext=extension, sep=sep)
+
+            # Display error
+            sublime.error_message("Invalid filemask.  Using default: {}".format(
+                self.archive_org_default_filemask))
+
+        return archive_filename
+
+    def __regionIndentLen(self, region):
+        line_contents  = self.view.substr(region).rstrip()
+        indent = re.match('^(\s*)\S', line_contents, re.U)
+        if indent is None or indent.group(1) is None:
+            return 0
+        return len(indent.group(1))
+
+    def __findCurrentSubtree(self):
+
+        for region in self.view.sel():
+            if not region.empty():
+                sublime.error_message("Warning:  Regions not supported yet.  Ignoring selection")
+            # either way, leave with only our starting region
+            break
+
+        #sublime.message_dialog("Region ({}/{}, {}/{}) xpos={} empty={} size={}".format(
+        #    region.begin(), region.a, region.end(), region.b,
+        #    region.xpos, region.empty(), region.size()))
+
+        start_region=self.view.line(region)
+        start_line, _ = self.view.rowcol(start_region.a)
+
+        # Figure our our starting indent
+        start_indent=self.__regionIndentLen(start_region)
+
+        # Are we on a blank line?
+        if (start_region.size() - start_indent) <=1:
+            # we're empty
+            sublime.error_message("Error:\n\n"
+                    "Can not start archiving a tree on a blank line")
+            return -1, -1, None
+
+        # build regexp that will match our end of indent.
+        if start_indent < 1:
+            end_regexp="^\S"
+        else:
+            end_regexp="^[ \t]{{{},{}}}\S".format(0,start_indent)
+
+        #end_regexp="^\s"
+        #sublime.message_dialog("Debug\n\nRegexp: {} (indent={})".format(
+        #    end_regexp, start_indent))
+        end=self.view.find(end_regexp, start_region.b)
+        if end.a == -1 and end.b == -1:
+            end_point=self.view.size()
+            end_line, _ = self.view.rowcol(end_point)
+        else:
+            end_point=self.view.line(end).b
+            end_line, _ = self.view.rowcol(end.a)
+            end_line -= 1
+
+        return start_line, end_line
+
+    def get_task_project(self, task, projects):
+        index = -1
+        for ind, pr in enumerate(projects):
+            if task < pr:
+                if ind > 0:
+                    index = ind-1
+                break
+        #if there is no projects for task - return empty string
+        if index == -1:
+            return ''
+
+        prog = re.compile('^\n*(\s*)(.+):(?=\s|$)\s*(\@[^\s]+(\(.*?\))?\s*)*')
+        hierarhProject = ''
+
+        if index >= 0:
+            depth = re.match(r"\s*", self.view.substr(self.view.line(task))).group()
+            while index >= 0:
+                strProject = self.view.substr(projects[index])
+                if prog.match(strProject):
+                    spaces = prog.match(strProject).group(1)
+                    if len(spaces) < len(depth):
+                        hierarhProject = prog.match(strProject).group(2) + ((" / " + hierarhProject) if hierarhProject else '')
+                        depth = spaces
+                        if len(depth) == 0:
+                            break
+                else:
+                    sep = re.compile('(^\s*)---.{3,5}---+$')
+                    spaces = sep.match(strProject).group(1)
+                    if len(spaces) < len(depth):
+                        depth = spaces
+                        if len(depth) == 0:
+                            break
+                index -= 1
+        if not hierarhProject:
+            return ''
+        else:
+            return hierarhProject
+
+    def get_task_note(self, task, tasks):
+        note_line = task.end() + 1
+        while self.view.scope_name(note_line) == 'text.todo notes.todo ':
+            note = self.view.line(note_line)
+            if note not in tasks:
+                tasks.append(note)
+            note_line = self.view.line(note_line).end() + 1
+
