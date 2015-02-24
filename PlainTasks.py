@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import os
+import os,io
 import re
 import sublime
 import sublime_plugin
@@ -714,7 +714,7 @@ class PlainTasksConvertToHtml(PlainTasksBase):
             html_doc.append(ht)
 
         # create file
-        import tempfile, io
+        import tempfile
         tmp_html = tempfile.NamedTemporaryFile(delete=False, suffix='.html')
         with io.open('%s/PlainTasks/templates/template.html' % sublime.packages_path(), 'r', encoding='utf8') as template:
             title = os.path.basename(self.view.file_name()) if self.view.file_name() else 'Export'
@@ -867,11 +867,10 @@ class PlainTasksArchiveOrgCommand(PlainTasksBase):
         start_region=self.view.line(self.view.text_point(start_line,0))
         region=start_region.cover(self.view.line(
             self.view.text_point(end_line,0)))
-        #sublime.message_dialog("Debug:\n\nWriting: Region:({},{})".format(
-        #    region.a, region.b))
         # Write it out!
+        sublime.status_message('Archiving tree to {}'.format(filename))
         try:
-            with open (filename, "a") as fh:
+            with io.open(filename, 'a', encoding='utf8') as fh:
                 data = self.view.substr(region)
                 fh.write("--- ✄ -----------------------\n")
                 fh.write("Archived {}:\n".format(datetime.now().strftime(
@@ -882,7 +881,6 @@ class PlainTasksArchiveOrgCommand(PlainTasksBase):
             sublime.error_message("Error:\n\nUnable to append to {}\n{}".format(
                 filename, str(e)))
             return False, None
-
 
     def __createArchiveFilename(self):
         # Compute archive filename
