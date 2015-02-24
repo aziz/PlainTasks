@@ -41,8 +41,6 @@ class PlainTasksBase(sublime_plugin.TextCommand):
         self.archive_org_default_filemask = "{dir}{sep}{base}_archive{ext}"
         self.archive_org_filemask = self.view.settings().get(
                 'archive_org_filemask', self.archive_org_default_filemask)
-        self.archive_org_use_file = self.view.settings().get(
-                'archive_org_use_file', True)
         self.runCommand(edit)
 
 
