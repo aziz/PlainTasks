@@ -28,6 +28,7 @@ class PlainTasksBase(sublime_plugin.TextCommand):
         self.before_tasks_bullet_spaces = ' ' * self.view.settings().get('before_tasks_bullet_margin', 1) if not self.taskpaper_compatible and translate_tabs_to_spaces else '\t'
         self.tasks_bullet_space = self.view.settings().get('tasks_bullet_space', ' ' if self.taskpaper_compatible or translate_tabs_to_spaces else '\t')
         self.date_format = self.view.settings().get('date_format', '(%y-%m-%d %H:%M)')
+        self.date_only_format = self.view.settings().get('date_only_format', '(%d-%b-%Y)')
         if self.view.settings().get('done_tag', True) or self.taskpaper_compatible:
             self.done_tag = "@done"
             self.canc_tag = "@cancelled"
@@ -505,6 +506,10 @@ class PlainTaskInsertDate(PlainTasksBase):
         for s in reversed(list(self.view.sel())):
             self.view.insert(edit, s.b, datetime.now().strftime(self.date_format))
 
+class PlainTaskInsertDateOnly(PlainTasksBase):
+    def runCommand(self, edit):
+        for s in reversed(list(self.view.sel())):
+            self.view.insert(edit, s.b, datetime.now().strftime(self.date_only_format))
 
 class PlainTasksReplaceShortDate(PlainTasksBase):
     def runCommand(self, edit):
