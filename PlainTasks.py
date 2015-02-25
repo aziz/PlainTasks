@@ -39,7 +39,7 @@ class PlainTasksBase(sublime_plugin.TextCommand):
         self.project_postfix = self.view.settings().get('project_tag', True)
         self.archive_name = self.view.settings().get('archive_name', 'Archive:')
         # org-mode style archive stuff
-        self.archive_org_default_filemask = "{dir}{sep}{base}_archive{ext}"
+        self.archive_org_default_filemask = u'{dir}{sep}{base}_archive{ext}'
         self.archive_org_filemask = self.view.settings().get(
                 'archive_org_filemask', self.archive_org_default_filemask)
         self.runCommand(edit)
@@ -867,7 +867,7 @@ class PlainTasksArchiveOrgCommand(PlainTasksBase):
     def __writeArchive(self, filename, region):
         # Write out the given region
 
-        sublime.status_message('Archiving tree to {}'.format(filename))
+        sublime.status_message(u'Archiving tree to {}'.format(filename))
         try:
             # Have to use io.open because windows doesn't like writing
             # utf8 to regular filehandles
@@ -913,16 +913,6 @@ class PlainTasksArchiveOrgCommand(PlainTasksBase):
 
         return archive_filename
 
-    def __regionIndentLen(self, region):
-        # Compute how many spaces a given region is indented
-        # This is used to determine when we've left our subtree
-
-        line_contents  = self.view.substr(region).rstrip()
-        indent = re.match('^(\s*)\S', line_contents, re.U)
-        if indent is None or indent.group(1) is None:
-            return 0
-        return len(indent.group(1))
-
     def __findCurrentSubtree(self):
         # Return the region that starts at the cursor, or starts at
         # the beginning of the selection
@@ -931,7 +921,7 @@ class PlainTasksArchiveOrgCommand(PlainTasksBase):
         # Start finding the region at the beginning of the next line
         region = self.view.indented_region(line.b+2)
 
-        # It missed our current line, so, back up one line.
-        region.a=line.a
+        if not region.empty():
+            region = sublime.Region(line.a, region.b)
 
         return region
