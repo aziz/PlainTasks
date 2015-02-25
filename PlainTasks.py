@@ -849,31 +849,24 @@ class PlainTasksArchiveOrgCommand(PlainTasksBase):
         archive_filename = self.__createArchiveFilename()
 
         # Figure out our subtree
-        start_line, end_line = self.__findCurrentSubtree()
-        if (start_line < 0 or end_line < 0):
-            # Errors would have been displayed already
+        region = self.__findCurrentSubtree()
+        if region.empty():
+            # How can we get here?
+            sublime.error_message("Error:\n\nCould not find a tree to archive.")
             return
 
         # Write our region or our archive file
-        success, region = self.__writeArchive(archive_filename, start_line, end_line)
+        success = self.__writeArchive(archive_filename, region)
 
         # only erase our region if the write was successful
-        if success is True:
+        if success:
             self.view.erase(edit,region)
 
         return
 
-    def __writeArchive(self, filename, start_line, end_line):
-        # Write out the given line numbers to a file.
-        # Since we need it to be in a region to delete, anyway, 
-        # go ahead and create the region and return it.
+    def __writeArchive(self, filename, region):
+        # Write out the given region
 
-        # Build our region
-        start_region=self.view.line(self.view.text_point(start_line,0))
-        region=start_region.cover(self.view.line(
-            self.view.text_point(end_line,0)))
-
-        # Write it out!
         sublime.status_message('Archiving tree to {}'.format(filename))
         try:
             # Have to use io.open because windows doesn't like writing
@@ -886,12 +879,12 @@ class PlainTasksArchiveOrgCommand(PlainTasksBase):
                     self.date_format)))
                 # And, finally, write our data
                 fh.write("{}\n".format(data))
-            return True, region
+            return True
 
         except Exception as e:
             sublime.error_message("Error:\n\nUnable to append to {}\n{}".format(
                 filename, str(e)))
-            return False, None
+            return False
 
     def __createArchiveFilename(self):
         # Create our archive filename, from the mask in our settings.
@@ -931,52 +924,14 @@ class PlainTasksArchiveOrgCommand(PlainTasksBase):
         return len(indent.group(1))
 
     def __findCurrentSubtree(self):
-        # Return the starting and ending lines of the subtree that starts where
-        # the cursor is.
+        # Return the region that starts at the cursor, or starts at
+        # the beginning of the selection
 
-        for region in self.view.sel():
-            if not region.empty():
-                sublime.error_message("Warning:  Regions not supported yet.  Ignoring selection")
-            # either way, leave with only our starting region
-            break
+        line = self.view.line(self.view.sel()[0].begin())
+        # Start finding the region at the beginning of the next line
+        region = self.view.indented_region(line.b+2)
 
-        # Compute our region starting line and indent
-        start_region=self.view.line(region)
-        start_line, _ = self.view.rowcol(start_region.a)
-        start_indent=self.__regionIndentLen(start_region)
+        # It missed our current line, so, back up one line.
+        region.a=line.a
 
-        # Are we on a blank line?
-        # TODO - back up to first region, or, skip forward to next.
-        if (start_region.size() - start_indent) <=1:
-            # we're empty
-            sublime.error_message("Error:\n\n"
-                    "Can not start archiving a tree on a blank line")
-            return -1, -1, None
-
-        # build regexp that will match our end of indent.
-        # So, if we are currently indented 5 spaces, this regexp will
-        # trigger once we've left our subtree:
-        #
-        #  r'^[ \t]{0,5}\S'
-        #
-        #     Note, I'm not using \s, since that matches newlines
-        #
-        if start_indent < 1:
-            end_regexp="^\S"
-        else:
-            end_regexp="^[ \t]{{{},{}}}\S".format(0,start_indent)
-
-        # Find our next subtree, or, end of file.
-        end=self.view.find(end_regexp, start_region.b)
-        if end.a == -1 and end.b == -1:
-            # We found eof
-            end_point=self.view.size()
-            end_line, _ = self.view.rowcol(end_point)
-        else:
-            # we have our match
-            end_point=self.view.line(end).b
-            end_line, _ = self.view.rowcol(end.a)
-            end_line -= 1
-
-        return start_line, end_line
-
+        return region
