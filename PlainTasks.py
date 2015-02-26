@@ -1,16 +1,25 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import os,io
+import sublime, sublime_plugin
+import os
 import re
-import sublime
-import sublime_plugin
 import webbrowser
 import itertools
 from datetime import datetime
 from datetime import timedelta
-if int(sublime.version()) < 3000:
+
+ST2 = int(sublime.version()) < 3000
+
+if ST2:
     import locale
+
+# io is not operable in ST2 on Linux, but in all other cases io is better
+# https://github.com/SublimeTextIssues/Core/issues/254
+if ST2 and sublime.platform() == 'linux':
+    import codecs as io
+else:
+    import io
 
 
 class PlainTasksBase(sublime_plugin.TextCommand):
