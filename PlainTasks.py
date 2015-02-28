@@ -553,19 +553,29 @@ class PlainTasksReplaceShortDate(PlainTasksBase):
 
         match_obj = re.search(r'''(?mxu)
             \s*\+\+?\s*
-            (?P<number>\d*)\s*
-            (?P<days>[Dd])?
-            (?P<weeks>[Ww])?
-            ''', matchstr)
+            (?:
+             (?P<number>\d*(?![:.]))\s*
+             (?P<days>[Dd]?)
+             (?P<weeks>[Ww]?)
+             (?! \d*[:.])
+            )?
+            \s*
+            (?:
+             (?P<hour>\d*)
+             [:.]
+             (?P<minute>\d*)
+            )?''', matchstr)
         number = int(match_obj.group('number') or 0)
         days   = match_obj.group('days')
         weeks  = match_obj.group('weeks')
-        if not number:
+        hour   = int(match_obj.group('hour') or 0)
+        minute = int(match_obj.group('minute') or 0)
+        if not (number or hour or minute) or (not number and (days or weeks)):
             # set 1 if number is ommited, i.e.
             #   @due(+) == @due(+1) == @due(+1d)
             #   @due(+w) == @due(+1w)
             number = 1
-        delta = now + timedelta(days=(number*7 if weeks else number))
+        delta = now + timedelta(days=(number*7 if weeks else number), minutes=minute, hours=hour)
         return delta.strftime(self.date_format)
 
     def convert_date(self, matchstr, now):

@@ -84,7 +84,7 @@ For more portability you can use `todolist.txt` either as a filename or as suffi
         </table>
 
     - relative period of time starts with a plus sign or two  
-      __`+[+][number][DdWw]`__ — number is optional as well as letter `d` for days or letter `w` for weeks.
+      __`+[+][number][DdWw][h:m]`__ — number is optional as well as letter `d` for days or letter `w` for weeks.
 
         <table>
          <tr>
@@ -105,6 +105,18 @@ For more portability you can use `todolist.txt` either as a filename or as suffi
          <tr>
           <td>  <code>@due(++)</code>   </td>
           <td>  one day since <code>@created(date)</code> if any, otherwise it is equal to <code>@due(+)</code></td>
+         </tr>
+         <tr>
+          <td>  <code>@due(+2:)</code>   </td>
+          <td>  two hours since current date</td>
+         </tr>
+         <tr>
+          <td>  <code>@due(+:555)</code>   </td>
+          <td>  555 minutes since current date</td>
+         </tr>
+         <tr>
+          <td>  <code>@due(+2 12:)</code>   </td>
+          <td>  2 days and 12 hours since current date</td>
          </tr>
         </table>
 
