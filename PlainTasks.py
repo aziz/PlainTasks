@@ -945,6 +945,10 @@ class PlainTasksArchiveOrgCommand(PlainTasksBase):
         # Start finding the region at the beginning of the next line
         region = self.view.indented_region(line.b + 2)
 
+        if region.contains(line.b):
+            # there is no subtree
+            return sublime.Region(-1, -1)
+
         if not region.empty():
             region = sublime.Region(line.a, region.b)
 
