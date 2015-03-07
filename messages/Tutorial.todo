@@ -24,13 +24,26 @@ Tasks:
   URLs:
    ☐ ⌘+shift+U (ctrl+shift+U on Windows) opens the URL under the cursor in your default browser
   File links:
-   ☐ You can create a link to a file within your project by prefixing the file name with a dot and (back)slash sign
+   ☐ You can create a link to a file by prefixing the file name with a dot and (back)slash sign
      like: .\filename\ or ./another filename/
      It supports only one filename per line
+     Filename can be absolute path or relative one (to project folder(s) or to open files)
    ☐ The line and column numbers can be specified by colons after the filename: .\filename:11:8
    ☐ In SublimeText 3 you can specify a symbol inside the file by using > character like: .\filename>symbol
    ☐ In SublimeText 2 you can specify a text inside that file by using double quotes like: .\filename"any text"
-   ☐ ctrl+o (alt+o on Windows) opens the file in Sublime
+   ☐ ctrl+o (alt+o on Windows) opens the file in Sublime: try to open .\install.txt\
+   ☐ Other ways to create file links:
+      [](install.txt)  ← try to open it
+      [](path ":11:8")
+      [](path ">symbol")
+      [](path "any text")
+      [[install.txt]]  ← try to open it
+      [[path::11:8]]
+      [[path::*symbol]]
+      [[path::any text]]
+      [[path]] ":11:8"
+      [[path]] ">symbol"
+      [[path]] "any text"
 
   Archiving:
    ☐ ⌘+shift+A (ctrl+shift+A on Windows) archives tasks in done mode.

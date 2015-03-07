@@ -424,7 +424,7 @@ class PlainTasksOpenUrlCommand(sublime_plugin.TextCommand):
 
 
 class PlainTasksOpenLinkCommand(sublime_plugin.TextCommand):
-    LINK_PATTERN = re.compile(
+    LINK_PATTERN = re.compile( # simple ./path/
         r'''(?ixu)\.[\\/]
             (?P<fn>
             (?:[a-z]\:[\\/])?      # special case for Windows full path
@@ -432,6 +432,26 @@ class PlainTasksOpenLinkCommand(sublime_plugin.TextCommand):
             (?=[\\/:">])           # stop matching path
                                    # options:
             (>(?P<sym>\w+))?(\:(?P<line>\d+))?(\:(?P<col>\d+))?(\"(?P<text>[^\n]*)\")?
+        ''')
+    MD_LINK = re.compile( # markdown [](path)
+        r'''(?ixu)\][ \t]*\(\<?(?:file\:///?)?
+            (?P<fn>.*?((\\\))?.*?)*)
+              (?:\>?[ \t]*
+              \"((\:(?P<line>\d+))?(\:(?P<col>\d+))?|(\>(?P<sym>\w+))?|(?P<text>[^\n]*))
+              \")?
+            \)
+        ''')
+    WIKI_LINK = re.compile(  # ORGMODE, NV, and all similar formats [[link][opt-desc]]
+        r'''(?ixu)\[\[(?:file(?:\+(?:sys|emacs))?\:)?\.?
+            (?P<fn>.*?((\\\])?.*?)*)
+              (?# options for orgmode link [[path::option]])
+              (?:\:\:(((?P<line>\d+))?(\:(?P<col>\d+))?|(\*(?P<sym>\w+))?|(?P<text>.*?((\\\])?.*?)*)))?
+            \](?:\[(.*?)\])?
+            \]
+              (?# options for NV [[path]] "option" — NV not support it, but PT should support so it wont break NV)
+              (?:[ \t]*
+              \"((\:(?P<linen>\d+))?(\:(?P<coln>\d+))?|(\>(?P<symn>\w+))?|(?P<textn>[^\n]*))
+              \")?
         ''')
 
     def _format_res(self, res):
@@ -463,21 +483,41 @@ class PlainTasksOpenLinkCommand(sublime_plugin.TextCommand):
             if os.path.isfile(fn): # check for full path
                 self._current_res.append((fn, line or 0, col or 0))
             self._current_res = list(set(self._current_res))
+        if not self._current_res:
+            sublime.error_message('File was not found\n\n\t%s' % fn)
         if len(self._current_res) == 1:
             self._on_panel_selection(0)
         else:
             entries = [self._format_res(res) for res in self._current_res]
             win.show_quick_panel(entries, self._on_panel_selection)
 
-    def run(self, edit):
+    def run(self, edit, fn=None):
         point = self.view.sel()[0].begin()
         line = self.view.substr(self.view.line(point))
-        match = self.LINK_PATTERN.search(line)
-        if match:
-            fn, sym, line, col, text = match.group('fn', 'sym', 'line', 'col', 'text')
+        match_link = self.LINK_PATTERN.search(line)
+        match_md   = self.MD_LINK.search(line)
+        match_wiki = self.WIKI_LINK.search(line)
+        if match_link:
+            fn, sym, line, col, text = match_link.group('fn', 'sym', 'line', 'col', 'text')
+        elif match_md:
+            fn, sym, line, col, text = match_md.group('fn', 'sym', 'line', 'col', 'text')
+            # unescape some chars
+            fn = (fn.replace('\\(', '(').replace('\\)', ')'))
+        elif match_wiki:
+            fn   = match_wiki.group('fn')
+            sym  = match_wiki.group('sym') or match_wiki.group('symn')
+            line = match_wiki.group('line') or match_wiki.group('linen')
+            col  = match_wiki.group('col') or match_wiki.group('coln')
+            text = match_wiki.group('text') or match_wiki.group('textn')
+            # unescape some chars
+            fn   = (fn.replace('\\[', '[').replace('\\]', ']'))
+            text = (text.replace('\\[', '[').replace('\\]', ']'))
+        if fn:
             self.show_panel_or_open(fn, sym, line, col, text)
             if text:
                 sublime.set_timeout(lambda: self.find_text(self.opened_file, text, line), 300)
+        else:
+            sublime.status_message('Line does not contain a valid link to file')
 
     def find_text(self, view, text, line):
         result = view.find(text, view.sel()[0].a if line else 0, sublime.LITERAL)
