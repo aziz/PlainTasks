@@ -425,7 +425,7 @@ class PlainTasksOpenUrlCommand(sublime_plugin.TextCommand):
 
 class PlainTasksOpenLinkCommand(sublime_plugin.TextCommand):
     LINK_PATTERN = re.compile( # simple ./path/
-        r'''(?ixu)\.[\\/]
+        r'''(?ixu)(?:^|[ \t])\.[\\/]
             (?P<fn>
             (?:[a-z]\:[\\/])?      # special case for Windows full path
             (?:[^\\/:">]+[\\/]?)+) # the very path (single filename/relative/full)
@@ -442,7 +442,7 @@ class PlainTasksOpenLinkCommand(sublime_plugin.TextCommand):
             \)
         ''')
     WIKI_LINK = re.compile(  # ORGMODE, NV, and all similar formats [[link][opt-desc]]
-        r'''(?ixu)\[\[(?:file(?:\+(?:sys|emacs))?\:)?\.?
+        r'''(?ixu)\[\[(?:file(?:\+(?:sys|emacs))?\:)?(?:\.[\\/])?
             (?P<fn>.*?((\\\])?.*?)*)
               (?# options for orgmode link [[path::option]])
               (?:\:\:(((?P<line>\d+))?(\:(?P<col>\d+))?|(\*(?P<sym>\w+))?|(?P<text>.*?((\\\])?.*?)*)))?
@@ -475,11 +475,10 @@ class PlainTasksOpenLinkCommand(sublime_plugin.TextCommand):
             fn = fn.replace('/', os.sep)
             all_folders = win.folders() + [os.path.dirname(v.file_name()) for v in win.views() if v.file_name()]
             for folder in set(all_folders):
-                for root, _, filenames in os.walk(folder):
-                    filenames = [os.path.join(root, f) for f in filenames]
-                    for name in filenames:
-                        if name.lower().endswith(fn.lower()):
-                            self._current_res.append((name, line or 0, col or 0))
+                for root, _, _ in os.walk(folder):
+                    name = os.path.join(root, fn)
+                    if os.path.isfile(name):
+                        self._current_res.append((name, line or 0, col or 0))
             if os.path.isfile(fn): # check for full path
                 self._current_res.append((fn, line or 0, col or 0))
             self._current_res = list(set(self._current_res))
@@ -511,7 +510,8 @@ class PlainTasksOpenLinkCommand(sublime_plugin.TextCommand):
             text = match_wiki.group('text') or match_wiki.group('textn')
             # unescape some chars
             fn   = (fn.replace('\\[', '[').replace('\\]', ']'))
-            text = (text.replace('\\[', '[').replace('\\]', ']'))
+            if text:
+                text = (text.replace('\\[', '[').replace('\\]', ']'))
         if fn:
             self.show_panel_or_open(fn, sym, line, col, text)
             if text:

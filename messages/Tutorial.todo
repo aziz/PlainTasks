@@ -37,7 +37,7 @@ Tasks:
       [](path ":11:8")
       [](path ">symbol")
       [](path "any text")
-      [[install.txt]]  ← try to open it
+      [[..\PlainTasks.py]]  ← try to open it
       [[path::11:8]]
       [[path::*symbol]]
       [[path::any text]]
@@ -115,6 +115,7 @@ You can customize:
  ☐ Icon for file-type
  ☐ and more
  See the Readme file on github on how to do these customizations. https://github.com/aziz/PlainTasks
+ or in Sublime ./../Readme.md"## Settings"
 
 Editor Useful Tools:
  ☐ Use ⌘+control+up/down (ctrl+shift+up/down on Windows) to move tasks up and down.
