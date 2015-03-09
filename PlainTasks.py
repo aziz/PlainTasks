@@ -67,7 +67,7 @@ class PlainTasksNewCommand(PlainTasksBase):
         header_to_task = self.view.settings().get('header_to_task', False)
         for line in regions:
             line_contents  = self.view.substr(line).rstrip()
-            not_empty_line = re.match('^(\s*)(\S.+)$', self.view.substr(line))
+            not_empty_line = re.match('^(\s*)(\S.*)$', self.view.substr(line))
             empty_line     = re.match('^(\s+)$', self.view.substr(line))
             current_scope  = self.view.scope_name(line.a)
             if 'item' in current_scope:
