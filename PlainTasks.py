@@ -875,7 +875,7 @@ class PlainTasksStatsStatus(sublime_plugin.EventListener):
         date_format = view.settings().get('date_format', '(%y-%m-%d %H:%M)')
         tasks_dates = [PlainTasksCompleteCommand.check_parentheses(date_format, t, is_date=True) for t in tasks_dates]
         tasks_dates.sort(reverse=True)
-        last = tasks_dates[0] if tasks_dates else '(UNKOWN)'
+        last = tasks_dates[0] if tasks_dates else '(UNKNOWN)'
 
         msg = (msgf.replace('$o', str(pend))
                    .replace('$d', str(done))
