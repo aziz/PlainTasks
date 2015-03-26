@@ -65,11 +65,17 @@ class PlainTasksNewCommand(PlainTasksBase):
         # reversed because with multiple selections regions would be messed up after first iteration
         regions = itertools.chain(*(reversed(self.view.lines(region)) for region in reversed(list(self.view.sel()))))
         header_to_task = self.view.settings().get('header_to_task', False)
-        for line in regions:
+        # ST3 (3080) moves sel when call view.replace only by delta between original and
+        # new regions, so if sel is not in eol and we replace line with two lines,
+        # then cursor won’t be on next line as it should
+        sels = self.view.sel()
+        eol  = None
+        for i, line in enumerate(regions):
             line_contents  = self.view.substr(line).rstrip()
             not_empty_line = re.match('^(\s*)(\S.*)$', self.view.substr(line))
             empty_line     = re.match('^(\s+)$', self.view.substr(line))
             current_scope  = self.view.scope_name(line.a)
+            eol = line.b  # need for ST3 when new content has line break
             if 'item' in current_scope:
                 grps = not_empty_line.groups()
                 line_contents = self.view.substr(line) + '\n' + grps[0] + self.open_tasks_bullet + self.tasks_bullet_space
@@ -80,6 +86,7 @@ class PlainTasksNewCommand(PlainTasksBase):
                 grps = not_empty_line.groups()
                 line_contents = self.view.substr(line) + '\n' + grps[0] + self.before_tasks_bullet_spaces + self.open_tasks_bullet + self.tasks_bullet_space
             elif not ('header' and 'separator') in current_scope or header_to_task:
+                eol = None
                 if not_empty_line:
                     grps = not_empty_line.groups()
                     line_contents = (grps[0] if len(grps[0]) > 0 else self.before_tasks_bullet_spaces) + self.open_tasks_bullet + self.tasks_bullet_space + grps[1]
@@ -90,6 +97,10 @@ class PlainTasksNewCommand(PlainTasksBase):
                     line_contents = self.before_tasks_bullet_spaces + self.open_tasks_bullet + self.tasks_bullet_space
             else:
                 print('oops, need to improve PlainTasksNewCommand')
+            if eol:
+                # move cursor to eol of original line, workaround for ST3
+                sels.subtract(sels[~i])
+                sels.add(sublime.Region(eol, eol))
             self.view.replace(edit, line, line_contents)
 
         # convert each selection to single cursor, ready to type
