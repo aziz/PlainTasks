@@ -23,6 +23,7 @@ Tasks:
    ☐ You can add tags using @ sign, like this @tag
   URLs:
    ☐ ⌘+shift+U (ctrl+shift+U on Windows) opens the URL under the cursor in your default browser
+     www.github.com or <skype:nickname>
   File links:
    ☐ You can create a link to a file by prefixing the file name with a dot and (back)slash sign
      like: .\filename\ or ./another filename/

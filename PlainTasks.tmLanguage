@@ -118,6 +118,10 @@
 					<key>include</key>
 					<string>#bold</string>
 				</dict>
+				<dict>
+					<key>include</key>
+					<string>#url</string>
+				</dict>
 			</array>
 		</dict>
 
@@ -129,16 +133,53 @@
 					<key>name</key>
 					<string>punctuation.definition.bullet.pending.todo</string>
 				</dict>
-				<key>2</key>
+				<!-- <key>2</key>
 				<dict>
 					<key>name</key>
 					<string>text.pending.todo</string>
-				</dict>
+				</dict> -->
 			</dict>
-			<key>match</key>
-			<string>^\s*(-|❍|❑|■|□|☐|▪|▫|–|—|\[\s\])(\s+(?:[^\@\n]|(?&lt;!\s)\@)*)(?!(.*)?(\@done|\@cancelled))</string>
+			<key>begin</key>
+			<string>^\s*(-|❍|❑|■|□|☐|▪|▫|–|—|\[\s\])(?=(\s+(?:[^\@\n]|(?&lt;!\s)\@)*)(?!(.*)?(\@done|\@cancelled)))</string>
+			<key>end</key>
+			<string>$</string>
 			<key>name</key>
 			<string>meta.item.todo.pending</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#italic</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#bold</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#url</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#tag</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#today</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#low</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#high</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#critical</string>
+				</dict>
+			</array>
 		</dict>
 
 		<dict>
@@ -162,37 +203,12 @@
 			<string>meta.punctuation.separator.todo</string>
 		</dict>
 
-		<dict>
-			<key>match</key>
-			<string>(?&lt;=\s)\@today|✭ᴛᴏᴅᴀʏ</string>
-			<key>name</key>
-			<string>string.other.tag.todo.today</string>
-		</dict>
-
-		<dict>
-			<key>match</key>
-			<string>(?&lt;=\s)\@low|✭low</string>
-			<key>name</key>
-			<string>string.other.tag.todo.low</string>
-		</dict>
-
-		<dict>
-			<key>match</key>
-			<string>(?&lt;=\s)\@high|✭high</string>
-			<key>name</key>
-			<string>string.other.tag.todo.high</string>
-		</dict>
-
-		<dict>
-			<key>match</key>
-			<string>(?&lt;=\s)\@critical|✭critical</string>
-			<key>name</key>
-			<string>string.other.tag.todo.critical</string>
-		</dict>
 	</array>
+
 
 	<key>repository</key>
 	<dict>
+
 		<key>bold</key>
 		<dict>
 			<key>captures</key>
@@ -210,6 +226,7 @@
 			<key>name</key>
 			<string>todo.bold</string>
 		</dict>
+
 		<key>italic</key>
 		<dict>
 			<key>captures</key>
@@ -227,6 +244,55 @@
 			<key>name</key>
 			<string>todo.italic</string>
 		</dict>
+
+		<key>url</key>
+		<dict>
+			<key>match</key>
+			<string>\s*(?&lt;=&lt;)\w+?(?!\s)(\.|:)(?!\s)[^\n]+(?=&gt;)</string>
+			<key>name</key>
+			<string>todo.url</string>
+		</dict>
+
+		<key>tag</key>
+		<dict>
+			<key>match</key>
+			<string>(?&lt;=\s)\@(?!high|today|critical|low|completed|done)[\w\d\.\(\)\-!? :\+]+\s*</string>
+			<key>name</key>
+			<string>meta.tag.todo</string>
+		</dict>
+
+		<key>today</key>
+		<dict>
+			<key>match</key>
+			<string>(?&lt;=\s)\@today|✭ᴛᴏᴅᴀʏ</string>
+			<key>name</key>
+			<string>string.other.tag.todo.today</string>
+		</dict>
+
+		<key>low</key>
+		<dict>
+			<key>match</key>
+			<string>(?&lt;=\s)\@low|✭low</string>
+			<key>name</key>
+			<string>string.other.tag.todo.low</string>
+		</dict>
+
+		<key>high</key>
+		<dict>
+			<key>match</key>
+			<string>(?&lt;=\s)\@high|✭high</string>
+			<key>name</key>
+			<string>string.other.tag.todo.high</string>
+		</dict>
+
+		<key>critical</key>
+		<dict>
+			<key>match</key>
+			<string>(?&lt;=\s)\@critical|✭critical</string>
+			<key>name</key>
+			<string>string.other.tag.todo.critical</string>
+		</dict>
+
 	</dict>
 	<key>scopeName</key>
 	<string>text.todo</string>

@@ -227,6 +227,19 @@
         </dict>
         <dict>
             <key>name</key>
+            <string>URL</string>
+            <key>scope</key>
+            <string>todo.url</string>
+            <key>settings</key>
+            <dict>
+                <key>foreground</key>
+                <string>#003e7290</string>
+                <key>fontStyle</key>
+                <string>bold</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>name</key>
             <string>Punctuation</string>
             <key>scope</key>
             <string>punctuation.section.embedded</string>

@@ -400,10 +400,19 @@ class PlainTasksOpenUrlCommand(sublime_plugin.TextCommand):
 
     def run(self, edit):
         s = self.view.sel()[0]
-        # expand selection to possible URL
-        start = s.a
-        end = s.b
+        start, end = s.a, s.b
+        if 'url' in self.view.scope_name(start):
+            while self.view.substr(start) != '<': start -= 1
+            while self.view.substr(end)   != '>': end += 1
+            rgn = sublime.Region(start + 1, end)
+            # optional select URL
+            self.view.sel().add(rgn)
+            url = self.view.substr(rgn)
+            webbrowser.open_new_tab(url)
+        else:
+            self.search_bare_weblink_and_open(start, end)
 
+    def search_bare_weblink_and_open(self, start, end):
         # expand selection to nearest stopSymbols
         view_size = self.view.size()
         stopSymbols = ['\t', ' ', '\"', '\'', '>', '<', ',']
