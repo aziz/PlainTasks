@@ -56,7 +56,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^\s*(?:(\+|✓|✔|☑|√|\[x\])(\s+(?:[^\@\n]|(?&lt;!\s)\@|\@(?=\s))*)([^\n]*))|^\s*(?:(-)(\s+(?:[^\@]|(?&lt;!\s)\@|\@(?=\s))*)(.*\@done[^\n]*))</string>
+			<string>^\s*(?:(\+|✓|✔|☑|√|\[x\])(\s+(?:[^\@\n]|(?&lt;!\s)\@|\@(?=\s))*)([^\n]*))|^\s*(?:(-)(\s+(?:[^\@]|(?&lt;!\s)\@|\@(?=\s))*)(.*\@done(\s|\(|$)[^\n]*))</string>
 			<key>name</key>
 			<string>meta.item.todo.completed</string>
 		</dict>
@@ -96,7 +96,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^\s*(?:(✘|x|\[-\])(\s+(?:[^\@\n]|(?&lt;!\s)\@|\@(?=\s))*)(.*))|^\s*(?:(-)(\s+(?:[^\@]|(?&lt;!\s)\@|\@(?=\s))*)(.*\@cancelled[^\n]*))</string>
+			<string>^\s*(?:(✘|x|\[-\])(\s+(?:[^\@\n]|(?&lt;!\s)\@|\@(?=\s))*)(.*))|^\s*(?:(-)(\s+(?:[^\@]|(?&lt;!\s)\@|\@(?=\s))*)(.*\@cancelled(\s|\(|$)[^\n]*))</string>
 			<key>name</key>
 			<string>meta.item.todo.cancelled</string>
 		</dict>
@@ -133,14 +133,9 @@
 					<key>name</key>
 					<string>punctuation.definition.bullet.pending.todo</string>
 				</dict>
-				<!-- <key>2</key>
-				<dict>
-					<key>name</key>
-					<string>text.pending.todo</string>
-				</dict> -->
 			</dict>
 			<key>begin</key>
-			<string>^\s*(-|❍|❑|■|□|☐|▪|▫|–|—|\[\s\])(?=(\s+(?:[^\@\n]|(?&lt;!\s)\@)*)(?!(.*)?(\@done|\@cancelled)))</string>
+			<string>^\s*(-|❍|❑|■|□|☐|▪|▫|–|—|\[\s\])(?=(\s+(?:[^\@\n]|(?&lt;!\s)\@)*)(?!(.*)?(\@done|\@cancelled)[\s\(]))</string>
 			<key>end</key>
 			<string>$</string>
 			<key>name</key>
@@ -180,13 +175,6 @@
 					<string>#critical</string>
 				</dict>
 			</array>
-		</dict>
-
-		<dict>
-			<key>match</key>
-			<string>(?&lt;=\s)\@(?!high|today|critical|low|completed|done)[\w\d\.\(\)\-!? :\+]+\s*</string>
-			<key>name</key>
-			<string>meta.tag.todo</string>
 		</dict>
 
 		<dict>
@@ -256,7 +244,7 @@
 		<key>tag</key>
 		<dict>
 			<key>match</key>
-			<string>(?&lt;=\s)\@(?!high|today|critical|low|completed|done)[\w\d\.\(\)\-!? :\+]+\s*</string>
+			<string>(?&lt;=\s)\@(?!(high|today|critical|low|completed|done)[\s\(])[\w\d\.\(\)\-!? :\+]+\s*</string>
 			<key>name</key>
 			<string>meta.tag.todo</string>
 		</dict>
