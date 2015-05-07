@@ -169,7 +169,6 @@ Here is a list of PlainTasks’ specific settings:
 | **before_tasks_bullet_margin** | 1                | Determines the number of spaces (default indent) before the task bullet |
 | **project_tag**                | true             | Postfix archived task with project tag, otherwise prefix                |
 | **archive_name**               | `Archive:`       | Make sure it is the unique project name within your todo files          |
-| **indent_after_task**          | true             | Determines whether next line after task should be indented or not       |
 | **new_on_top**                 | true             | How to sort archived tasks (done_tag=true and default date_format are required)|
 | **header_to_task**             | absent (false)   | If true, a project title line will be converted to a task on the certain keystroke  |
 | **tasks_bullet_space** | absent (whitespace or tab) | String to place after bullet, might be any character(s) |

@@ -7,7 +7,6 @@
   "done_tag": true, // related to @cancelled as well
   "project_tag": true, // if true - postfix archived task with project tag, if false - prefix
   "archive_name": "Archive:", // make sure it is the unique project name within your todo files
-  "indent_after_task": true, // indenting the next line after tasks
   "new_on_top": true, // how to sort archived tasks
 
   "color_scheme": "Packages/PlainTasks/tasks.hidden-tmTheme",
