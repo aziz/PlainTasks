@@ -737,6 +737,8 @@ class PlainTasksConvertToHtml(PlainTasksBase):
                         note += '<i>%s</i>' % cgi.escape(self.view.substr(s).strip('_*'))
                     elif 'bold' in sn:
                         note += '<b>%s</b>' % cgi.escape(self.view.substr(s).strip('_*'))
+                    elif 'url' in sn:
+                        note += '<a href="{0}">{0}</a>'.format(cgi.escape(self.view.substr(s).strip('<>')))
                     else:
                         note += cgi.escape(self.view.substr(s))
                 ht = note + '</span>'
@@ -753,6 +755,18 @@ class PlainTasksConvertToHtml(PlainTasksBase):
                         pending += '<span class="tag">%s</span>' % cgi.escape(self.view.substr(s))
                     elif 'tag.todo.today' in sn:
                         pending += '<span class="tag-today">%s</span>' % self.view.substr(s)
+                    elif 'tag.todo.critical' in sn:
+                        pending += '<span class="tag-critical">%s</span>' % self.view.substr(s)
+                    elif 'tag.todo.high' in sn:
+                        pending += '<span class="tag-high">%s</span>' % self.view.substr(s)
+                    elif 'tag.todo.low' in sn:
+                        pending += '<span class="tag-low">%s</span>' % self.view.substr(s)
+                    elif 'italic' in sn:
+                        pending += '<i>%s</i>' % cgi.escape(self.view.substr(s).strip('_*'))
+                    elif 'bold' in sn:
+                        pending += '<b>%s</b>' % cgi.escape(self.view.substr(s).strip('_*'))
+                    elif 'url' in sn:
+                        pending += '<a href="{0}">{0}</a>'.format(cgi.escape(self.view.substr(s).strip('<>')))
                     else:
                         pending += cgi.escape(self.view.substr(s))
                 ht = pending + '</span>'
@@ -812,8 +826,9 @@ class PlainTasksConvertToHtml(PlainTasksBase):
         scopes = []
         for p in range(region.b-region.a):
             sr = self.view.extract_scope(region.a + p)
-            # fix multi-line notes, because variable region is always a single line
-            if 'note' in scope_name and sr.a < region.a or sr.b - 1 > region.b:
+            p += region.a
+            # fix multi-line, because variable region is always a single line
+            if sr.a < region.a or sr.b - 1 > region.b:
                 if scopes and p == scopes[~0].b: # *text* inbetween *markups*
                     sr = sublime.Region(p, region.b + 1)
                 else: # multi-line
@@ -830,7 +845,7 @@ class PlainTasksConvertToHtml(PlainTasksBase):
             if scopes[0].intersects(scopes[1]):
                 scopes[0] = sublime.Region(scopes[0].a, scopes[1].a)
             # fix text after tag(s)
-            if scopes[~0].b <= region.b or scopes[~0].a < region.a:
+            if scopes[~0].b < region.b or scopes[~0].a < region.a:
                 scopes.append(sublime.Region(scopes[~0].b, region.b))
             for i, s in enumerate(scopes[:0:~0]):
                 # fix overall intersections

@@ -135,9 +135,9 @@
 				</dict>
 			</dict>
 			<key>begin</key>
-			<string>^\s*(-|❍|❑|■|□|☐|▪|▫|–|—|\[\s\])(?=(\s+(?:[^\@\n]|(?&lt;!\s)\@)*)(?!(.*)?(\@done|\@cancelled)[\s\(]))</string>
+			<string>^\s*(-|❍|❑|■|□|☐|▪|▫|–|—|\[\s\])(?=(\s+(?:[^\@\n]|(?&lt;!\s)\@)*)(?!([^\n]*)?(\@done|\@cancelled)[\s\(]))</string>
 			<key>end</key>
-			<string>$</string>
+			<string>$\n?</string>
 			<key>name</key>
 			<string>meta.item.todo.pending</string>
 			<key>patterns</key>
@@ -235,8 +235,16 @@
 
 		<key>url</key>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.url</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>\s*(?&lt;=&lt;)\w+?(?!\s)(\.|:)(?!\s)[^\n]+(?=&gt;)</string>
+			<string>(?&lt;!\S)(&lt;)\w+?(?!\s)(\.|:)(?!\s)[^\n]+?(&gt;)</string>
 			<key>name</key>
 			<string>todo.url</string>
 		</dict>

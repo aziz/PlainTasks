@@ -11,6 +11,12 @@
  body {
   background-color: #efe9b7;
  }
+ a {
+  color: rgba(0, 62, 114, .55);
+  font-weight: bold;
+ }
+ span { display: inline-block; }         /* prevent unsupposed empty lines */
+ span[class|="tag"] { display: inline; } /* add proper wrapping for tags */
 
  pre {
   margin: 30px;
@@ -51,54 +57,70 @@
   font-style: normal;
   color: #bc644a;
   background-color: rgba(0,0,0,.05);
-  display: inline-block;
   width: 100%;
  }
  .tag {
   font-weight: bold;
   font-style: normal;
   color: #C37763;
-  display: inline-block;
  }
  .tag-done, .tag-cancelled {
   font-style: normal;
   color:#A49F85;
  }
- .tag-today{
+
+ .tag-today, .tag-critical, .tag-high, .tag-low{
   font-weight: bold;
   font-style: normal;
-  background: #EADD4E;
   color: #000000;
  }
- .done, .cancelled, .note {
+ .tag-today{
+  background: #EADD4E;
+ }
+ .tag-critical{
+  background: #FF0000;
+ }
+ .tag-high{
+  background: #FF7F00;
+ }
+ .tag-low{
+  background: #222222;
+  color: #ffffff;
+ }
+
+ .done, .cancelled{
   color: #66654F;
  }
+ .note{
+  font-style: normal;
+  color: #858266;
+ }
  .empty-line {
-  display: inline-block;
-  height: 5px;
+  /* span, either empty or containing whitespaces/tabs */
  }
 </style>
 </head>
 <body>
 <pre><span class="header">TODO:</span>
-<span class="open"> <span class="bullet-pending">☐</span> make urls highlighted <span class="tag">@feature
-</span></span>
 <span class="open"> <span class="bullet-pending">☐</span> make file links highlighted <span class="tag">@feature
 </span></span>
 <span class="open"> <span class="bullet-pending">☐</span> use control+shift+A to only archive the first level tasks (or current level of indent) <span class="tag">@feature
 </span></span>
 <span class="open"> <span class="bullet-pending">☐</span> in archive list, add date in front of done tasks (e.g. 2012-09-06 14:41 Ξ some task) <span class="tag">@feature
 </span></span>
-<span class="open"> <span class="bullet-pending">☐</span> tags <span class="tag-today">@today</span><span class="tag-today">✭ᴛᴏᴅᴀʏ</span><span class="tag">@feature
+<span class="open"> <span class="bullet-pending">☐</span> tags <span class="tag-today">@today</span> <span class="tag-today">✭ᴛᴏᴅᴀʏ</span> <span class="tag">@feature
 </span></span>
-<span class="open"> <span class="bullet-pending">☐</span> marking all nested tasks as done should mark the parent as done?</span>
-<span class="open"> <span class="bullet-pending">☐</span> other themes?</span>
+<span class="open"> <span class="bullet-pending">☐</span> marking all nested tasks as done should mark the parent as done?
+</span>
+<span class="open"> <span class="bullet-pending">☐</span> other themes?
+</span>
 <span class="open"> <span class="bullet-pending">☐</span> mouse interaction <span class="tag">@feature
 </span></span>
 <span class="empty-line"></span>
 <span class="sep-archive">＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿</span>
 <span class="header">Archive:</span>
-<span class="done"> <span class="bullet-done">✔</span> export to html/ preview in browser <span class="tag-done">@feature @done (14-04-28 19:08) @project(TODO)</span></span>
+<span class="done"> <span class="bullet-done">✔</span> make urls highlighted <span class="tag-done">@feature @done (15-05-18 08:15) @project(TODO)</span></span>
+<span class="done"> <span class="bullet-done">✔</span> export to html/ preview in browser <span class="tag-done">@feature @done (14-04-28 19:28)</span></span>
 <span class="done"> <span class="bullet-done">✔</span> accept multiple bullet types at the same time <span class="tag-done">@feature @done (14-01-23 15:39)</span></span>
 <span class="done"> <span class="bullet-done">✔</span> taskpaper compatibility <span class="tag-done">@improvement @done (14-01-23 15:38)</span></span>
 <span class="done"> <span class="bullet-done">✔</span> include in the task the date and time of creation (using a shortcut key) <span class="tag-done">@feature @done (13-10-25 14:47) @project(TODO)</span></span>

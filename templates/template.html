@@ -11,7 +11,10 @@
  body {
   background-color: #efe9b7;
  }
-
+ a {
+  color: rgba(0, 62, 114, .55);
+  font-weight: bold;
+ }
  span { display: inline-block; }         /* prevent unsupposed empty lines */
  span[class|="tag"] { display: inline; } /* add proper wrapping for tags */
 
@@ -65,12 +68,26 @@
   font-style: normal;
   color:#A49F85;
  }
- .tag-today{
+
+ .tag-today, .tag-critical, .tag-high, .tag-low{
   font-weight: bold;
   font-style: normal;
-  background: #EADD4E;
   color: #000000;
  }
+ .tag-today{
+  background: #EADD4E;
+ }
+ .tag-critical{
+  background: #FF0000;
+ }
+ .tag-high{
+  background: #FF7F00;
+ }
+ .tag-low{
+  background: #222222;
+  color: #ffffff;
+ }
+
  .done, .cancelled{
   color: #66654F;
  }

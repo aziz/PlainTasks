@@ -1,5 +1,4 @@
 TODO:
- ☐ make urls highlighted @feature
  ☐ make file links highlighted @feature
  ☐ use control+shift+A to only archive the first level tasks (or current level of indent) @feature
  ☐ in archive list, add date in front of done tasks (e.g. 2012-09-06 14:41 Ξ some task) @feature
@@ -10,6 +9,7 @@ TODO:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ make urls highlighted @feature @done (15-05-18 08:15) @project(TODO)
  ✔ export to html/ preview in browser @feature @done (14-04-28 19:28)
  ✔ accept multiple bullet types at the same time @feature @done (14-01-23 15:39)
  ✔ taskpaper compatibility @improvement @done (14-01-23 15:38)
