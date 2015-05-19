@@ -825,8 +825,8 @@ class PlainTasksConvertToHtml(PlainTasksBase):
         '''extract scope for each char in line wo dups, ineffective but it works?'''
         scopes = []
         for p in range(region.b-region.a):
-            sr = self.view.extract_scope(region.a + p)
             p += region.a
+            sr = self.view.extract_scope(p)
             # fix multi-line, because variable region is always a single line
             if sr.a < region.a or sr.b - 1 > region.b:
                 if scopes and p == scopes[~0].b: # *text* inbetween *markups*
@@ -836,11 +836,12 @@ class PlainTasksConvertToHtml(PlainTasksBase):
             # main block, add unique entity to the list
             if sr not in scopes:
                 scopes.append(sr)
+            elif scopes and self.view.scope_name(p) != self.view.scope_name(scopes[~0].a):
+                scopes.append(sublime.Region(p, region.b))
             # fix intersecting regions, e.g. markup in notes
             if scopes and sr.a < scopes[~0].b and p - 1 == scopes[~0].b:
                 scopes.append(sublime.Region(scopes[~0].b, sr.b))
-        ln = len(scopes)
-        if ('note' in scope_name and ln > 1) or ln > 2:
+        if len(scopes) > 1:
             # fix bullet
             if scopes[0].intersects(scopes[1]):
                 scopes[0] = sublime.Region(scopes[0].a, scopes[1].a)
