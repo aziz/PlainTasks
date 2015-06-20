@@ -171,6 +171,7 @@ Here is a list of PlainTasks’ specific settings:
 | **archive_name**               | `Archive:`       | Make sure it is the unique project name within your todo files          |
 | **new_on_top**                 | true             | How to sort archived tasks (done_tag=true and default date_format are required)|
 | **header_to_task**             | absent (false)   | If true, a project title line will be converted to a task on the certain keystroke  |
+| **decimal_minutes**            | absent (false)   | If true, minutes in lasted/wasted tags will be persent of hour, e.g. 1.50 instead of 1:30 |
 | **tasks_bullet_space** | absent (whitespace or tab) | String to place after bullet, might be any character(s) |
 
 

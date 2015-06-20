@@ -187,15 +187,20 @@ class PlainTasksCompleteCommand(PlainTasksBase):
         start = datetime.strptime(started_matches, self.date_format)
         end = datetime.strptime(done_line_end.replace('@done', '').replace('@cancelled', '').strip(), self.date_format)
 
-        toggle_times = [datetime.strptime(toggle,self.date_format) for toggle in toggle_matches]
+        toggle_times = [datetime.strptime(toggle, self.date_format) for toggle in toggle_matches]
         all_times = [start] + toggle_times + [end]
         pairs = zip(all_times[::2], all_times[1::2])
         deltas = [pair[1] - pair[0] for pair in pairs]
 
-        delta = str(sum(deltas, timedelta()))
-        if delta[~6:] == '0:00:00': # strip meaningless time
+        delta = sum(deltas, timedelta())
+        if self.view.settings().get('decimal_timetrack', False):
+            days = delta.days
+            delta = u'%s%s%s%.2f' % (days or '', ' day, ' if days == 1 else '', ' days, ' if days > 1 else '', delta.seconds/3600.0)
+        else:
+            delta = str(delta)
+        if delta[~6:] == '0:00:00':  # strip meaningless time
             delta = delta[:~6]
-        elif delta[~2:] == ':00': # strip meaningless seconds
+        elif delta[~2:] == ':00':  # strip meaningless seconds
             delta = delta[:~2]
 
         tag = ' @%s(%s)' % (tag, delta.rstrip(', ') if delta else ('a bit' if '%H' in self.date_format else 'less than day'))
