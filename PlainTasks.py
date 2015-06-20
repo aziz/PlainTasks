@@ -193,7 +193,7 @@ class PlainTasksCompleteCommand(PlainTasksBase):
         deltas = [pair[1] - pair[0] for pair in pairs]
 
         delta = sum(deltas, timedelta())
-        if self.view.settings().get('decimal_timetrack', False):
+        if self.view.settings().get('decimal_minutes', False):
             days = delta.days
             delta = u'%s%s%s%.2f' % (days or '', ' day, ' if days == 1 else '', ' days, ' if days > 1 else '', delta.seconds/3600.0)
         else:
