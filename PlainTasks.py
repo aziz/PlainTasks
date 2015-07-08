@@ -122,6 +122,7 @@ class PlainTasksCompleteCommand(PlainTasksBase):
             done_line_end = ' %s%s%s' % (self.done_tag, self.before_date_space, datetime.now().strftime(self.date_format).decode(self.sys_enc))
         except:
             done_line_end = ' %s%s%s' % (self.done_tag, self.before_date_space, datetime.now().strftime(self.date_format))
+        done_line_end = done_line_end.replace('  ', ' ').rstrip()
         offset = len(done_line_end)
         rom = r'^(\s*)(\[\s\]|.)(\s*.*)$'
         rdm = r'''
@@ -165,14 +166,14 @@ class PlainTasksCompleteCommand(PlainTasksBase):
                 grps = done_matches.groups()
                 parentheses = self.check_parentheses(self.date_format, grps[4] or '')
                 replacement = u'%s%s%s%s' % (grps[0], self.open_tasks_bullet, grps[2], parentheses)
-                self.view.replace(edit, line, replacement)
+                self.view.replace(edit, line, replacement.rstrip())
                 offset = -offset
             elif 'cancelled' in current_scope:
                 grps = canc_matches.groups()
                 self.view.insert(edit, line.end(), done_line_end)
                 parentheses = self.check_parentheses(self.date_format, grps[4] or '')
                 replacement = u'%s%s%s%s' % (grps[0], self.done_tasks_bullet, grps[2], parentheses)
-                self.view.replace(edit, line, replacement)
+                self.view.replace(edit, line, replacement.rstrip())
                 offset = -offset
         self.view.sel().clear()
         for ind, pt in enumerate(original):
@@ -225,9 +226,10 @@ class PlainTasksCancelCommand(PlainTasksBase):
     def runCommand(self, edit):
         original = [r for r in self.view.sel()]
         try:
-            canc_line_end = ' %s%s%s' % (self.canc_tag,self.before_date_space, datetime.now().strftime(self.date_format).decode(self.sys_enc))
+            canc_line_end = ' %s%s%s' % (self.canc_tag, self.before_date_space, datetime.now().strftime(self.date_format).decode(self.sys_enc))
         except:
-            canc_line_end = ' %s%s%s' % (self.canc_tag,self.before_date_space, datetime.now().strftime(self.date_format))
+            canc_line_end = ' %s%s%s' % (self.canc_tag, self.before_date_space, datetime.now().strftime(self.date_format))
+        canc_line_end = canc_line_end.replace('  ', ' ').rstrip()
         offset = len(canc_line_end)
         rom = r'^(\s*)(\[\s\]|.)(\s*.*)$'
         rdm = r'^(\s*)(\[x\]|.)(\s*[^\b]*?(?:[^\@]|(?<!\s)\@|\@(?=\s))*?\s*)(?=((?:\s@done|@project|$).*)|(?:(\([^()]*\))\s*([^@]*|@project.*))?$)'
@@ -241,7 +243,7 @@ class PlainTasksCancelCommand(PlainTasksBase):
             done_matches = re.match(rdm, line_contents, re.U)
             canc_matches = re.match(rcm, line_contents, re.U)
             started_matches = re.match(started, line_contents, re.U)
-            toggle_matches = re.findall(toggle,line_contents, re.U)
+            toggle_matches = re.findall(toggle, line_contents, re.U)
 
             current_scope = self.view.scope_name(line.a)
             if 'pending' in current_scope:
@@ -263,13 +265,13 @@ class PlainTasksCancelCommand(PlainTasksBase):
                 # grps = done_matches.groups()
                 # parentheses = PlainTasksCompleteCommand.check_parentheses(self.date_format, grps[4] or '')
                 # replacement = u'%s%s%s%s' % (grps[0], self.canc_tasks_bullet, grps[2], parentheses)
-                # self.view.replace(edit, line, replacement)
+                # self.view.replace(edit, line, replacement.rstrip())
                 # offset = -offset
             elif 'cancelled' in current_scope:
                 grps = canc_matches.groups()
                 parentheses = PlainTasksCompleteCommand.check_parentheses(self.date_format, grps[4] or '')
                 replacement = u'%s%s%s%s' % (grps[0], self.open_tasks_bullet, grps[2], parentheses)
-                self.view.replace(edit, line, replacement)
+                self.view.replace(edit, line, replacement.rstrip())
                 offset = -offset
         self.view.sel().clear()
         for ind, pt in enumerate(original):
