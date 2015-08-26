@@ -4,6 +4,7 @@
     { "caption": "Tasks: Cancel", "command": "plain_tasks_cancel" },
     { "caption": "Tasks: New", "command": "plain_tasks_new" },
     { "caption": "Tasks: Archive", "command": "plain_tasks_archive" },
+    { "caption": "Tasks: Archive within selection(s)", "command": "plain_tasks_archive", "args": {"partial": true} },
     { "caption": "Tasks: Archive (Org-Mode Style)", "command": "plain_tasks_org_archive" },
     { "caption": "Tasks: Open URL", "command": "plain_tasks_open_url" },
     { "caption": "Tasks: Open Link", "command": "plain_tasks_open_link" },
