@@ -23,7 +23,7 @@ else:
 
 
 class PlainTasksBase(sublime_plugin.TextCommand):
-    def run(self, edit):
+    def run(self, edit, **kwargs):
         settings = self.view.settings()
 
         self.taskpaper_compatible = settings.get('taskpaper_compatible', False)
@@ -56,7 +56,7 @@ class PlainTasksBase(sublime_plugin.TextCommand):
 
         if ST2:
             self.sys_enc = locale.getpreferredencoding()
-        self.runCommand(edit)
+        self.runCommand(edit, **kwargs)
 
 
 class PlainTasksNewCommand(PlainTasksBase):
@@ -712,7 +712,7 @@ class PlainTasksConvertToHtml(PlainTasksBase):
     def is_enabled(self):
         return self.view.score_selector(0, "text.todo") > 0
 
-    def runCommand(self, edit):
+    def runCommand(self, edit, ask=False):
         import cgi
         all_lines_regions = self.view.split_by_newlines(sublime.Region(0, self.view.size()))
         html_doc = []
@@ -817,16 +817,31 @@ class PlainTasksConvertToHtml(PlainTasksBase):
                                       'Please, report an issue in PlainTasks repository on GitHub.')
             html_doc.append(ht)
 
-        # create file
+        title = os.path.basename(self.view.file_name()) if self.view.file_name() else 'Export'
+        html  = self.produce_html_from_template(title, html_doc)
+
+        if ask:
+            window = sublime.active_window()
+            nv = window.new_file()
+            nv.set_syntax_file('Packages/HTML/HTML.tmLanguage')
+            nv.set_name(title + '.html')
+            nv.insert(edit, 0, html)
+            window.run_command('close_file')
+            return
+
         import tempfile
         tmp_html = tempfile.NamedTemporaryFile(delete=False, suffix='.html')
-        with io.open('%s/PlainTasks/templates/template.html' % sublime.packages_path(), 'r', encoding='utf8') as template:
-            title = os.path.basename(self.view.file_name()) if self.view.file_name() else 'Export'
-            for line in template:
-                line = line.replace('$title', title).replace('$content', '\n'.join(html_doc))
-                tmp_html.write(line.encode('utf-8'))
+        tmp_html.write(html.encode('utf-8'))
         tmp_html.close()
         webbrowser.open_new_tab("file://%s" % tmp_html.name)
+
+    def produce_html_from_template(self, title, html_doc):
+        html_lines = []
+        with io.open('%s/PlainTasks/templates/template.html' % sublime.packages_path(), 'r', encoding='utf8') as template:
+            for line in template:
+                line = line.replace('$title', title).replace('$content', '\n'.join(html_doc)).strip('\n')
+                html_lines.append(line)
+        return u'\n'.join(html_lines)
 
     def extracting_scopes(self, edit, region, scope_name=''):
         '''extract scope for each char in line wo dups, ineffective but it works?'''

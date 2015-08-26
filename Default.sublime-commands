@@ -8,5 +8,6 @@
     { "caption": "Tasks: Open URL", "command": "plain_tasks_open_url" },
     { "caption": "Tasks: Open Link", "command": "plain_tasks_open_link" },
     { "caption": "Tasks: View as HTML", "command": "plain_tasks_convert_to_html" },
+    { "caption": "Tasks: Save as HTML…", "command": "plain_tasks_convert_to_html", "args": {"ask": true} },
     { "caption": "Tasks: Copy Statistics", "command": "plain_tasks_copy_stats" }
 ]
