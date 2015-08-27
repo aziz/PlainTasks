@@ -15,9 +15,10 @@
     //   Packages/PlainTasks/tasks-eighties-colored.hidden-tmTheme
     //   Packages/PlainTasks/tasks-eighties-dark.hidden-tmTheme
     //   Packages/PlainTasks/tasks-gray.hidden-tmTheme
+    //   Packages/PlainTasks/tasks-markdown.hidden-tmTheme    
     //   Packages/PlainTasks/tasks-monokai.hidden-tmTheme
     //   Packages/PlainTasks/tasks-solarized-dark.hidden-tmTheme
-    //   Packages/PlainTasks/tasks-solarized-light.hidden-tmTheme
+    //   Packages/PlainTasks/tasks-solarized-light.hidden-tmTheme 
   "font_size": 15,
   "font_face": "Consolas",
   "draw_indent_guides": false,
