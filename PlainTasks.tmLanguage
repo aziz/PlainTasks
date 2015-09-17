@@ -135,7 +135,7 @@
 				</dict>
 			</dict>
 			<key>begin</key>
-			<string>^\s*(-|❍|❑|■|□|☐|▪|▫|–|—|\[\s\])(?=(\s+(?:[^\@\n]|(?&lt;!\s)\@)*)(?!([^\n]*)?(\@done|\@cancelled)[\s\(]))</string>
+			<string>^\s*(-|❍|❑|■|□|☐|▪|▫|–|—|\[\s\])(?=(\s+(?:[^\@\n]|(?&lt;![ \t])\@)*)(?!([^\n]*)?(\@done|\@cancelled)[\s\(]))</string>
 			<key>end</key>
 			<string>$</string>
 			<key>name</key>
@@ -252,7 +252,7 @@
 		<key>tag</key>
 		<dict>
 			<key>match</key>
-			<string>(?&lt;=\s)\@(?!(high|today|critical|low|completed|done)[\s\(])[\w\d\.\(\)\-!? :\+]+\s*</string>
+			<string>(?&lt;=\s)\@(?!(high|today|critical|low|completed|done)[\s\(])[\w\d\.\(\)\-!? :\+]+[ \t]*</string>
 			<key>name</key>
 			<string>meta.tag.todo</string>
 		</dict>

@@ -865,15 +865,16 @@ class PlainTasksConvertToHtml(PlainTasksBase):
     def extracting_scopes(self, edit, region, scope_name=''):
         '''extract scope for each char in line wo dups, ineffective but it works?'''
         scopes = []
+
         for p in range(region.b-region.a):
             p += region.a
             sr = self.view.extract_scope(p)
             # fix multi-line, because variable region is always a single line
             if sr.a < region.a or sr.b - 1 > region.b:
-                if scopes and p == scopes[~0].b: # *text* inbetween *markups*
-                    sr = sublime.Region(p, region.b + 1)
-                else: # multi-line
-                    sr = sublime.Region(region.a, region.b + 1)
+                if scopes and p == scopes[~0].b:  # *text* inbetween *markups*
+                    sr = sublime.Region(p, region.b)
+                else:  # multi-line
+                    sr = sublime.Region(region.a, region.b)
             # main block, add unique entity to the list
             if sr not in scopes:
                 scopes.append(sr)
@@ -882,6 +883,11 @@ class PlainTasksConvertToHtml(PlainTasksBase):
             # fix intersecting regions, e.g. markup in notes
             if scopes and sr.a < scopes[~0].b and p - 1 == scopes[~0].b:
                 scopes.append(sublime.Region(scopes[~0].b, sr.b))
+
+        if scopes and scopes[~0].b > region.b:
+            # avoid line break at eol
+            scopes[~0] = sublime.Region(scopes[~0].a, region.b)
+
         if len(scopes) > 1:
             # fix bullet
             if scopes[0].intersects(scopes[1]):
@@ -889,13 +895,17 @@ class PlainTasksConvertToHtml(PlainTasksBase):
             # fix text after tag(s)
             if scopes[~0].b < region.b or scopes[~0].a < region.a:
                 scopes.append(sublime.Region(scopes[~0].b, region.b))
-            for i, s in enumerate(scopes[:0:~0]):
+            new_scopes = scopes[:0:~0]
+            for i, s in enumerate(new_scopes):
                 # fix overall intersections
                 if s.intersects(scopes[~(i + 1)]):
                     if scopes[~(i + 1)].b < s.b:
                         scopes[~i] = sublime.Region(scopes[~(i + 1)].b, s.b)
+                        new_scopes[i] = scopes[~i]
                     else:
                         scopes[~(i + 1)] = sublime.Region(scopes[~(i + 1)].a, s.a)
+                        if len(new_scopes) > i + 1:
+                            new_scopes[i + 1] = scopes[~(i + 1)]
         return scopes
 
 
