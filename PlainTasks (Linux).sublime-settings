@@ -18,8 +18,8 @@
     //   Packages/PlainTasks/tasks-monokai.hidden-tmTheme
     //   Packages/PlainTasks/tasks-solarized-dark.hidden-tmTheme
     //   Packages/PlainTasks/tasks-solarized-light.hidden-tmTheme
-  "font_size": 15,
-  "font_face": "Consolas",
+  // "font_size": 15,
+  // "font_face": "Consolas",
   "draw_indent_guides": false,
   "line_numbers": false,
   "gutter": true,
