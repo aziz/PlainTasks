@@ -165,7 +165,7 @@ Here is a list of PlainTasks’ specific settings:
 | **open_tasks_bullet**          | ☐                | - ❍ ❑ ■ □ ☐ ▪ ▫ – — ≡ → › [ ]                                           |
 | **done_tasks_bullet**          | ✔                | ✓   ☑ + [x]                                                               |
 | **cancelled_tasks_bullet**     | ✘                | x [-]                                                                   |
-| **date_format**                | `(%y-%m-%d %H:%M)` |                                                                         |
+| **date_format**                | `(%y-%m-%d %H:%M)` | See [strfti.me](http://www.strfti.me/) for quick reference; detailed documentation: [ST2](https://docs.python.org/2.6/library/datetime.html#strftime-and-strptime-behavior), [ST3](https://docs.python.org/3.3/library/datetime.html#strftime-and-strptime-behavior) |
 | **done_tag**                   | true             | Determines whether done tasks should gain a @done tag or not            |
 | **before_tasks_bullet_margin** | 1                | Determines the number of spaces (default indent) before the task bullet |
 | **project_tag**                | true             | Postfix archived task with project tag, otherwise prefix                |

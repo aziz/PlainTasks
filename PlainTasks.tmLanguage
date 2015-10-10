@@ -103,7 +103,7 @@
 
 		<dict>
 		  <key>begin</key>
-		  <string>^\s*(?!-|\+|✓|✔|√|❍|❑|■|□|☐|▪|▫|–|—|\[[\sx-]\]|＿|✘|(x\s+))(?=\S)</string>
+		  <string>^\s*(?!-|\+|✓|✔|√|❍|❑|■|□|☐|▪|▫|–|—|≡|→|›|\[[\sx-]\]|＿|✘|(x\s+))(?=\S)</string>
 		  <key>end</key>
 		  <string>$\n?</string>
 		  <key>name</key>
@@ -135,7 +135,7 @@
 				</dict>
 			</dict>
 			<key>begin</key>
-			<string>^\s*(-|❍|❑|■|□|☐|▪|▫|–|—|\[\s\])(?=(\s+(?:[^\@\n]|(?&lt;![ \t])\@)*)(?!([^\n]*)?(\@done|\@cancelled)[\s\(]))</string>
+			<string>^\s*(-|❍|❑|■|□|☐|▪|▫|–|—|≡|→|›|\[\s\])(?=(\s+(?:[^\@\n]|(?&lt;![ \t])\@)*)(?!([^\n]*)?(\@done|\@cancelled)[\s\(]))</string>
 			<key>end</key>
 			<string>$</string>
 			<key>name</key>
