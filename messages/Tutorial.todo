@@ -33,6 +33,7 @@ Tasks:
    ☐ In SublimeText 3 you can specify a symbol inside the file by using > character like: .\filename>symbol
    ☐ In SublimeText 2 you can specify a text inside that file by using double quotes like: .\filename"any text"
    ☐ ctrl+o (alt+o on Windows) opens the file in Sublime: try to open .\install.txt\
+   ☐ In SublimeText 3 link may point to directory, open such link will add the directory to current project (sidebar), e.g. .\..\PlainTasks\
    ☐ Other ways to create file links:
       [](install.txt)  ← try to open it
       [](path ":11:8")

@@ -125,6 +125,7 @@ For more portability you can use `todolist.txt` either as a filename or as suffi
   In SublimeText 3 you can specify a symbol inside that file by using \> character like: `.\filename>symbol`.  
   In SublimeText 2 you can specify a text inside that file by using inch characters like: `.\filename"any text"`.  
   Pressing <kbd>ctrl + o</kbd> (<kbd>alt + o</kbd> on Windows/Linux) will open the file in Sublime and scroll to specific position if any.  
+  Also in SublimeText 3 link may point to directory, open such link will add the directory to current project (sidebar).  
   In addition, Markdown and “wiki” (Org-Mode, NV, etc.) styles are supported as well, examples:
 
 ```
