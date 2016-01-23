@@ -504,13 +504,15 @@ class PlainTasksOpenLinkCommand(sublime_plugin.TextCommand):
         if res[3] == 'f':
             return [res[0], "line: %d column: %d" % (int(res[1]), int(res[2]))]
         elif res[3] == 'd':
-            return [res[0]]
+            return [res[0], 'Add folder to project' if not ST2 else 'Folders are supported only in Sublime 3']
 
     def _on_panel_selection(self, selection):
         if selection >= 0:
             res = self._current_res[selection]
             win = sublime.active_window()
-            if (not ST2) and res[3] == 'd':
+            if ST2 and res[3] == "d":
+                return
+            elif res[3] == "d":
                 data = win.project_data()
                 if not data:
                     data = {}
@@ -539,10 +541,11 @@ class PlainTasksOpenLinkCommand(sublime_plugin.TextCommand):
                     name = os.path.join(root, fn)
                     if os.path.isfile(name):
                         self._current_res.append((name, line or 0, col or 0, "f"))
+                    if os.path.isdir(name):
+                        self._current_res.append((name, 0, 0, "d"))
             if os.path.isfile(fn):  # check for full path
                 self._current_res.append((fn, line or 0, col or 0, "f"))
             elif os.path.isdir(fn):
-                # self._open_folder(fn)
                 self._current_res.append((fn, 0, 0, "d"))
             self._current_res = list(set(self._current_res))
         if not self._current_res:
