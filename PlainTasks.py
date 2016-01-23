@@ -501,13 +501,29 @@ class PlainTasksOpenLinkCommand(sublime_plugin.TextCommand):
         ''')
 
     def _format_res(self, res):
-        return [res[0], "line: %d column: %d" % (int(res[1]), int(res[2]))]
+        if res[3] == 'f':
+            return [res[0], "line: %d column: %d" % (int(res[1]), int(res[2]))]
+        elif res[3] == 'd':
+            return [res[0], 'Add folder to project' if not ST2 else 'Folders are supported only in Sublime 3']
 
     def _on_panel_selection(self, selection):
         if selection >= 0:
             res = self._current_res[selection]
             win = sublime.active_window()
-            self.opened_file = win.open_file('%s:%s:%s' % res, sublime.ENCODED_POSITION)
+            if ST2 and res[3] == "d":
+                return
+            elif res[3] == "d":
+                data = win.project_data()
+                if not data:
+                    data = {}
+                if "folders" not in data:
+                    data["folders"] = []
+                data["folders"].append({'follow_symlinks': True,
+                                        'path': res[0]})
+                win.set_project_data(data)
+            else:
+                self.opened_file = win.open_file('%s:%s:%s' % res[:3],
+                                                 sublime.ENCODED_POSITION)
 
     def show_panel_or_open(self, fn, sym, line, col, text):
         win = sublime.active_window()
@@ -516,7 +532,7 @@ class PlainTasksOpenLinkCommand(sublime_plugin.TextCommand):
             for name, _, pos in win.lookup_symbol_in_index(sym):
                 if name.endswith(fn):
                     line, col = pos
-                    self._current_res.append((name, line, col))
+                    self._current_res.append((name, line, col, "f"))
         else:
             fn = fn.replace('/', os.sep)
             all_folders = win.folders() + [os.path.dirname(v.file_name()) for v in win.views() if v.file_name()]
@@ -524,9 +540,13 @@ class PlainTasksOpenLinkCommand(sublime_plugin.TextCommand):
                 for root, _, _ in os.walk(folder):
                     name = os.path.join(root, fn)
                     if os.path.isfile(name):
-                        self._current_res.append((name, line or 0, col or 0))
-            if os.path.isfile(fn): # check for full path
-                self._current_res.append((fn, line or 0, col or 0))
+                        self._current_res.append((name, line or 0, col or 0, "f"))
+                    if os.path.isdir(name):
+                        self._current_res.append((name, 0, 0, "d"))
+            if os.path.isfile(fn):  # check for full path
+                self._current_res.append((fn, line or 0, col or 0, "f"))
+            elif os.path.isdir(fn):
+                self._current_res.append((fn, 0, 0, "d"))
             self._current_res = list(set(self._current_res))
         if not self._current_res:
             sublime.error_message('File was not found\n\n\t%s' % fn)
