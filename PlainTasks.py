@@ -728,8 +728,9 @@ class PlainTasksReplaceShortDate(PlainTasksBase):
                     if month == 13:
                         year += 1
                         month = 1
-                else: # @due(0) == today
+                elif not day:  # @due(0) == today
                     day = now.day
+                # else would be day>now, i.e. future day in current month
         hour   = match_obj.group('hour')   or now.hour
         minute = match_obj.group('minute') or now.minute
         hour, minute = int(hour), int(minute)
