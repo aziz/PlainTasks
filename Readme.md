@@ -40,7 +40,7 @@ For more portability you can use `todolist.txt` either as a filename or as suffi
 
 `--` and then <kbd>tab</kbd> will give you this: `--- ✄ -----------------------`
 
-☐ Completion rules (<kbd>ctrl+space</kbd> to see list of them):  
+☐ Completion rules (<kbd>ctrl+space</kbd> or <kbd>alt+/</kbd> to see list of them):  
 
 - type `t`, press <kbd>tab</kbd> — it’ll become `@today` — this one is highlighted differently than other tags;
 - `c`, <kbd>tab</kbd> — `@critical`;

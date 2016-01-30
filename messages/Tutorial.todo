@@ -97,7 +97,7 @@ Time Tracking:
         - @due(+:555)  = @due( +.555)  →  555 minutes since current date
         - @due(+2 12:) = @due( +2 12.) →  2 days and 12 hours since current date
 
-☐ ctrl+space shows list of those tags
+☐ ctrl+space (alt+/ on Linux) shows list of those tags
 
 FileType Support:
  PlainTasks support these file types out of the box
