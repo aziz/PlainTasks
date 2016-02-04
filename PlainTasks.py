@@ -115,6 +115,19 @@ class PlainTasksNewCommand(PlainTasksBase):
         PlainTasksStatsStatus.set_stats(self.view)
 
 
+class PlainTasksNewWithDateCommand(PlainTasksBase):
+    def runCommand(self, edit):
+        self.view.run_command('plain_tasks_new')
+        sels = list(self.view.sel())
+        suffix = ' @created%s' % datetime.now().strftime(self.date_format)
+        for s in reversed(sels):
+            self.view.insert(edit, s.b, suffix)
+        self.view.sel().clear()
+        offset = len(suffix)
+        for i, sel in enumerate(sels):
+            self.view.sel().add(sublime.Region(sel.a + i*offset, sel.b + i*offset))
+
+
 class PlainTasksCompleteCommand(PlainTasksBase):
     def runCommand(self, edit):
         original = [r for r in self.view.sel()]

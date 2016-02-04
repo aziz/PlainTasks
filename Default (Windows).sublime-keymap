@@ -3,6 +3,7 @@
   { "keys": ["alt+c"], "command": "plain_tasks_cancel", "context": [{"key": "selector", "operator": "equal", "operand": "text.todo" }] },
   { "keys": ["ctrl+enter"], "command": "plain_tasks_new","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },
   { "keys": ["ctrl+i"], "command": "plain_tasks_new","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },
+  { "keys": ["ctrl+shift+enter"], "command": "plain_tasks_new_with_date","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },
   { "keys": ["ctrl+shift+a"], "command": "plain_tasks_archive","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },
   { "keys": ["ctrl+shift+o"], "command": "plain_tasks_archive_org","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },
   { "keys": ["ctrl+shift+u"], "command": "plain_tasks_open_url","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },

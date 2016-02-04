@@ -48,7 +48,7 @@ For more portability you can use `todolist.txt` either as a filename or as suffi
 - `l`, <kbd>tab</kbd> — `@low`;
 - `s`, <kbd>tab</kbd> — `@started` — press <kbd>tab</kbd> again and current date will be inserted, when you’ll complete or cancel a task with such tag, you’ll know how many time has passed since start;
 - `tg`, <kbd>tab</kbd>, <kbd>tab</kbd> work in the same manner as `s`, but inserts `@toggle(current date)` — so you can pause and resume to get more correct result when done/cancel; each toggle tag is either pause or resume depending on its place in sequence;
-- `cr`, <kbd>tab</kbd>, <kbd>tab</kbd> — `@created(current date)`;
+- `cr`, <kbd>tab</kbd>, <kbd>tab</kbd> — `@created(current date)` (<kbd>⌘ + shift + enter</kbd> creates a new task with this tag);
 - `d`, <kbd>tab</kbd> — `@due( )`  
   If you press <kbd>tab</kbd> again, it’ll insert current date, same for `@due( 0)`.  
   You can type short date (similar to [OrgMode’s date prompt](http://orgmode.org/manual/The-date_002ftime-prompt.html), but not the same) and then press <kbd>tab</kbd> to expand it into default format.  

@@ -76,6 +76,7 @@ Time Tracking:
     That way you can pause and resume started task, so result of calculation will be more correct.
     First, you need start task, then toggle means pause, next toggle — resume, etc.
   ☐ type cr, press tab key twice — @created(14-12-24 15:57)
+    ⌘+shift+enter (ctrl+shift+enter) creates a new task with this tag
   ☐ type d, press tab key — @due( )
     If you press tab key again — it’ll insert current date, same for @due( 0).
     You can type short date and then press tab to expand it into default format.
