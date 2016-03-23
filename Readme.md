@@ -222,7 +222,7 @@ Statistics of current file are represented in status-bar, based on `stats_format
 
 So you can customise it as you like, by adding to `Settings - User`, e.g.
 
-```json
+```
 {
     "stats_format": "☐$o ✔$d ✘$c",
 
@@ -235,7 +235,7 @@ So you can customise it as you like, by adding to `Settings - User`, e.g.
 Bring up the command palette and type `Tasks: Copy Statistics`.
 
 ### Additional settings for progress bar
-```json
+```
 {
     "bar_full": "■",   // any char
     "bar_empty": "☐", // any char
@@ -248,6 +248,11 @@ Bring up the command palette and type `Tasks: Copy Statistics`.
 
 ## [Introduction to PlainTasks Screencast](https://tutsplus.com/lesson/pretty-task-management/)
 [![](http://i46.tinypic.com/9ggbd3.png)](https://tutsplus.com/lesson/pretty-task-management/)
+
+## PlainTasks for other editors
+NOTE: These are separate projects, maintained by some awesome developers other than us.
+- [Atom: Tasks plugin](https://atom.io/packages/tasks)
+- [Vim: Plaintasks.vim](https://github.com/elentok/plaintasks.vim)
 
 
 ## Contributors
