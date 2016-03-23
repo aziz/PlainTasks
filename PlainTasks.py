@@ -9,6 +9,7 @@ import itertools
 from datetime import datetime
 from datetime import timedelta
 
+platform = sublime.platform()
 ST2 = int(sublime.version()) < 3000
 
 if ST2:
@@ -16,11 +17,14 @@ if ST2:
 
 # io is not operable in ST2 on Linux, but in all other cases io is better
 # https://github.com/SublimeTextIssues/Core/issues/254
-if ST2 and sublime.platform() == 'linux':
+if ST2 and platform == 'linux':
     import codecs as io
 else:
     import io
 
+NT = platform == 'windows'
+if NT:
+    import subprocess
 
 class PlainTasksBase(sublime_plugin.TextCommand):
     def run(self, edit, **kwargs):
@@ -447,7 +451,12 @@ class PlainTasksOpenUrlCommand(sublime_plugin.TextCommand):
             # optional select URL
             self.view.sel().add(rgn)
             url = self.view.substr(rgn)
-            webbrowser.open_new_tab(url)
+            if NT and all([not ST2, ':' in url]):
+                # webbrowser uses os.startfile() under the hood, and it is not reliable in py3;
+                # thus call start command for url with scheme (eg skype:nick) and full path (eg c:\b)
+                subprocess.Popen(['start', url], shell=True)
+            else:
+                webbrowser.open_new_tab(url)
         else:
             self.search_bare_weblink_and_open(start, end)
 
