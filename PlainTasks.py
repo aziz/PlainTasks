@@ -431,9 +431,14 @@ class PlainTasksNewTaskDocCommand(sublime_plugin.WindowCommand):
         view.set_syntax_file('Packages/PlainTasks/PlainTasks.tmLanguage')
 
     def set_proper_scheme(self, view):
+        if view.id() != sublime.active_window().active_view().id():
+            return
+        pts = sublime.load_settings('PlainTasks.sublime-settings')
+        if view.settings().get('color_scheme') == pts.get('color_scheme'):
+            return
         # Since we cannot create file with syntax, there is moment when view has no settings,
         # but it is activated, so some plugins (e.g. Color Highlighter) set wrong color scheme
-        view.settings().set('color_scheme', sublime.load_settings('PlainTasks.sublime-settings').get('color_scheme'))
+        view.settings().set('color_scheme', pts.get('color_scheme'))
 
 
 class PlainTasksOpenUrlCommand(sublime_plugin.TextCommand):
