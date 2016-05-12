@@ -1,0 +1,99 @@
+%YAML 1.2
+---
+name: Tasks
+file_extensions:
+  - todo
+  - tasks
+  - todolist.txt
+scope: text.todo
+contexts:
+  main:
+    - match: '^\s*(\w+.*?:\s*?(\@[^\s]+(\(.*?\))?\s*?)*$\n?)'
+      scope: keyword.control.header.todo
+    - match: '^\s*(?:(\+|✓|✔|☑|√|\[x\])(\s+(?:[^\@\n]|(?<!\s)\@|\@(?=\s))*)([^\n]*))|^\s*(?:(-)(\s+(?:[^\@]|(?<!\s)\@|\@(?=\s))*)(.*\@done(?=\s|\(|$)[^\n]*))'
+      scope: meta.item.todo.completed
+      captures:
+        1: punctuation.definition.bullet.completed.todo
+        2: comment.line.completed.todo
+        3: meta.tag.todo.completed
+        4: punctuation.definition.bullet.completed.todo
+        5: comment.line.completed.todo
+        6: meta.tag.todo.completed
+    - match: '^\s*(?:(✘|x|\[-\])(\s+(?:[^\@\n]|(?<!\s)\@|\@(?=\s))*)(.*))|^\s*(?:(-)(\s+(?:[^\@]|(?<!\s)\@|\@(?=\s))*)(.*\@cancelled(?=\s|\(|$)[^\n]*))'
+      scope: meta.item.todo.cancelled
+      captures:
+        1: punctuation.definition.bullet.cancelled.todo
+        2: text.cancelled.todo
+        3: meta.tag.todo.cancelled
+        4: punctuation.definition.bullet.cancelled.todo
+        5: text.cancelled.todo
+        6: meta.tag.todo.cancelled
+    - match: '^\s*(?!-|\+|✓|✔|√|❍|❑|■|□|☐|▪|▫|–|—|≡|→|›|\[[\sx-]\]|＿|✘|(x\s+))(?=\S)'
+      push:
+        - meta_scope: notes.todo
+        - match: $\n?
+          pop: true
+        - include: italic
+        - include: bold
+        - include: url
+    - match: '^\s*(-|❍|❑|■|□|☐|▪|▫|–|—|≡|→|›|\[\s\])(?=(\s+(?:[^\@\n]|(?<![ \t])\@)*)(?!([^\n]*)?(\@done|\@cancelled)[\s\(]))'
+      captures:
+        1: punctuation.definition.bullet.pending.todo
+      push:
+        - meta_scope: meta.item.todo.pending
+        - match: $
+          captures:
+            1: punctuation.definition.bullet.pending.todo
+          pop: true
+        - include: italic
+        - include: bold
+        - include: url
+        - include: tag
+        - include: today
+        - include: low
+        - include: high
+        - include: critical
+    - match: ^＿+$
+      scope: meta.punctuation.archive.todo
+    - match: '^\s*---.{3,5}---+$'
+      scope: meta.punctuation.separator.todo
+  bold:
+    - match: '(?<=\s|^)(\*\*|__)(?=\S)(?=(?!(?<=\S)\1)[^\n]+(?<=\S)\1)(?=[^\n]+(?<=\S)(\1)((?![\w\d\n])|(?=\s|$)))'
+      captures:
+        1: punctuation.definition.bold
+      push:
+        - meta_scope: todo.bold
+        - match: '(?<=\S)(\1)((?![\w\d\n])|(?=\s|$))'
+          captures:
+            1: punctuation.definition.bold
+          pop: true
+  critical:
+    - match: (?<=\s)\@critical|✭critical
+      scope: string.other.tag.todo.critical
+  high:
+    - match: (?<=\s)\@high|✭high
+      scope: string.other.tag.todo.high
+  italic:
+    - match: '(?<=\s|^)(\*|_)(?=\S)(?=(\1\1|(?!(?<=\S)\1).)++(?<=\S)\1)(?=[^\n]+(?<=\S)(\1)(?!\1|[\w\d]))'
+      captures:
+        1: punctuation.definition.italic
+      push:
+        - meta_scope: todo.italic
+        - match: '(?<=\S)(\1)(?!\1|[\w\d])'
+          captures:
+            1: punctuation.definition.italic
+          pop: true
+  low:
+    - match: (?<=\s)\@low|✭low
+      scope: string.other.tag.todo.low
+  tag:
+    - match: '(?<=\s)\@(?!(high|today|critical|low|completed|done)[\s\(])[\w\d\.\(\)\-!? :\+]+[ \t]*'
+      scope: meta.tag.todo
+  today:
+    - match: (?<=\s)\@today|✭ᴛᴏᴅᴀʏ
+      scope: string.other.tag.todo.today
+  url:
+    - match: '(?<!\S)(<)\w+?(?!\s)(\.|:)(?!\s)[^\n]+?(>)'
+      scope: todo.url
+      captures:
+        1: punctuation.definition.url
