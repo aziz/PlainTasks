@@ -775,6 +775,14 @@ class PlainTasksReplaceShortDate(PlainTasksBase):
             return date
 
 
+class PlainTasksRemoveBold(sublime_plugin.TextCommand):
+    def run(self, edit):
+        for s in reversed(list(self.view.sel())):
+            a, b = s.begin(), s.end()
+            for r in sublime.Region(b + 2, b), sublime.Region(a - 2, a):
+                self.view.erase(edit, r)
+
+
 class PlainTasksStatsStatus(sublime_plugin.EventListener):
     def on_activated(self, view):
         if not view.score_selector(0, "text.todo") > 0:
