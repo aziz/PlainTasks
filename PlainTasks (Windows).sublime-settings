@@ -9,6 +9,8 @@
   "archive_name": "Archive:", // make sure it is the unique project name within your todo files
   "new_on_top": true, // how to sort archived tasks
 
+  "bar_empty": "☐", // empty cell for progress-bar in status-bar, for more details see Custom Statistics in README
+
   "color_scheme": "Packages/PlainTasks/tasks.hidden-tmTheme",
     // other bundled schemes:
     //   Packages/PlainTasks/tasks-dark.hidden-tmTheme
