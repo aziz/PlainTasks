@@ -828,7 +828,7 @@ class PlainTasksStatsStatus(sublime_plugin.EventListener):
         factor   = int(round(percent/10)) if percent<90 else int(percent/10)
 
         barfull  = view.settings().get('bar_full', u'■')
-        barempty = view.settings().get('bar_empty', u'☐')
+        barempty = view.settings().get('bar_empty', u'□')
         progress = '%s%s' % (barfull*factor, barempty*(10-factor)) if factor else ''
 
         tasks_dates = []
