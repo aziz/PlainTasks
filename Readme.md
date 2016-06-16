@@ -246,8 +246,8 @@ Bring up the command palette and type `Tasks: Copy Statistics`.
 }
 ```
 
-## [Introduction to PlainTasks Screencast](https://tutsplus.com/lesson/pretty-task-management/)
-[![](http://i46.tinypic.com/9ggbd3.png)](https://tutsplus.com/lesson/pretty-task-management/)
+## Introduction to PlainTasks Screencast
+[![](http://i46.tinypic.com/9ggbd3.png)](https://www.youtube.com/watch?v=LsfGhjRVJwk)
 
 ## PlainTasks for other editors
 NOTE: These are separate projects, maintained by some awesome developers other than us.
