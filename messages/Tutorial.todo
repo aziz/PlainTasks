@@ -18,6 +18,7 @@ Tasks:
   Done:
    ☐ ⌘+d (ctrl+d on Windows) marks a task as done
    ☐ Pressing ⌘+d (ctrl+d on Windows) again puts it back in pending mode
+   ☐ Clicking bullet with left mouse button toggles done and pending modes
    ☐ ctrl+c (alt+c on Windows) marks the task as cancelled
   Tagging:
    ☐ You can add tags using @ sign, like this @tag

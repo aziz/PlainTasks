@@ -20,7 +20,7 @@ For more portability you can use `todolist.txt` either as a filename or as suffi
 
 ☐ <kbd>⌘ + enter</kbd> or <kbd>⌘ + i</kbd>: new task
 
-☐ <kbd>⌘ + d</kbd>: toggle task as completed.
+☐ <kbd>⌘ + d</kbd> or click bullet: toggle task as completed.
 
 ☐ <kbd>ctrl + c</kbd>: toggle task as cancelled on Mac. <kbd>alt + c</kbd> on Windows/Linux.
 
