@@ -958,9 +958,10 @@ class PlainTasksArchiveOrgCommand(PlainTasksBase):
 
 def pt_mouse(view, args):
     if view.score_selector(0, "text.todo") > 0:
-        cursor = view.sel()[0].a
+        sel = view.sel()[0]
+        cursor = sel.a
         # cursor = user click on left side of bullet, -1 = right side
-        if any('bullet' in view.scope_name(r) for r in [cursor, cursor - 1]):
+        if sel.empty() and any('bullet' in view.scope_name(r) for r in [cursor, cursor - 1]):
             view.run_command('plain_tasks_complete')
     else:
         system_command = args["command"] if "command" in args else None
