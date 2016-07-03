@@ -177,9 +177,19 @@ Here is a list of PlainTasks’ specific settings:
 | **tasks_bullet_space** | absent (whitespace or tab) | String to place after bullet, might be any character(s) |
 
 
+### Changing color scheme
+If you don't like colors used in bundled schemes just copy any `.hidden-tmTheme` from PlainTasks to 
+your User directory, change colors and paste the code below in your user settings file:
+
+``` json
+{ "color_scheme": "Path to your custom color scheme file. e.g. Packages/User/custom_plaintasks.hidden-tmTheme" }
+```
+
+**N.B.**, sometimes you have to restart Sublime Text to apply changes made in tmTheme file.
 
 ### Taskpaper Compatibility
-Go to `Preferences → Package Settings → PlainTasks` and open `Settings - User`, then
+If you need to keep your files compatible with Taskpaper, go to 
+`Preferences → Package Settings → PlainTasks` and open `Settings - User`, then
 add these settings to the json file:
 
 ```json
