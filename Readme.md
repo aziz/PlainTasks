@@ -263,6 +263,7 @@ Bring up the command palette and type `Tasks: Copy Statistics`.
 NOTE: These are separate projects, maintained by some awesome developers other than us.
 - [Atom: Tasks plugin](https://atom.io/packages/tasks)
 - [Vim: Plaintasks.vim](https://github.com/elentok/plaintasks.vim)
+- [Visual Studio Code: To Do Tasks](https://github.com/sandy081/vscode-todotasks)
 
 
 ## Contributors
