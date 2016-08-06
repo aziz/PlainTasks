@@ -1,4 +1,6 @@
-## [PlainTasks](https://github.com/aziz/PlainTasks)
+## [PlainTasks](https://github.com/aziz/PlainTasks) 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/8d42f3e49d104ab8bf663392661b183b)](https://www.codacy.com/app/allen-bargi/PlainTasks?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=aziz/PlainTasks&amp;utm_campaign=Badge_Grade)
+
 An opinionated todo-list plugin for Sublime Text (2 & 3) editor
 ![](http://cl.ly/image/1q100Q212o2Q/ss.png)
 
