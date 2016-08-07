@@ -789,6 +789,9 @@ class PlainTasksStatsStatus(sublime_plugin.EventListener):
             return
         self.set_stats(view)
 
+    def on_post_save(self, view):
+        self.on_activated(view)
+
     @staticmethod
     def set_stats(view):
         view.set_status('PlainTasks', PlainTasksStatsStatus.get_stats(view))
