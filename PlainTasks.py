@@ -117,6 +117,7 @@ class PlainTasksNewCommand(PlainTasksBase):
             self.view.sel().add(sel)
 
         PlainTasksStatsStatus.set_stats(self.view)
+        self.view.run_command('plain_tasks_toggle_highlight_past_due')
 
 
 class PlainTasksNewWithDateCommand(PlainTasksBase):
@@ -199,6 +200,7 @@ class PlainTasksCompleteCommand(PlainTasksBase):
             self.view.sel().add(new_pt)
 
         PlainTasksStatsStatus.set_stats(self.view)
+        self.view.run_command('plain_tasks_toggle_highlight_past_due')
 
     @staticmethod
     def calc_end_start_time(self, edit, line, started_matches, toggle_matches, done_line_end, eol, tag='lasted'):
@@ -297,6 +299,7 @@ class PlainTasksCancelCommand(PlainTasksBase):
             self.view.sel().add(new_pt)
 
         PlainTasksStatsStatus.set_stats(self.view)
+        self.view.run_command('plain_tasks_toggle_highlight_past_due')
 
 
 class PlainTasksArchiveCommand(PlainTasksBase):
