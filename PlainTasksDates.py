@@ -1,19 +1,23 @@
 # coding: utf-8
 import sublime, sublime_plugin
-from datetime import datetime, timedelta
+from datetime import datetime
 
 ST3 = int(sublime.version()) >= 3000
 if ST3:
+    from .PlainTasks import get_all_projects_and_separators
     MARK_SOON = sublime.DRAW_NO_FILL
     MARK_INVALID = sublime.DRAW_NO_FILL | sublime.DRAW_NO_OUTLINE | sublime.DRAW_SQUIGGLY_UNDERLINE
 else:
+    from PlainTasks import get_all_projects_and_separators
     MARK_SOON = MARK_INVALID = 0
 
 
-class PlainTasksToggleHighlightPastDue(sublime_plugin.TextCommand):
+class PlainTasksEnabled(sublime_plugin.TextCommand):
     def is_enabled(self):
         return self.view.score_selector(0, "text.todo") > 0
 
+
+class PlainTasksToggleHighlightPastDue(PlainTasksEnabled):
     def run(self, edit):
         highlight_on = self.view.settings().get('highlight_past_due', True)
         self.view.erase_regions('past_due')
@@ -68,3 +72,58 @@ class PlainTasksHLDue(sublime_plugin.EventListener):
 
     def on_post_save(self, view):
         self.on_activated(view)
+
+    def on_load(self, view):
+        self.on_activated(view)
+
+
+class PlainTasksFoldToDueTags(PlainTasksEnabled):
+    def run(self, edit):
+        if not self.view.settings().get('highlight_past_due', True):
+            return sublime.message_dialog('highlight_past_due setting must be true')
+        self.view.run_command('plain_tasks_toggle_highlight_past_due')
+        dues = sorted(self.view.line(r) for r in (self.view.get_regions('past_due') + self.view.get_regions('due_soon')))
+        if not dues:
+            return sublime.message_dialog('No overdue tasks.\nCongrats!')
+
+        dues = self.add_projects_and_notes(dues)
+
+        self.view.unfold(sublime.Region(0, self.view.size()))
+        for i, d in enumerate(dues):
+            if not i:  # beginning of document
+                self.folding(0, d.a - 1)
+            else:  # all regions within
+                self.folding(dues[i-1].b + 1, d.a - 1)
+        if d:  # ending of document
+            self.folding(d.b + 1, self.view.size())
+
+    def folding(self, start, end):
+        r = sublime.Region(start, end)
+        if r.a < r.b:
+            self.view.fold(r)
+
+    def add_projects_and_notes(self, dues):
+        '''Context is important, if due task has note and belongs to projects, make em visible'''
+        def add_note(region):
+            # refactor: method in ArchiveCommand
+            next_line_begins = region.end() + 1
+            while self.view.scope_name(next_line_begins) == 'text.todo notes.todo ':
+                note = self.view.line(next_line_begins)
+                if note not in dues:
+                    dues.append(note)
+                next_line_begins = self.view.line(next_line_begins).end() + 1
+
+        projects = [r for r in get_all_projects_and_separators(self.view) if r.a < dues[~0].a]
+        for d in reversed(dues):
+            add_note(d)
+            for p in reversed(projects):
+                # refactor: different implementation in ArchiveCommand
+                project_block = self.view.indented_region(p.end() + 1)
+                due_block     = self.view.indented_region(d.begin())
+                if all((p not in dues, project_block.contains(due_block))):
+                    dues.append(p)
+                    add_note(p)
+                if self.view.indented_region(p.begin()).empty():
+                    break
+        dues.sort()
+        return dues

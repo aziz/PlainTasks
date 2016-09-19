@@ -26,6 +26,16 @@ NT = platform == 'windows'
 if NT:
     import subprocess
 
+
+def get_all_projects_and_separators(view):
+    # because tmLanguage need \n to make background full width of window
+    # multiline headers are possible, thus we have to split em to be sure that
+    # one header == one line
+    projects = itertools.chain(*[view.lines(r) for r in view.find_by_selector('keyword.control.header.todo')])
+    return sorted(list(projects) +
+                  view.find_by_selector('meta.punctuation.separator.todo'))
+
+
 class PlainTasksBase(sublime_plugin.TextCommand):
     def run(self, edit, **kwargs):
         settings = self.view.settings()
@@ -325,12 +335,7 @@ class PlainTasksArchiveCommand(PlainTasksBase):
                 self.view.insert(edit, self.view.size(), create_archive)
                 line = self.view.size()
 
-            # because tmLanguage need \n to make background full width of window
-            # multiline headers are possible, thus we have to split em to be sure that
-            # one header == one line
-            projects = itertools.chain(*[self.view.lines(r) for r in self.view.find_by_selector('keyword.control.header.todo')])
-            projects = sorted(list(projects) +
-                              self.view.find_by_selector('meta.punctuation.separator.todo'))
+            projects = get_all_projects_and_separators(self.view)
 
             # adding tasks to archive section
             for task in all_tasks:

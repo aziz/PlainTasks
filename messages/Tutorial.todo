@@ -98,6 +98,11 @@ Time Tracking:
         - @due(+:555)  = @due( +.555)  →  555 minutes since current date
         - @due(+2 12:) = @due( +2 12.) →  2 days and 12 hours since current date
 
+    You probably notice that due tags looks unusual, past (overdue or expired) and those due soon
+    (in next 24 hours by default) are dynamically highlighted depending on system time;
+    You can search 'Tasks: Fold to due tasks' in command palette to fold/hide everything except
+    pending tasks with past or soon due tag, their notes, and projects or separators they belong to.
+
 ☐ ctrl+space (alt+/ on Linux) shows list of those tags
 
 FileType Support:
@@ -112,7 +117,7 @@ You can customize:
  ☐ New and done bullets
  ☐ List of file-types that should be considered todo lists
  ☐ Key-bindings if you don’t like the default ones
- ☐ Date formating for done tasks
+ ☐ Date formatting for done tasks
  ☐ Colour scheme
  ☐ Statistics appearance
  ☐ Icon for file-type
