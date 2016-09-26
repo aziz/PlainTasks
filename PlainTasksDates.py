@@ -1,6 +1,8 @@
 # coding: utf-8
 import sublime, sublime_plugin
+import json
 from datetime import datetime
+from datetime import timedelta
 
 ST3 = int(sublime.version()) >= 3000
 if ST3:
@@ -10,6 +12,19 @@ if ST3:
 else:
     from PlainTasks import get_all_projects_and_separators
     MARK_SOON = MARK_INVALID = 0
+
+
+def format_delta(view, delta):
+    if view.settings().get('decimal_minutes', False):
+        days = delta.days
+        delta = u'%s%s%s%.2f' % (days or '', ' day, ' if days == 1 else '', ' days, ' if days > 1 else '', delta.seconds/3600.0)
+    else:
+        delta = str(delta)
+    if delta[~6:] == '0:00:00':  # strip meaningless time
+        delta = delta[:~6]
+    elif delta[~2:] == ':00':  # strip meaningless seconds
+        delta = delta[:~2]
+    return delta
 
 
 class PlainTasksEnabled(sublime_plugin.TextCommand):
@@ -127,3 +142,52 @@ class PlainTasksFoldToDueTags(PlainTasksEnabled):
                     break
         dues.sort()
         return dues
+
+
+class CalculateTotalTimeForProject(PlainTasksEnabled):
+    def run(self, edit, start):
+        line = self.view.line(int(start))
+        total, eol = self.calc_total_time_for_project(line)
+        if total:
+            self.view.insert(edit, eol, ' @total(%s)' % format_delta(self.view, total).rstrip(', '))
+
+    def calc_total_time_for_project(self, line):
+        pattern = r'(?<=\s)@(lasted|wasted|total)\([ \t]*(?:(\d+)[ \t]*days?,?)?[ \t]*((?:(\d+)\:(\d+)\:?(\d+)?)|(?:(\d+)\.(\d+)))?[ \t]*\)'
+        format = '{"days": "\\2", "hours": "\\4", "minutes": "\\5", "seconds": "\\6", "dhours": "\\7", "dminutes": "\\8"}'
+        lasted_strings = []
+        lasted_regions = self.view.find_all(pattern, 0, format, lasted_strings)
+        if not lasted_regions:
+            return 0, 0
+
+        eol = line.end()
+        project_block = self.view.indented_region(eol + 1)
+        total = timedelta()
+        for i, region in enumerate(lasted_regions):
+            if not all((region > line, region.b <= project_block.b)):
+                continue
+            t = json.loads(lasted_strings[i].replace('""', '"0"'))
+            total += timedelta(days=int(t['days']),
+                               hours=int(t['hours']) or int(t['dhours']),
+                               minutes=int(t['minutes']) or int(t['dminutes'])*60,
+                               seconds=int(t['seconds']))
+        return total, eol
+
+
+class CalculateTimeForTask(PlainTasksEnabled):
+    def run(self, edit, started_matches, toggle_matches, done_line_end, eol, tag='lasted'):
+        if not started_matches:
+            return
+
+        date_format = self.view.settings().get('date_format', '(%y-%m-%d %H:%M)')
+        start = datetime.strptime(started_matches[0], date_format)
+        end = datetime.strptime(done_line_end.replace('@done', '').replace('@cancelled', '').strip(), date_format)
+
+        toggle_times = [datetime.strptime(toggle, date_format) for toggle in toggle_matches]
+        all_times = [start] + toggle_times + [end]
+        pairs = zip(all_times[::2], all_times[1::2])
+        deltas = [pair[1] - pair[0] for pair in pairs]
+
+        delta = format_delta(self.view, sum(deltas, timedelta()))
+
+        tag = ' @%s(%s)' % (tag, delta.rstrip(', ') if delta else ('a bit' if '%H' in date_format else 'less than day'))
+        self.view.insert(edit, int(eol), tag)
