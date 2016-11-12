@@ -447,7 +447,8 @@ class PlainTasksNewTaskDocCommand(sublime_plugin.WindowCommand):
         if view.id() != sublime.active_window().active_view().id():
             return
         pts = sublime.load_settings('PlainTasks.sublime-settings')
-        if view.settings().get('color_scheme') == pts.get('color_scheme'):
+        new_scheme = pts.get('color_scheme')
+        if new_scheme is None or new_scheme == view.settings().get('color_scheme'):
             return
         # Since we cannot create file with syntax, there is moment when view has no settings,
         # but it is activated, so some plugins (e.g. Color Highlighter) set wrong color scheme
