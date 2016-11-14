@@ -14,6 +14,97 @@ else:
     from APlainTasksCommon import PlainTasksBase, get_all_projects_and_separators
     MARK_SOON = MARK_INVALID = 0
 
+try:  # unavailable dependencies shall not break basic functionality
+    from dateutil import parser as dateutil_parser
+except:
+    dateutil_parser = None
+
+
+def _convert_date(matchstr, now, date_format):
+    match_obj = re.search(r'''(?mxu)
+        (?:\s*
+         (?P<yearORmonthORday>\d*(?!:))
+         (?P<sep>[-\.])?
+         (?P<monthORday>\d*)
+         (?P=sep)?
+         (?P<day>\d*)
+         (?! \d*:)(?# e.g. '23:' == hour, but '1 23:' == day=1, hour=23)
+        )?
+        \s*
+        (?:
+         (?P<hour>\d*)
+         :
+         (?P<minute>\d*)
+        )?''', matchstr)
+    year  = now.year
+    month = now.month
+    day   = int(match_obj.group('day') or 0)
+    # print(day)
+    if day:
+        year  = int(match_obj.group('yearORmonthORday'))
+        month = int(match_obj.group('monthORday'))
+    else:
+        day = int(match_obj.group('monthORday') or 0)
+        # print(day)
+        if day:
+            month = int(match_obj.group('yearORmonthORday'))
+            if month < now.month:
+                year += 1
+        else:
+            day = int(match_obj.group('yearORmonthORday') or 0)
+            # print(day)
+            if 0 < day <= now.day:
+                # expect next month
+                month += 1
+                if month == 13:
+                    year += 1
+                    month = 1
+            elif not day:  # @due(0) == today
+                day = now.day
+            # else would be day>now, i.e. future day in current month
+    hour   = match_obj.group('hour')   or now.hour
+    minute = match_obj.group('minute') or now.minute
+    hour, minute = int(hour), int(minute)
+    if year < 100:
+        year += 2000
+
+    # print(year, month, day, hour, minute)
+    return year, month, day, hour, minute
+
+
+def convert_date(matchstr, now, date_format):
+    year = month = day = hour = minute = None
+    try:
+        year, month, day, hour, minute = _convert_date(matchstr, now, date_format)
+        date = datetime(year, month, day, hour, minute, 0).strftime(date_format)
+    except ValueError as e:
+        return None, (e, year, month, day, hour, minute)
+    else:
+        return date, None
+
+
+def parse_date(date_string, date_format='(%y-%m-%d %H:%M)', yearfirst=True, default=None):
+    '''
+    Attempt to convert arbitrary string to datetime object
+    date_string
+        Unicode
+    date_format
+        Unicode
+    yearfirst
+        boolin
+    default
+        datetime object (now)
+    '''
+    bare_date_string = date_string.strip('( )')
+    expanded_date, _ = convert_date(bare_date_string, default, date_format)
+    if dateutil_parser:
+        date = dateutil_parser.parse(expanded_date.strip('( )') or bare_date_string,
+                                     yearfirst=yearfirst,
+                                     default=default)
+    else:
+        date = datetime.strptime(expanded_date or date_string, date_format)
+    return date
+
 
 def format_delta(view, delta):
     if view.settings().get('decimal_minutes', False):
@@ -42,24 +133,38 @@ class PlainTasksToggleHighlightPastDue(PlainTasksEnabled):
         if not highlight_on:
             return
 
-        past_due, due_soon, misformatted = [], [], []
-
-        date_format = self.view.settings().get('date_format', '(%y-%m-%d %H:%M)')
         pattern = r'@due(\([^@\n]*\))'
         dates_strings = []
         dates_regions = self.view.find_all(pattern, 0, '\\1', dates_strings)
         if not dates_regions:
             return
 
+        past_due, due_soon, misformatted = self.group_due_tags(dates_strings, dates_regions)
+
+        scope_past_due = self.view.settings().get('scope_past_due', 'string.other.tag.todo.critical')
+        scope_due_soon = self.view.settings().get('scope_due_soon', 'string.other.tag.todo.high')
+        scope_misformatted = self.view.settings().get('scope_misformatted', 'string.other.tag.todo.low')
+        self.view.add_regions('past_due', past_due, scope_past_due, 'circle')
+        self.view.add_regions('due_soon', due_soon, scope_due_soon, 'dot', MARK_SOON)
+        self.view.add_regions('misformatted', misformatted, scope_misformatted, '', MARK_INVALID)
+
+    def group_due_tags(self, dates_strings, dates_regions):
+        past_due, due_soon, misformatted = [], [], []
+        date_format = self.view.settings().get('date_format', '(%y-%m-%d %H:%M)')
+        yearfirst = date_format.startswith(('(%y', '(%Y'))
         now = datetime.now()
+        default = now - timedelta(seconds=1)  # for short dates w/o time
         due_soon_threshold = self.view.settings().get('highlight_due_soon', 24) * 60 * 60
 
         for i, region in enumerate(dates_regions):
             if any(s in self.view.scope_name(region.a) for s in ('completed', 'cancelled')):
                 continue
             try:
-                date = datetime.strptime(dates_strings[i], date_format)
-            except:
+
+                date = parse_date(dates_strings[i], date_format=date_format, yearfirst=yearfirst, default=default)
+                # print(date, date_format, yearfirst)
+            except Exception as e:
+                # print(e)
                 misformatted.append(region)
             else:
                 if now >= date:
@@ -71,13 +176,7 @@ class PlainTasksToggleHighlightPastDue(PlainTasksEnabled):
                         time_left = (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10.0**6
                         if time_left < due_soon_threshold:
                             due_soon.append(region)
-
-        scope_past_due = self.view.settings().get('scope_past_due', 'string.other.tag.todo.critical')
-        scope_due_soon = self.view.settings().get('scope_due_soon', 'string.other.tag.todo.high')
-        scope_misformatted = self.view.settings().get('scope_misformatted', 'string.other.tag.todo.low')
-        self.view.add_regions('past_due', past_due, scope_past_due, 'circle')
-        self.view.add_regions('due_soon', due_soon, scope_due_soon, 'dot', MARK_SOON)
-        self.view.add_regions('misformatted', misformatted, scope_misformatted, '', MARK_INVALID)
+        return past_due, due_soon, misformatted
 
 
 class PlainTasksHLDue(sublime_plugin.EventListener):
@@ -216,11 +315,13 @@ class PlainTasksReplaceShortDate(PlainTasksBase):
         # print(matchstr)
 
         if '+' in matchstr:
-            date = self.increase_date(matchstr, now)
+            date, error = self.increase_date(matchstr, now)
         else:
-            date = self.convert_date(matchstr, now)
+            date, error = convert_date(matchstr, now, self.date_format)
 
         if not date:
+            sublime.error_message('PlainTasks:\n\n'
+                '{0}:\n year:\t{1}\n month:\t{2}\n day:\t{3}\n HH:\t{4}\n MM:\t{5}\n'.format(*error))
             return
 
         self.view.replace(edit, self.rgn, date)
@@ -264,62 +365,4 @@ class PlainTasksReplaceShortDate(PlainTasksBase):
             #   @due(+w) == @due(+1w)
             number = 1
         delta = now + timedelta(days=(number*7 if weeks else number), minutes=minute, hours=hour)
-        return delta.strftime(self.date_format)
-
-    def convert_date(self, matchstr, now):
-        match_obj = re.search(r'''(?mxu)
-            (?:\s*
-             (?P<yearORmonthORday>\d*(?!:))
-             (?P<sep>[-\.])?
-             (?P<monthORday>\d*)
-             (?P=sep)?
-             (?P<day>\d*)
-             (?! \d*:)(?# e.g. '23:' == hour, but '1 23:' == day=1, hour=23)
-            )?
-            \s*
-            (?:
-             (?P<hour>\d*)
-             :
-             (?P<minute>\d*)
-            )?''', matchstr)
-        year  = now.year
-        month = now.month
-        day   = int(match_obj.group('day') or 0)
-        # print(day)
-        if day:
-            year  = int(match_obj.group('yearORmonthORday'))
-            month = int(match_obj.group('monthORday'))
-        else:
-            day = int(match_obj.group('monthORday') or 0)
-            # print(day)
-            if day:
-                month = int(match_obj.group('yearORmonthORday'))
-                if month < now.month:
-                    year += 1
-            else:
-                day = int(match_obj.group('yearORmonthORday') or 0)
-                # print(day)
-                if 0 < day <= now.day:
-                    # expect next month
-                    month += 1
-                    if month == 13:
-                        year += 1
-                        month = 1
-                elif not day:  # @due(0) == today
-                    day = now.day
-                # else would be day>now, i.e. future day in current month
-        hour   = match_obj.group('hour')   or now.hour
-        minute = match_obj.group('minute') or now.minute
-        hour, minute = int(hour), int(minute)
-        if year < 100:
-            year += 2000
-
-        # print(year, month, day, hour, minute)
-        try:
-            date = datetime(year, month, day, hour, minute, 0).strftime(self.date_format)
-        except ValueError as e:
-            return sublime.error_message('PlainTasks:\n\n'
-                '%s:\n year:\t%d\n month:\t%d\n day:\t%d\n HH:\t%d\n MM:\t%d\n' %
-                (e, year, month, day, hour, minute))
-        else:
-            return date
+        return delta.strftime(self.date_format), None
