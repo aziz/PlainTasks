@@ -7,11 +7,11 @@ from datetime import timedelta
 
 ST3 = int(sublime.version()) >= 3000
 if ST3:
-    from .PlainTasks import PlainTasksBase, get_all_projects_and_separators
+    from .APlainTasksCommon import PlainTasksBase, get_all_projects_and_separators
     MARK_SOON = sublime.DRAW_NO_FILL
     MARK_INVALID = sublime.DRAW_NO_FILL | sublime.DRAW_NO_OUTLINE | sublime.DRAW_SQUIGGLY_UNDERLINE
 else:
-    from PlainTasks import PlainTasksBase, get_all_projects_and_separators
+    from APlainTasksCommon import PlainTasksBase, get_all_projects_and_separators
     MARK_SOON = MARK_INVALID = 0
 
 
@@ -145,7 +145,7 @@ class PlainTasksFoldToDueTags(PlainTasksEnabled):
         return dues
 
 
-class CalculateTotalTimeForProject(PlainTasksEnabled):
+class PlainTasksCalculateTotalTimeForProject(PlainTasksEnabled):
     def run(self, edit, start):
         line = self.view.line(int(start))
         total, eol = self.calc_total_time_for_project(line)
@@ -174,7 +174,7 @@ class CalculateTotalTimeForProject(PlainTasksEnabled):
         return total, eol
 
 
-class CalculateTimeForTask(PlainTasksEnabled):
+class PlainTasksCalculateTimeForTask(PlainTasksEnabled):
     def run(self, edit, started_matches, toggle_matches, done_line_end, eol, tag='lasted'):
         if not started_matches:
             return
@@ -219,6 +219,9 @@ class PlainTasksReplaceShortDate(PlainTasksBase):
             date = self.increase_date(matchstr, now)
         else:
             date = self.convert_date(matchstr, now)
+
+        if not date:
+            return
 
         self.view.replace(edit, self.rgn, date)
         offset = start + len(date) + 2
