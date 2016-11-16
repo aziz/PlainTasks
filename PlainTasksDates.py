@@ -13,6 +13,7 @@ if ST3:
 else:
     from APlainTasksCommon import PlainTasksBase, get_all_projects_and_separators
     MARK_SOON = MARK_INVALID = 0
+    sublime_plugin.ViewEventListener = object
 
 try:  # unavailable dependencies shall not break basic functionality
     from dateutil import parser as dateutil_parser
@@ -20,7 +21,7 @@ except:
     dateutil_parser = None
 
 
-def _convert_date(matchstr, now, date_format):
+def _convert_date(matchstr, now):
     match_obj = re.search(r'''(?mxu)
         (?:\s*
          (?P<yearORmonthORday>\d*(?!:))
@@ -72,15 +73,73 @@ def _convert_date(matchstr, now, date_format):
     return year, month, day, hour, minute
 
 
-def convert_date(matchstr, now, date_format):
+def convert_date(matchstr, now):
     year = month = day = hour = minute = None
     try:
-        year, month, day, hour, minute = _convert_date(matchstr, now, date_format)
-        date = datetime(year, month, day, hour, minute, 0).strftime(date_format)
+        year, month, day, hour, minute = _convert_date(matchstr, now)
+        date = datetime(year, month, day, hour, minute, 0)
     except ValueError as e:
         return None, (e, year, month, day, hour, minute)
     else:
         return date, None
+
+
+def increase_date(view, region, text, now, date_format):
+    # relative from date of creation if any
+    if '++' in text:
+        line_content = view.substr(view.line(region))
+        created = re.search(r'(?mxu)@created\(([\d\w,\.:\-\/ @]*)\)', line_content)
+        if created:
+            try:
+                now = datetime.strptime(created.group(1), date_format)
+            except ValueError as e:
+                return sublime.error_message('PlainTasks:\n\n FAILED date convertion: %s' % e)
+
+    match_obj = re.search(r'''(?mxu)
+        \s*\+\+?\s*
+        (?:
+         (?P<number>\d*(?![:.]))\s*
+         (?P<days>[Dd]?)
+         (?P<weeks>[Ww]?)
+         (?! \d*[:.])
+        )?
+        \s*
+        (?:
+         (?P<hour>\d*)
+         [:.]
+         (?P<minute>\d*)
+        )?''', text)
+    number = int(match_obj.group('number') or 0)
+    days   = match_obj.group('days')
+    weeks  = match_obj.group('weeks')
+    hour   = int(match_obj.group('hour') or 0)
+    minute = int(match_obj.group('minute') or 0)
+    if not (number or hour or minute) or (not number and (days or weeks)):
+        # set 1 if number is ommited, i.e.
+        #   @due(+) == @due(+1) == @due(+1d)
+        #   @due(+w) == @due(+1w)
+        number = 1
+    delta = now + timedelta(days=(number * 7 if weeks else number), minutes=minute, hours=hour)
+    return delta, None
+
+
+def expand_short_date(view, start, end, now, date_format):
+    date_format = date_format.strip('()')
+
+    while view.substr(start) != '(':
+        start -= 1
+    while view.substr(end) != ')':
+        end += 1
+    region = sublime.Region(start + 1, end)
+    text = view.substr(region)
+    # print(text)
+
+    if '+' in text:
+        date, error = increase_date(view, region, text, now, date_format)
+    else:
+        date, error = convert_date(text, now)
+
+    return date, error, region
 
 
 def parse_date(date_string, date_format='(%y-%m-%d %H:%M)', yearfirst=True, default=None):
@@ -96,9 +155,9 @@ def parse_date(date_string, date_format='(%y-%m-%d %H:%M)', yearfirst=True, defa
         datetime object (now)
     '''
     bare_date_string = date_string.strip('( )')
-    expanded_date, _ = convert_date(bare_date_string, default, date_format)
+    expanded_date, _ = convert_date(bare_date_string, default)
     if dateutil_parser:
-        date = dateutil_parser.parse(expanded_date.strip('( )') or bare_date_string,
+        date = dateutil_parser.parse(expanded_date.strftime(date_format).strip('( )') if expanded_date else bare_date_string,
                                      yearfirst=yearfirst,
                                      default=default)
     else:
@@ -159,9 +218,12 @@ class PlainTasksToggleHighlightPastDue(PlainTasksEnabled):
         for i, region in enumerate(dates_regions):
             if any(s in self.view.scope_name(region.a) for s in ('completed', 'cancelled')):
                 continue
+            text = dates_strings[i]
             try:
-
-                date = parse_date(dates_strings[i], date_format=date_format, yearfirst=yearfirst, default=default)
+                if '+' in text:
+                    date, _ = increase_date(self.view, region, text, default, date_format)
+                else:
+                    date = parse_date(text, date_format=date_format, yearfirst=yearfirst, default=default)
                 # print(date, date_format, yearfirst)
             except Exception as e:
                 # print(e)
@@ -301,68 +363,52 @@ class PlainTaskInsertDate(PlainTasksBase):
 
 class PlainTasksReplaceShortDate(PlainTasksBase):
     def runCommand(self, edit):
-        self.date_format = self.date_format.strip('()')
-        now = datetime.now()
-
         s = self.view.sel()[0]
-        start, end = s.a, s.b
-        while self.view.substr(start) != '(':
-            start -= 1
-        while self.view.substr(end) != ')':
-            end += 1
-        self.rgn = sublime.Region(start + 1, end)
-        matchstr = self.view.substr(self.rgn)
-        # print(matchstr)
-
-        if '+' in matchstr:
-            date, error = self.increase_date(matchstr, now)
-        else:
-            date, error = convert_date(matchstr, now, self.date_format)
+        date, error, region = expand_short_date(self.view, s.a, s.b, datetime.now(), self.date_format)
 
         if not date:
             sublime.error_message('PlainTasks:\n\n'
                 '{0}:\n year:\t{1}\n month:\t{2}\n day:\t{3}\n HH:\t{4}\n MM:\t{5}\n'.format(*error))
             return
 
-        self.view.replace(edit, self.rgn, date)
-        offset = start + len(date) + 2
+        self.view.replace(edit, region, date.strftime(date_format))
+        offset = region.a + len(date) + 1
         self.view.sel().clear()
         self.view.sel().add(sublime.Region(offset, offset))
 
-    def increase_date(self, matchstr, now):
-        # relative from date of creation if any
-        if '++' in matchstr:
-            line_content = self.view.substr(self.view.line(self.rgn))
-            created = re.search(r'(?mxu)@created\(([\d\w,\.:\-\/ @]*)\)', line_content)
-            if created:
-                try:
-                    now = datetime.strptime(created.group(1), self.date_format)
-                except ValueError as e:
-                    return sublime.error_message('PlainTasks:\n\n FAILED date convertion: %s' % e)
 
-        match_obj = re.search(r'''(?mxu)
-            \s*\+\+?\s*
-            (?:
-             (?P<number>\d*(?![:.]))\s*
-             (?P<days>[Dd]?)
-             (?P<weeks>[Ww]?)
-             (?! \d*[:.])
-            )?
-            \s*
-            (?:
-             (?P<hour>\d*)
-             [:.]
-             (?P<minute>\d*)
-            )?''', matchstr)
-        number = int(match_obj.group('number') or 0)
-        days   = match_obj.group('days')
-        weeks  = match_obj.group('weeks')
-        hour   = int(match_obj.group('hour') or 0)
-        minute = int(match_obj.group('minute') or 0)
-        if not (number or hour or minute) or (not number and (days or weeks)):
-            # set 1 if number is ommited, i.e.
-            #   @due(+) == @due(+1) == @due(+1d)
-            #   @due(+w) == @due(+1w)
-            number = 1
-        delta = now + timedelta(days=(number*7 if weeks else number), minutes=minute, hours=hour)
-        return delta.strftime(self.date_format), None
+class PlainTasksPreviewShortDate(sublime_plugin.ViewEventListener):
+    def __init__(self, view):
+        self.view = view
+        self.phantoms = sublime.PhantomSet(view, 'plain_tasks_preview_short_date')
+
+    @classmethod
+    def is_applicable(cls, settings):
+        return settings.get('syntax') == 'Packages/PlainTasks/PlainTasks.tmLanguage'
+
+    def on_selection_modified_async(self):
+        self.phantoms.update([])  # https://github.com/SublimeTextIssues/Core/issues/1497
+        s = self.view.sel()[0]
+        if not (s.empty() and 'meta.tag.todo' in self.view.scope_name(s.a)):
+            return
+
+        rgn = self.view.extract_scope(s.a)
+        text = self.view.substr(rgn)
+        match = re.match(r'@due(\([^@\n]*\))[\s$]*', text)
+        # print(s, rgn, text)
+
+        if not match:
+            return
+        # print(match.group(1))
+
+        date_format = self.view.settings().get('date_format', '(%y-%m-%d %H:%M)')
+        date, error, region = expand_short_date(self.view, s.a, s.b, datetime.now(), date_format)
+
+        if date == match.group(1).strip():
+            return
+
+        self.phantoms.update([sublime.Phantom(
+            sublime.Region(region.b),
+            date.strftime(date_format).strip('()') if date else
+            '{0}:<br> year:\t{1}<br> month:\t{2}<br> day:\t{3}<br> HH:\t{4}<br> MM:\t{5}<br>'.format(*error),
+            sublime.LAYOUT_INLINE)])
