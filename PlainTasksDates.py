@@ -123,9 +123,9 @@ def increase_date(view, region, text, now, date_format):
     delta = error = None
     amount = number * 7 if weeks else number
     try:
-        delta = now + timedelta(days=(amount), minutes=minute, hours=hour)
+        delta = now + timedelta(days=(amount), hours=hour, minutes=minute)
     except OverflowError as e:
-        error = e, amount
+        error = e, amount, hour, minute
     return delta, error
 
 
@@ -376,7 +376,7 @@ class PlainTasksReplaceShortDate(PlainTasksBase):
 
         if not date:
             sublime.error_message('PlainTasks:\n\n'
-                '{0}:\n {1} days'.format(*error) if len(error) == 2 else
+                '{0}:\n days:\t{1}\n hours:\t{2}\n minutes:\t{3}\n'.format(*error) if len(error) == 4 else
                 '{0}:\n year:\t{1}\n month:\t{2}\n day:\t{3}\n HH:\t{4}\n MM:\t{5}\n'.format(*error))
             return
 
@@ -420,6 +420,6 @@ class PlainTasksPreviewShortDate(sublime_plugin.ViewEventListener):
         self.phantoms.update([sublime.Phantom(
             sublime.Region(region.b - 1),
             date.strftime(date_format).strip('()') if date else
-            '{0}:<br> {1} days'.format(*error) if len(error) == 2 else
+            '{0}:<br> days:\t{1}<br> hours:\t{2}<br> minutes:\t{3}<br>'.format(*error) if len(error) == 4 else
             '{0}:<br> year:\t{1}<br> month:\t{2}<br> day:\t{3}<br> HH:\t{4}<br> MM:\t{5}<br>'.format(*error),
             sublime.LAYOUT_INLINE)])
