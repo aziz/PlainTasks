@@ -15,6 +15,7 @@ else:
     MARK_SOON = MARK_INVALID = 0
     sublime_plugin.ViewEventListener = object
 
+
 try:  # unavailable dependencies shall not break basic functionality
     from dateutil import parser as dateutil_parser
 except:
@@ -139,7 +140,7 @@ def expand_short_date(view, start, end, now, date_format):
     else:
         date, error = convert_date(text, now)
 
-    return date, error, region
+    return date, error, sublime.Region(start, end + 1)
 
 
 def parse_date(date_string, date_format='(%y-%m-%d %H:%M)', yearfirst=True, default=None):
@@ -161,7 +162,7 @@ def parse_date(date_string, date_format='(%y-%m-%d %H:%M)', yearfirst=True, defa
                                      yearfirst=yearfirst,
                                      default=default)
     else:
-        date = datetime.strptime(expanded_date or date_string, date_format)
+        date = expanded_date or datetime.strptime(date_string, date_format)
     return date
 
 
@@ -371,7 +372,8 @@ class PlainTasksReplaceShortDate(PlainTasksBase):
                 '{0}:\n year:\t{1}\n month:\t{2}\n day:\t{3}\n HH:\t{4}\n MM:\t{5}\n'.format(*error))
             return
 
-        self.view.replace(edit, region, date.strftime(date_format))
+        date = date.strftime(self.date_format)
+        self.view.replace(edit, region, date)
         offset = region.a + len(date) + 1
         self.view.sel().clear()
         self.view.sel().add(sublime.Region(offset, offset))
@@ -408,7 +410,7 @@ class PlainTasksPreviewShortDate(sublime_plugin.ViewEventListener):
             return
 
         self.phantoms.update([sublime.Phantom(
-            sublime.Region(region.b),
+            sublime.Region(region.b - 1),
             date.strftime(date_format).strip('()') if date else
             '{0}:<br> year:\t{1}<br> month:\t{2}<br> day:\t{3}<br> HH:\t{4}<br> MM:\t{5}<br>'.format(*error),
             sublime.LAYOUT_INLINE)])
