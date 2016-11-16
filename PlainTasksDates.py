@@ -79,7 +79,7 @@ def convert_date(matchstr, now):
     try:
         year, month, day, hour, minute = _convert_date(matchstr, now)
         date = datetime(year, month, day, hour, minute, 0)
-    except ValueError as e:
+    except (ValueError, OverflowError) as e:
         return None, (e, year, month, day, hour, minute)
     else:
         return date, None
@@ -88,13 +88,17 @@ def convert_date(matchstr, now):
 def increase_date(view, region, text, now, date_format):
     # relative from date of creation if any
     if '++' in text:
-        line_content = view.substr(view.line(region))
+        line = view.line(region)
+        line_content = view.substr(line)
         created = re.search(r'(?mxu)@created\(([\d\w,\.:\-\/ @]*)\)', line_content)
         if created:
-            try:
-                now = datetime.strptime(created.group(1), date_format)
-            except ValueError as e:
-                return sublime.error_message('PlainTasks:\n\n FAILED date convertion: %s' % e)
+            created_date, error = convert_date(created.group(1), now)
+            if error:
+                ln = (view.rowcol(line.a)[0] + 1)
+                print(u'\nPlainTasks:\nError at line %d\n\t%s\ncaused by text:\n\t"%s"\n' % (ln, error, created.group(0)))
+                sublime.status_message(u'@created date is invalid at line %d, see console for details' % ln)
+            else:
+                now = created_date
 
     match_obj = re.search(r'''(?mxu)
         \s*\+\+?\s*
@@ -124,7 +128,7 @@ def increase_date(view, region, text, now, date_format):
     amount = number * 7 if weeks else number
     try:
         delta = now + timedelta(days=(amount), hours=hour, minutes=minute)
-    except OverflowError as e:
+    except (ValueError, OverflowError) as e:
         error = e, amount, hour, minute
     return delta, error
 
@@ -382,7 +386,7 @@ class PlainTasksReplaceShortDate(PlainTasksBase):
 
         date = date.strftime(self.date_format)
         self.view.replace(edit, region, date)
-        offset = region.a + len(date) + 1
+        offset = region.a + len(date)
         self.view.sel().clear()
         self.view.sel().add(sublime.Region(offset, offset))
 
