@@ -120,8 +120,13 @@ def increase_date(view, region, text, now, date_format):
         #   @due(+) == @due(+1) == @due(+1d)
         #   @due(+w) == @due(+1w)
         number = 1
-    delta = now + timedelta(days=(number * 7 if weeks else number), minutes=minute, hours=hour)
-    return delta, None
+    delta = error = None
+    amount = number * 7 if weeks else number
+    try:
+        delta = now + timedelta(days=(amount), minutes=minute, hours=hour)
+    except OverflowError as e:
+        error = e, amount
+    return delta, error
 
 
 def expand_short_date(view, start, end, now, date_format):
@@ -156,14 +161,17 @@ def parse_date(date_string, date_format='(%y-%m-%d %H:%M)', yearfirst=True, defa
         datetime object (now)
     '''
     bare_date_string = date_string.strip('( )')
-    expanded_date, _ = convert_date(bare_date_string, default)
+    expanded_date, error = convert_date(bare_date_string, default)
     if dateutil_parser:
-        date = dateutil_parser.parse(expanded_date.strftime(date_format).strip('( )') if expanded_date else bare_date_string,
+        try:
+            date = dateutil_parser.parse(expanded_date.strftime(date_format).strip('( )') if expanded_date else bare_date_string,
                                      yearfirst=yearfirst,
                                      default=default)
+        except Exception as e:
+            error = e
     else:
-        date = expanded_date or datetime.strptime(date_string, date_format)
-    return date
+        date = expanded_date
+    return date, error
 
 
 def format_delta(view, delta):
@@ -220,14 +228,13 @@ class PlainTasksToggleHighlightPastDue(PlainTasksEnabled):
             if any(s in self.view.scope_name(region.a) for s in ('completed', 'cancelled')):
                 continue
             text = dates_strings[i]
-            try:
-                if '+' in text:
-                    date, _ = increase_date(self.view, region, text, default, date_format)
-                else:
-                    date = parse_date(text, date_format=date_format, yearfirst=yearfirst, default=default)
+            if '+' in text:
+                date, error = increase_date(self.view, region, text, default, date_format)
+            else:
+                date, error = parse_date(text, date_format=date_format, yearfirst=yearfirst, default=default)
                 # print(date, date_format, yearfirst)
-            except Exception as e:
-                # print(e)
+            if error:
+                # print(error)
                 misformatted.append(region)
             else:
                 if now >= date:
@@ -369,6 +376,7 @@ class PlainTasksReplaceShortDate(PlainTasksBase):
 
         if not date:
             sublime.error_message('PlainTasks:\n\n'
+                '{0}:\n {1} days'.format(*error) if len(error) == 2 else
                 '{0}:\n year:\t{1}\n month:\t{2}\n day:\t{3}\n HH:\t{4}\n MM:\t{5}\n'.format(*error))
             return
 
@@ -412,5 +420,6 @@ class PlainTasksPreviewShortDate(sublime_plugin.ViewEventListener):
         self.phantoms.update([sublime.Phantom(
             sublime.Region(region.b - 1),
             date.strftime(date_format).strip('()') if date else
+            '{0}:<br> {1} days'.format(*error) if len(error) == 2 else
             '{0}:<br> year:\t{1}<br> month:\t{2}<br> day:\t{3}<br> HH:\t{4}<br> MM:\t{5}<br>'.format(*error),
             sublime.LAYOUT_INLINE)])
