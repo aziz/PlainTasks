@@ -398,7 +398,7 @@ class PlainTasksPreviewShortDate(sublime_plugin.ViewEventListener):
 
     @classmethod
     def is_applicable(cls, settings):
-        return settings.get('syntax') == 'Packages/PlainTasks/PlainTasks.sublime-syntax'
+        return settings.get('syntax') in ('Packages/PlainTasks/PlainTasks.sublime-syntax', 'Packages/PlainTasks/PlainTasks.tmLanguage')
 
     def on_selection_modified_async(self):
         self.phantoms.update([])  # https://github.com/SublimeTextIssues/Core/issues/1497
@@ -416,7 +416,8 @@ class PlainTasksPreviewShortDate(sublime_plugin.ViewEventListener):
         # print(match.group(1))
 
         date_format = self.view.settings().get('date_format', '(%y-%m-%d %H:%M)')
-        date, error, region = expand_short_date(self.view, s.a, s.b, datetime.now(), date_format)
+        start = rgn.a + 5  # within parenthesis
+        date, error, region = expand_short_date(self.view, start, start, datetime.now(), date_format)
 
         if date == match.group(1).strip():
             return
