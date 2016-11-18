@@ -172,7 +172,7 @@ def parse_date(date_string, date_format='(%y-%m-%d %H:%M)', yearfirst=True, defa
                                      yearfirst=yearfirst,
                                      default=default)
         except Exception as e:
-            error = e
+            date, error = None, e
     else:
         date = expanded_date
     return date, error
@@ -398,7 +398,7 @@ class PlainTasksPreviewShortDate(sublime_plugin.ViewEventListener):
 
     @classmethod
     def is_applicable(cls, settings):
-        return settings.get('syntax') == 'Packages/PlainTasks/PlainTasks.tmLanguage'
+        return settings.get('syntax') == 'Packages/PlainTasks/PlainTasks.sublime-syntax'
 
     def on_selection_modified_async(self):
         self.phantoms.update([])  # https://github.com/SublimeTextIssues/Core/issues/1497

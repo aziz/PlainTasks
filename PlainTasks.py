@@ -396,7 +396,8 @@ class PlainTasksNewTaskDocCommand(sublime_plugin.WindowCommand):
     def run(self):
         view = self.window.new_file()
         view.settings().add_on_change('color_scheme', lambda: self.set_proper_scheme(view))
-        view.set_syntax_file('Packages/PlainTasks/PlainTasks.tmLanguage')
+        view.set_syntax_file('Packages/PlainTasks/PlainTasks.sublime-syntax' if ST3 else
+                             'Packages/PlainTasks/PlainTasks.tmLanguage')
 
     def set_proper_scheme(self, view):
         if view.id() != sublime.active_window().active_view().id():

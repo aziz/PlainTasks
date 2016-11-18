@@ -1,12 +1,41 @@
+Due tags highlighting:
+  ☐ misformated @due( 2-31)
+    February 31st
+
+  ☐ misformated @due( -7)
+
+  ☐ overdue     @due( 1-11-11)
+    2001 year
+
+  ☐ overdue     @due( ) @due(yo) @due(0)
+    it is today by a second before a moment when highlighting is executed
+
+  ☐ overdue     @due( ++) @created(11-11-18 16:32)
+    it is 2011-11-19
+
+  ☐ soon        @due( 23:)
+    it can be overdue if now is the last hour of a day
+
+  ☐ soon        @due( :59)
+    it can be overdue if now is the last minute of an hour
+
+  ☐ soon        @due( +)
+    tomorrow
+
+  ☐ none        @due( +1w)
+
+  ☐ none        @due( 1)
+    it can be soon if today is the last day of a month
+
 Project:
   ☐ simple
   ☐ with tags @tag1 @tag2
-  Completed with done/cancel: 
+  Completed with done/cancel:
     ✔ done simple @done (13-06-27 10:08)
     ✘ canceled simple @cancelled (13-06-27 10:08)
     ✔ done with tags @tag1 @tag2 @done (13-06-27 10:08)
     ✘ cenceled with tags @tag1 @tag2 @cancelled (13-06-27 10:08)
-  Completed without done/cancel: 
+  Completed without done/cancel:
     ✔ done simple  (13-06-27 10:09)
     ✘ canceled simple  (13-06-27 10:09)
     ✔ done with tags @tag1 @tag2  (13-06-27 10:09)
