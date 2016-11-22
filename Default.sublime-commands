@@ -11,5 +11,6 @@
     { "caption": "Tasks: View as HTML", "command": "plain_tasks_convert_to_html" },
     { "caption": "Tasks: Save as HTML…", "command": "plain_tasks_convert_to_html", "args": {"ask": true} },
     { "caption": "Tasks: Copy Statistics", "command": "plain_tasks_copy_stats" },
-    { "caption": "Tasks: Fold to due tasks", "command": "plain_tasks_fold_to_due_tags" }
+    { "caption": "Tasks: Fold to due tasks", "command": "plain_tasks_fold_to_due_tags" },
+    { "caption": "Tasks: Filter by tags under cursors", "command": "plain_tasks_fold_to_tags" }
 ]

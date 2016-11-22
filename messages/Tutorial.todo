@@ -21,6 +21,10 @@ Tasks:
    ☐ ctrl+c (alt+c on Windows) marks the task as cancelled
   Tagging:
    ☐ You can add tags using @ sign, like this @tag
+     You can place cursors on tags, click right mouse button and **Filter by tags under cursors**
+     Pending tasks with selected tags will remain visible (and their notes and projects they belong to),
+     but everything else will be hidden/folded
+     To unfold all press ⌘+k, ⌘+j or ⌘+k, ⌘+0
   URLs:
    ☐ ⌘+shift+U (ctrl+shift+U on Windows) opens the URL under the cursor in your default browser
      www.github.com or <skype:nickname>

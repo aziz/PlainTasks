@@ -1,0 +1,3 @@
+[
+    { "caption": "Tasks: Filter by tags under cursors", "command": "plain_tasks_fold_to_tags" }
+]

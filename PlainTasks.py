@@ -12,9 +12,9 @@ platform = sublime.platform()
 ST3 = int(sublime.version()) >= 3000
 
 if ST3:
-    from .APlainTasksCommon import PlainTasksBase, get_all_projects_and_separators
+    from .APlainTasksCommon import PlainTasksBase, PlainTasksFold, get_all_projects_and_separators
 else:
-    from APlainTasksCommon import PlainTasksBase, get_all_projects_and_separators
+    from APlainTasksCommon import PlainTasksBase, PlainTasksFold, get_all_projects_and_separators
 
 # io is not operable in ST2 on Linux, but in all other cases io is better
 # https://github.com/SublimeTextIssues/Core/issues/254
@@ -798,3 +798,40 @@ class PlainTasksArchiveOrgCommand(PlainTasksBase):
             region = sublime.Region(line.a, region.b)
 
         return region
+
+
+class PlainTasksFoldToTags(PlainTasksFold):
+    TAG = r'(?u)@\w+'
+
+    def run(self, edit):
+        tag_sels = [s for s in list(self.view.sel()) if 'tag.todo' in self.view.scope_name(s.a)]
+        if not tag_sels:
+            sublime.status_message('Cursor(s) must be placed on tag(s)')
+            return
+
+        tags = self.extract_tags(tag_sels)
+        tasks = [self.view.line(f) for f in self.view.find_all(r'[ \t](%s)' % '|'.join(tags)) if 'pending' in self.view.scope_name(f.a)]
+        if not tasks:
+            sublime.status_message('Pending tasks with given tags are not found')
+            print(tags, tag_sels)
+            return
+        self.exec_folding(self.add_projects_and_notes(tasks))
+
+    def extract_tags(self, tag_sels):
+        tags = []
+        for s in tag_sels:
+            start = end = s.a
+            limit = self.view.size()
+            while all(self.view.substr(start) != c for c in '@ \n'):
+                start -= 1
+                if start == 0:
+                    break
+            while all(self.view.substr(end) != c for c in '( @\n'):
+                end += 1
+                if end == limit:
+                    break
+            match = re.match(self.TAG, self.view.substr(sublime.Region(start, end)))
+            tag =  match.group(0) if match else False
+            if tag and tag not in tags:
+                tags.append(tag)
+        return tags
