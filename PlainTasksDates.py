@@ -417,9 +417,9 @@ class PlainTasksChooseDate(sublime_plugin.ViewEventListener):
             if start == 0:
                 break
         while all(self.view.substr(end) != c for c in '@\n '):
-            end += 1
             if end == limit:
                 break
+            end += 1
         tag = self.view.substr(sublime.Region(start, end))
         parens = re.search(r'\(.+\)', tag)
         return sublime.Region(end - (len(parens.group(0)) if parens else 0), end), tag
