@@ -401,7 +401,7 @@ class PlainTasksChooseDate(sublime_plugin.ViewEventListener):
 
     def on_selection_modified_async(self):
         s = self.view.sel()[0]
-        if not (s.empty() and any('meta.tag.todo' in self.view.scope_name(n) for n in (s.a, s.a - 1))):
+        if not (s.empty() and any('meta.tag.todo ' in self.view.scope_name(n) for n in (s.a, s.a - 1))):
             return
 
         self.region, tag = self.extract_tag(s.a)
