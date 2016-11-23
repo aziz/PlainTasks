@@ -2,6 +2,8 @@
 import sublime, sublime_plugin
 import json
 import re
+import locale
+import calendar
 from datetime import datetime
 from datetime import timedelta
 
@@ -322,7 +324,12 @@ class PlainTasksCalculateTimeForTask(PlainTasksEnabled):
 
 
 class PlainTaskInsertDate(PlainTasksBase):
-    def runCommand(self, edit):
+    def runCommand(self, edit, region=None, date=None):
+        if region:
+            y, m, d, H, M = date
+            self.view.replace(edit, sublime.Region(*region), datetime(y, m, d, H, M, 0).strftime(self.date_format) + ' ')
+            return
+
         for s in reversed(list(self.view.sel())):
             self.view.insert(edit, s.b, datetime.now().strftime(self.date_format))
 
@@ -382,3 +389,122 @@ class PlainTasksPreviewShortDate(sublime_plugin.ViewEventListener):
             '{0}:<br> days:\t{1}<br> hours:\t{2}<br> minutes:\t{3}<br>'.format(*error) if len(error) == 4 else
             '{0}:<br> year:\t{1}<br> month:\t{2}<br> day:\t{3}<br> HH:\t{4}<br> MM:\t{5}<br>'.format(*error),
             sublime.LAYOUT_INLINE)])
+
+
+class PlainTasksChooseDate(sublime_plugin.ViewEventListener):
+    def __init__(self, view):
+        self.view = view
+
+    @classmethod
+    def is_applicable(cls, settings):
+        return settings.get('syntax') in ('Packages/PlainTasks/PlainTasks.sublime-syntax', 'Packages/PlainTasks/PlainTasks.tmLanguage')
+
+    def on_selection_modified_async(self):
+        s = self.view.sel()[0]
+        if not (s.empty() and any('meta.tag.todo' in self.view.scope_name(n) for n in (s.a, s.a - 1))):
+            return
+
+        self.region, tag = self.extract_tag(s.a)
+
+        content = self.generate_calendar()
+        self.view.show_popup(content, sublime.COOPERATE_WITH_AUTO_COMPLETE, self.region.a, 555, 555, self.action)
+
+    def extract_tag(self, point):
+        start = end = point
+        limit = self.view.size()
+        while all(self.view.substr(start) != c for c in '@ \n'):
+            start -= 1
+            if start == 0:
+                break
+        while all(self.view.substr(end) != c for c in '@\n '):
+            end += 1
+            if end == limit:
+                break
+        tag = self.view.substr(sublime.Region(start, end))
+        parens = re.search(r'\(.+\)', tag)
+        return sublime.Region(end - (len(parens.group(0)) if parens else 0), end), tag
+
+    def generate_calendar(self, date=None):
+        date = date or datetime.now()
+        y, m, d, H, M = date.year, date.month, date.day, date.hour, date.minute
+
+        content = ('<style> #today {{color: var(--background); background-color: var(--foreground)}}</style>'
+                   '<br> <center><big>{month}</big></center><br><br>'
+                   '{table}<br> {time}<br><br><hr>'
+                   '<br> Click day to insert date '
+                   '<br> into view, click month or '
+                   '<br> time to switch the picker <br><br>'
+                   )
+
+        locale.setlocale(locale.LC_ALL, '')  # to get native month name
+        month = '<a href="month:{0}-{1}-{2}-{3}-{4}">{5} {0}</a>'.format(y, m, d, H, M, date.strftime('%B'))
+
+        table = ''
+        for week in calendar.Calendar().monthdayscalendar(y, m):
+            row = ['']
+            for day in week:
+                link = '<a href="day:{0}-{1}-{2}-{3}-{4}"{5}>{2}</a>'.format(y, m, day, H, M, ' id="today"' if d == day else '')
+                cell = ('  %s' % link if day < 10 else ' %s' % link) if day else '   '
+                row.append(cell)
+            table += ' '.join(row + ['<br><br>'])
+
+        time = '<a href="time:{0}-{1}-{2}-{3}-{4}">{5}</a>'.format(y, m, d, H, M, date.strftime('%H:%M'))
+
+        return content.format(month=month, time=time, table=table)
+
+    def action(self, payload):
+        msg, stamp = payload.split(':')
+
+        def insert(stamp):
+            self.view.hide_popup()
+            y, m, d, H, M = (int(i) for i in stamp.split('-'))
+            self.view.run_command('plain_task_insert_date', {'region': (self.region.a, self.region.b), 'date': (y, m, d, H, M)})
+            self.view.sel().clear()
+            self.view.sel().add(sublime.Region(self.region.b + 1))
+
+        def generate_months(stamp):
+            y, m, d, H, M = (int(i) for i in stamp.split('-'))
+            months = ['<br>{5}<a href="year:{0}-{1}-{2}-{3}-{4}">{0}</a><br><br>'.format(y, m, d, H, M, ' ' * 8)]
+            for i in range(1, 13):
+                months.append('{6}<a href="calendar:{0}-{1}-{2}-{3}-{4}">{5}</a> '.format(y, i, d, H, M, datetime(y, i, d, H, M, 0).strftime('%b'), '•' if i == m else ' '))
+                if i in (4, 8, 12):
+                    months.append('<br><br>')
+            self.view.update_popup(''.join(months))
+
+        def generate_years(stamp):
+            y, m, d, H, M = (int(i) for i in stamp.split('-'))
+            years = ['<br>']
+            for i in range(y - 6, y + 6):
+                years.append('{5}<a href="month:{0}-{1}-{2}-{3}-{4}">{0}</a> '.format(i, m, d, H, M, '•' if i == y else ' '))
+                if i in (y - 3, y + 1, y + 5):
+                    years.append('<br><br>')
+            self.view.update_popup(''.join(years))
+
+        def generate_time(stamp):
+            y, m, d, H, M = (int(i) for i in stamp.split('-'))
+            hours = ['<br> Hours:<br><br>']
+            for i in range(24):
+                hours.append('{6}{5}<a href="time:{0}-{1}-{2}-{3}-{4}">{3}</a> '.format(y, m, d, i, M, '•' if i == H else ' ', ' ' if i < 10 else ''))
+                if i in (7, 15, 23):
+                    hours.append('<br><br>')
+            minutes = ['<br> Minutes:<br><br>']
+            for i in range(60):
+                minutes.append('{6}{5}<a href="time:{0}-{1}-{2}-{3}-{4}">{4}</a> '.format(y, m, d, H, i, '•' if i == M else ' ', ' ' if i < 10 else ''))
+                if i in (9, 19, 29, 39, 49, 59):
+                    minutes.append('<br><br>')
+            confirm = ['<br> <a href="calendar:{0}-{1}-{2}-{3}-{4}">Confirm: {5}</a> <br><br>'.format(y, m, d, H, M, datetime(y, m, d, H, M, 0).strftime('%H:%M'))]
+            self.view.update_popup(''.join(hours + minutes + confirm))
+
+        def calendar(stamp):
+            y, m, d, H, M = (int(i) for i in stamp.split('-'))
+            self.view.update_popup(self.generate_calendar(date=datetime(y, m, d, H, M, 0)))
+
+        case = {
+            'day': insert,
+            'month': generate_months,
+            'year': generate_years,
+            'time': generate_time,
+            'calendar': calendar
+        }
+        self.view.update_popup('Loading...')
+        case[msg](stamp)
