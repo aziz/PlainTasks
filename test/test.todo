@@ -2,7 +2,8 @@ Due tags highlighting:
   ☐ misformated @due( 2-31)
     February 31st
 
-  ☐ misformated @due( -7)
+  ☐ overdue @due( -1)
+    first day of current month, can be misformatted if dateutil module is unavailable
 
   ☐ overdue     @due( 1-11-11)
     2001 year

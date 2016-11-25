@@ -68,6 +68,10 @@ For more portability you can use `todolist.txt` either as a filename or as suffi
           <td>  1st day of next month always    </td>
          </tr>
          <tr>
+          <td>  <code>@due(-1)</code>    </td>
+          <td>  1st day of current month always    </td>
+         </tr>
+         <tr>
           <td>  <code>@due(5)</code>    </td>
           <td>  5th day of current month (or next month if current day is 5th or older) </td>
          </tr>

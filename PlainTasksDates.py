@@ -149,7 +149,7 @@ def expand_short_date(view, start, end, now, date_format):
     if '+' in text:
         date, error = increase_date(view, region, text, now, date_format)
     else:
-        date, error = convert_date(text, now)
+        date, error = parse_date(text, date_format, yearfirst=date_format.startswith(('(%y', '(%Y')), default=now)
 
     return date, error, sublime.Region(start, end + 1)
 
@@ -167,16 +167,20 @@ def parse_date(date_string, date_format='(%y-%m-%d %H:%M)', yearfirst=True, defa
         datetime object (now)
     '''
     bare_date_string = date_string.strip('( )')
-    expanded_date, error = convert_date(bare_date_string, default)
-    if dateutil_parser:
-        try:
-            date = dateutil_parser.parse(expanded_date.strftime(date_format).strip('( )') if expanded_date else bare_date_string,
+    items = len(bare_date_string.split('-') or bare_date_string.split('.'))
+    try:
+        if items < 2:
+            # e.g. @due(1) is always first day of next month,
+            # but dateutil consider it 1st day of current month
+            raise Exception("Special case of short date: less than 2 numbers")
+        date = dateutil_parser.parse(bare_date_string,
                                      yearfirst=yearfirst,
                                      default=default)
-        except Exception as e:
-            date, error = None, e
+    except Exception as e:
+        # print(e)
+        date, error = convert_date(bare_date_string, default)
     else:
-        date = expanded_date
+        error = None
     return date, error
 
 
