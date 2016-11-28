@@ -14,6 +14,11 @@
 					<key>invisibles</key><string>#EAE3C9</string>
 					<key>lineHighlight</key><string>#393939</string>
 					<key>selection</key><string>#393939</string>
+					<key>popupCss</key>
+					<string><![CDATA[
+						html, body {color: #d3d0c8; background-color: #2d2d2d}
+						a {color: #ACC6F6;}
+					]]></string>
 				</dict>
 			</dict>
 			<dict>
