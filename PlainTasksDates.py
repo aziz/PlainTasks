@@ -177,7 +177,7 @@ def parse_date(date_string, date_format='(%y-%m-%d %H:%M)', yearfirst=True, defa
         if items < 3 and any(s in date_string for s in '-.'):
             # e.g. @due(1) is always first day of next month,
             # but dateutil consider it 1st day of current month
-            raise Exception("Special case of short date: less than 2 numbers")
+            raise Exception("Special case of short date: less than 3 numbers")
         date = dateutil_parser.parse(bare_date_string,
                                      yearfirst=yearfirst,
                                      default=default)
@@ -517,6 +517,8 @@ class PlainTasksChooseDate(PlainTasksViewEventListener):
             y, m, d, H, M = (int(i) for i in stamp.split('-'))
             if m == 2 and d > 28:
                 d = 28
+            elif d == 31 and m in (4, 6, 9, 11):
+                d = 30
             self.view.update_popup(self.generate_calendar(date=datetime(y, m, d, H, M, 0)))
 
         case = {
