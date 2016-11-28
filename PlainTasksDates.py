@@ -166,10 +166,15 @@ def parse_date(date_string, date_format='(%y-%m-%d %H:%M)', yearfirst=True, defa
     default
         datetime object (now)
     '''
+    try:
+        return datetime.strptime(date_string, date_format), None
+    except ValueError as e:
+        # print(e)
+        pass
     bare_date_string = date_string.strip('( )')
     items = len(bare_date_string.split('-') or bare_date_string.split('.'))
     try:
-        if items < 2:
+        if items < 3 and any(s in date_string for s in '-.'):
             # e.g. @due(1) is always first day of next month,
             # but dateutil consider it 1st day of current month
             raise Exception("Special case of short date: less than 2 numbers")
@@ -312,7 +317,7 @@ class PlainTasksCalculateTotalTimeForProject(PlainTasksEnabled):
             t = json.loads(lasted_strings[i].replace('""', '"0"'))
             total += timedelta(days=int(t['days']),
                                hours=int(t['hours']) or int(t['dhours']),
-                               minutes=int(t['minutes']) or int(t['dminutes'])*60,
+                               minutes=int(t['minutes']) or int(t['dminutes']) * 60,
                                seconds=int(t['seconds']))
         return total, eol
 
@@ -479,7 +484,7 @@ class PlainTasksChooseDate(PlainTasksViewEventListener):
             y, m, d, H, M = (int(i) for i in stamp.split('-'))
             months = ['<br>{5}<a href="year:{0}-{1}-{2}-{3}-{4}">{0}</a><br><br>'.format(y, m, d, H, M, ' ' * 8)]
             for i in range(1, 13):
-                months.append('{6}<a href="calendar:{0}-{1}-{2}-{3}-{4}">{5}</a> '.format(y, i, d, H, M, datetime(y, i, d, H, M, 0).strftime('%b'), '•' if i == m else ' '))
+                months.append('{6}<a href="calendar:{0}-{1}-{2}-{3}-{4}">{5}</a> '.format(y, i, d, H, M, datetime(y, i, 1, H, M, 0).strftime('%b'), '•' if i == m else ' '))
                 if i in (4, 8, 12):
                     months.append('<br><br>')
             self.view.update_popup(''.join(months))
@@ -510,6 +515,8 @@ class PlainTasksChooseDate(PlainTasksViewEventListener):
 
         def calendar(stamp):
             y, m, d, H, M = (int(i) for i in stamp.split('-'))
+            if m == 2 and d > 28:
+                d = 28
             self.view.update_popup(self.generate_calendar(date=datetime(y, m, d, H, M, 0)))
 
         case = {
