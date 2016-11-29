@@ -24,6 +24,9 @@ except:
     dateutil_parser = None
 
 
+locale.setlocale(locale.LC_ALL, '')
+
+
 def _convert_date(matchstr, now):
     match_obj = re.search(r'''(?mxu)
         (?:\s*
@@ -172,11 +175,15 @@ def parse_date(date_string, date_format='(%y-%m-%d %H:%M)', yearfirst=True, defa
         # print(e)
         pass
     bare_date_string = date_string.strip('( )')
-    items = len(bare_date_string.split('-') or bare_date_string.split('.'))
+    items = len(bare_date_string.split('-' if '-' in bare_date_string else '.'))
     try:
-        if items < 3 and any(s in date_string for s in '-.'):
+        if items < 2 and len(bare_date_string) < 3:
             # e.g. @due(1) is always first day of next month,
             # but dateutil consider it 1st day of current month
+            raise Exception("Special case of short date: less than 2 numbers")
+        if items < 3 and any(s in date_string for s in '-.'):
+            # e.g. @due(2-1) is always Fabruary 1st of next year,
+            # but dateutil consider it this year
             raise Exception("Special case of short date: less than 3 numbers")
         date = dateutil_parser.parse(bare_date_string,
                                      yearfirst=yearfirst,
@@ -241,6 +248,8 @@ class PlainTasksToggleHighlightPastDue(PlainTasksEnabled):
         now = datetime.now()
         default = now - timedelta(seconds=now.second)  # for short dates w/o time
         due_soon_threshold = self.view.settings().get('highlight_due_soon', 24) * 60 * 60
+
+        locale.setlocale(locale.LC_ALL, '')  # to get native month name
 
         for i, region in enumerate(dates_regions):
             if any(s in self.view.scope_name(region.a) for s in ('completed', 'cancelled')):
