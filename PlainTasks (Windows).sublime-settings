@@ -8,6 +8,7 @@
   "project_tag": true, // if true - postfix archived task with project tag, if false - prefix
   "archive_name": "Archive:", // make sure it is the unique project name within your todo files
   "new_on_top": true, // how to sort archived tasks
+  "show_remain_due": true, // in Sublime 3, show remain or overdue time under due tags
 
   "bar_empty": "☐", // empty cell for progress-bar in status-bar, for more details see Custom Statistics in README
 

@@ -355,7 +355,10 @@ class PlainTaskInsertDate(PlainTasksBase):
     def runCommand(self, edit, region=None, date=None):
         if region:
             y, m, d, H, M = date
-            self.view.replace(edit, sublime.Region(*region), datetime(y, m, d, H, M, 0).strftime(self.date_format) + ' ')
+            region = sublime.Region(*region)
+            self.view.replace(edit, region, datetime(y, m, d, H, M, 0).strftime(self.date_format) + ' ')
+            self.view.sel().clear()
+            self.view.sel().add(sublime.Region(self.view.line(region).b))
             return
 
         for s in reversed(list(self.view.sel())):
@@ -437,19 +440,26 @@ class PlainTasksChooseDate(PlainTasksViewEventListener):
         self.view.show_popup(content, sublime.COOPERATE_WITH_AUTO_COMPLETE, self.region.a, 555, 555, self.action)
 
     def extract_tag(self, point):
+        '''point is cursor
+        Return tuple of two elements
+        Region
+            which will be replaced with chosen date, it may be parentheses belong to tag, or end of tag, or point
+        Unicode
+            tag under cursor (i.e. point)
+        '''
         start = end = point
-        limit = self.view.size()
-        while all(self.view.substr(start) != c for c in '@ \n'):
-            start -= 1
-            if start == 0:
+        tag_pattern = r'(?<=\s)(\@[^\(\) ,\.]+)([\w\d\.\(\)\-!? :\+]*)'
+        line = self.view.line(point)
+        matches = re.finditer(tag_pattern, self.view.substr(line))
+        for match in matches:
+            m_start = line.a + match.start(1)
+            m_end   = line.a + match.end(2)
+            if m_start <= point <= m_end:
+                start = line.a + match.start(2)
+                end   = m_end
                 break
-        while all(self.view.substr(end) != c for c in '@\n '):
-            if end == limit:
-                break
-            end += 1
-        tag = self.view.substr(sublime.Region(start, end))
-        parens = re.search(r'\(.+\)', tag)
-        return sublime.Region(end - (len(parens.group(0)) if parens else 0), end), tag
+        tag = match.group(0) if match else ''
+        return sublime.Region(start, end), tag
 
     def generate_calendar(self, date=None):
         date = date or datetime.now()
