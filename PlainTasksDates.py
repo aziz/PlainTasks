@@ -425,17 +425,25 @@ class PlainTasksPreviewShortDate(PlainTasksViewEventListener):
             sublime.LAYOUT_INLINE)])
 
 
-class PlainTasksChooseDate(PlainTasksViewEventListener):
+class PlainTasksChooseDate(sublime_plugin.ViewEventListener):
     def __init__(self, view):
         self.view = view
+
+    @classmethod
+    def is_applicable(cls, settings):
+        return settings.get('show_calendar_on_tags')
 
     def on_selection_modified_async(self):
         s = self.view.sel()[0]
         if not (s.empty() and any('meta.tag.todo ' in self.view.scope_name(n) for n in (s.a, s.a - 1))):
             return
+        self.view.run_command('plain_tasks_calendar', {'point': s.a})
 
-        self.region, tag = self.extract_tag(s.a)
 
+class PlainTasksCalendar(sublime_plugin.TextCommand):
+    def run(self, edit, point=None):
+        point = point or self.view.sel()[0].a
+        self.region, tag = self.extract_tag(point)
         content = self.generate_calendar()
         self.view.show_popup(content, sublime.COOPERATE_WITH_AUTO_COMPLETE, self.region.a, 555, 555, self.action)
 
@@ -458,6 +466,8 @@ class PlainTasksChooseDate(PlainTasksViewEventListener):
                 start = line.a + match.start(2)
                 end   = m_end
                 break
+        else:
+            match = None
         tag = match.group(0) if match else ''
         return sublime.Region(start, end), tag
 

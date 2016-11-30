@@ -187,6 +187,7 @@ Here is a list of PlainTasks’ specific settings:
 | **scope_due_soon**             | `string.other.tag.todo.high`     | Any scope, define color for `@due` will be soon         |
 | **scope_misformatted**         | `string.other.tag.todo.low`      | Any scope, define color for `@due` mismatch **date_format** |
 | **show_remain_due**            | true             | In Sublime 3, show remain or overdue time under due tags                |
+| **show_calendar_on_tags**      | false            | In Sublime 3, if true, automatically show date picker when cursor is on tag (you can get date picker any time via context menu) |
 
 ### Changing color scheme
 If you don't like colors used in bundled schemes just copy any `.hidden-tmTheme` from PlainTasks to 

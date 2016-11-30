@@ -1,3 +1,4 @@
 [
-    { "caption": "Tasks: Filter by tags under cursors", "command": "plain_tasks_fold_to_tags" }
+    { "caption": "Tasks: Filter by tags under cursors", "command": "plain_tasks_fold_to_tags" },
+    { "caption": "Tasks: Show date picker", "command": "plain_tasks_calendar" }
 ]
