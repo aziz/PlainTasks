@@ -223,6 +223,8 @@ class PlainTasksToggleHighlightPastDue(PlainTasksEnabled):
         dates_strings = []
         dates_regions = self.view.find_all(pattern, 0, '\\1', dates_strings)
         if not dates_regions:
+            if ST3:
+                self.view.settings().set('plain_tasks_remain_time_phantoms', [])
             return
 
         past_due, due_soon, misformatted, phantoms = self.group_due_tags(dates_strings, dates_regions)

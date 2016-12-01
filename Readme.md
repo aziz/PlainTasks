@@ -36,7 +36,9 @@ For more portability you can use `todolist.txt` either as a filename or as suffi
 
 ☐ You can write plain text as notes or descriptions wherever you want. Use `_` or `*` for italic and bold just like in Markdown.
 
-☐ You can add tags using **`@`** sign
+☐ You can add tags using **`@`** sign  
+You can place cursors on tags, click right mouse button and **Filter by tags under cursors**:
+pending tasks with selected tags will remain visible (and their notes and projects they belong to), but everything else will be hidden/folded; to unfold all press <kbd>⌘+k</kbd>, <kbd>⌘+j</kbd> or <kbd>⌘+k</kbd>, <kbd>⌘+0</kbd>
 
 ☐ PlainTasks comes with a simple snippet for creating separators, if you feel that your task list is becoming too long you can split it into several sections (and fold some of them) using this snippet:
 
