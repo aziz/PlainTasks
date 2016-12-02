@@ -251,8 +251,6 @@ class PlainTasksToggleHighlightPastDue(PlainTasksEnabled):
         default = now - timedelta(seconds=now.second)  # for short dates w/o time
         due_soon_threshold = self.view.settings().get('highlight_due_soon', 24) * 60 * 60
 
-        locale.setlocale(locale.LC_ALL, '')  # to get native month name
-
         for i, region in enumerate(dates_regions):
             if any(s in self.view.scope_name(region.a) for s in ('completed', 'cancelled')):
                 continue
