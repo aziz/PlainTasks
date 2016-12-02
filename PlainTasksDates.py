@@ -24,7 +24,8 @@ except:
     dateutil_parser = None
 
 
-locale.setlocale(locale.LC_ALL, '')
+if ST3:
+    locale.setlocale(locale.LC_ALL, '')
 
 
 def _convert_date(matchstr, now):
