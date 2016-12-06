@@ -6,7 +6,7 @@ import os
 import re
 import webbrowser
 import itertools
-from datetime import datetime
+from datetime import datetime, tzinfo, timedelta
 
 platform = sublime.platform()
 ST3 = int(sublime.version()) >= 3000
@@ -26,6 +26,35 @@ else:
 NT = platform == 'windows'
 if NT:
     import subprocess
+
+if ST3:
+    from datetime import timezone
+else:
+    class timezone(tzinfo):
+        __slots__ = ("_offset", "_name")
+
+        def __init__(self, offset, name=None):
+            if not isinstance(offset, timedelta):
+                raise TypeError("offset must be a timedelta")
+            self._offset = offset
+            self._name = name
+
+        def utcoffset(self, dt):
+            return self._offset
+
+        def tzname(self, dt):
+            return self._name
+
+        def dst(self, dt):
+            return timedelta(0)
+
+
+def tznow():
+    return datetime.now().replace(
+        tzinfo=timezone(
+            datetime.fromtimestamp(0) - datetime.utcfromtimestamp(0)
+        )
+    )
 
 
 def check_parentheses(date_format, regex_group, is_date=False):
@@ -103,7 +132,7 @@ class PlainTasksNewWithDateCommand(PlainTasksBase):
     def runCommand(self, edit):
         self.view.run_command('plain_tasks_new')
         sels = list(self.view.sel())
-        suffix = ' @created%s' % datetime.now().strftime(self.date_format)
+        suffix = ' @created%s' % tznow().strftime(self.date_format)
         for s in reversed(sels):
             self.view.insert(edit, s.b, suffix)
         self.view.sel().clear()
@@ -116,9 +145,9 @@ class PlainTasksCompleteCommand(PlainTasksBase):
     def runCommand(self, edit):
         original = [r for r in self.view.sel()]
         try:
-            done_line_end = ' %s%s%s' % (self.done_tag, self.before_date_space, datetime.now().strftime(self.date_format).decode(self.sys_enc))
+            done_line_end = ' %s%s%s' % (self.done_tag, self.before_date_space, tznow().strftime(self.date_format).decode(self.sys_enc))
         except:
-            done_line_end = ' %s%s%s' % (self.done_tag, self.before_date_space, datetime.now().strftime(self.date_format))
+            done_line_end = ' %s%s%s' % (self.done_tag, self.before_date_space, tznow().strftime(self.date_format))
         done_line_end = done_line_end.replace('  ', ' ').rstrip()
         offset = len(done_line_end)
         rom = r'^(\s*)(\[\s\]|.)(\s*.*)$'
@@ -203,9 +232,9 @@ class PlainTasksCancelCommand(PlainTasksBase):
     def runCommand(self, edit):
         original = [r for r in self.view.sel()]
         try:
-            canc_line_end = ' %s%s%s' % (self.canc_tag, self.before_date_space, datetime.now().strftime(self.date_format).decode(self.sys_enc))
+            canc_line_end = ' %s%s%s' % (self.canc_tag, self.before_date_space, tznow().strftime(self.date_format).decode(self.sys_enc))
         except:
-            canc_line_end = ' %s%s%s' % (self.canc_tag, self.before_date_space, datetime.now().strftime(self.date_format))
+            canc_line_end = ' %s%s%s' % (self.canc_tag, self.before_date_space, tznow().strftime(self.date_format))
         canc_line_end = canc_line_end.replace('  ', ' ').rstrip()
         offset = len(canc_line_end)
         rom = r'^(\s*)(\[\s\]|.)(\s*.*)$'
@@ -745,7 +774,7 @@ class PlainTasksArchiveOrgCommand(PlainTasksBase):
                 data = self.view.substr(region)
                 # Is there a way to read this in?
                 fh.write(u"--- ✄ -----------------------\n")
-                fh.write(u"Archived {0}:\n".format(datetime.now().strftime(
+                fh.write(u"Archived {0}:\n".format(tznow().strftime(
                     self.date_format)))
                 # And, finally, write our data
                 fh.write(u"{0}\n".format(data))
