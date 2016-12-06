@@ -6,7 +6,7 @@ import os
 import re
 import webbrowser
 import itertools
-from datetime import datetime, timezone
+from datetime import datetime, tzinfo, timedelta
 
 platform = sublime.platform()
 ST3 = int(sublime.version()) >= 3000
@@ -26,6 +26,27 @@ else:
 NT = platform == 'windows'
 if NT:
     import subprocess
+
+if ST3:
+    from datetime import timezone
+else:
+    class timezone(tzinfo):
+        __slots__ = ("_offset", "_name")
+
+        def __init__(self, offset, name=None):
+            if not isinstance(offset, timedelta):
+                raise TypeError("offset must be a timedelta")
+            self._offset = offset
+            self._name = name
+
+        def utcoffset(self, dt):
+            return self._offset
+
+        def tzname(self, dt):
+            return self._name
+
+        def dst(self, dt):
+            return timedelta(0)
 
 
 def tznow():
