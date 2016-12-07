@@ -233,9 +233,12 @@ class PlainTasksToggleHighlightPastDue(PlainTasksEnabled):
         scope_past_due = self.view.settings().get('scope_past_due', 'string.other.tag.todo.critical')
         scope_due_soon = self.view.settings().get('scope_due_soon', 'string.other.tag.todo.high')
         scope_misformatted = self.view.settings().get('scope_misformatted', 'string.other.tag.todo.low')
-        self.view.add_regions('past_due', past_due, scope_past_due, 'circle')
-        self.view.add_regions('due_soon', due_soon, scope_due_soon, 'dot', MARK_SOON)
-        self.view.add_regions('misformatted', misformatted, scope_misformatted, '', MARK_INVALID)
+        icon_past_due = self.view.settings().get('icon_past_due', 'circle')
+        icon_due_soon = self.view.settings().get('icon_due_soon', 'dot')
+        icon_misformatted = self.view.settings().get('icon_misformatted', '')
+        self.view.add_regions('past_due', past_due, scope_past_due, icon_past_due)
+        self.view.add_regions('due_soon', due_soon, scope_due_soon, icon_due_soon, MARK_SOON)
+        self.view.add_regions('misformatted', misformatted, scope_misformatted, icon_misformatted, MARK_INVALID)
 
         if not ST3:
             return

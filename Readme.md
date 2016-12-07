@@ -188,8 +188,14 @@ Here is a list of PlainTasks’ specific settings:
 | **scope_past_due**             | `string.other.tag.todo.critical` | Any scope, define color for past `@due`                 |
 | **scope_due_soon**             | `string.other.tag.todo.high`     | Any scope, define color for `@due` will be soon         |
 | **scope_misformatted**         | `string.other.tag.todo.low`      | Any scope, define color for `@due` mismatch **date_format** |
+| **icon_past_due**              | `"circle"`       | Gutter icon¹                                                            |
+| **icon_due_soon**              | `"dot"`          | Gutter icon¹                                                            |
+| **icon_misformatted**          | `""`             | Gutter icon¹                                                            |
 | **show_remain_due**            | true             | In Sublime 3, show remain or overdue time under due tags                |
 | **show_calendar_on_tags**      | false            | In Sublime 3, if true, automatically show date picker when cursor is on tag (you can get date picker any time via context menu) |
+
+<b>¹</b> Icon value can be  `"dot"`, `"circle"`, `"bookmark"`, `"cross"`, `""`, or custom relative path to existing png file,
+e.g. `"Packages/User/my-icon.png"`.
 
 ### Changing color scheme
 If you don't like colors used in bundled schemes just copy any `.hidden-tmTheme` from PlainTasks to 
