@@ -70,7 +70,7 @@ pending tasks with selected tags will remain visible (and their notes and projec
           <td>  1st day of next month always    </td>
          </tr>
          <tr>
-          <td>  <code>@due(-1)</code>    </td>
+          <td>  <code>@due(--1)</code>    </td>
           <td>  1st day of current month always    </td>
          </tr>
          <tr>

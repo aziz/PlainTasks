@@ -88,7 +88,7 @@ Time Tracking:
     Dot can be used instead of hyphen, but should be consistent _year.month.day_
       - year, month, minute, hour can be omitted:
         - @due(1)          → 1st day of next month always
-        - @due(-1)         → 1st day of current month always
+        - @due(--1)         → 1st day of current month always
         - @due(5)          → 5th day of current month (or next month if current day is 5th or older)
         - @due(2-3)        → February 3rd of current year or next one
         - @due(28 23:)     → 28th day of current/next month at 23 hours and minutes are equal to current moment

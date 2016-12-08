@@ -252,7 +252,7 @@ class PlainTasksToggleHighlightPastDue(PlainTasksEnabled):
         date_format = self.view.settings().get('date_format', '(%y-%m-%d %H:%M)')
         yearfirst = date_format.startswith(('(%y', '(%Y'))
         now = datetime.now()
-        default = now - timedelta(seconds=now.second)  # for short dates w/o time
+        default = now - timedelta(seconds=now.second, microseconds=now.microsecond)  # for short dates w/o time
         due_soon_threshold = self.view.settings().get('highlight_due_soon', 24) * 60 * 60
 
         for i, region in enumerate(dates_regions):
@@ -407,7 +407,7 @@ class PlainTasksPreviewShortDate(PlainTasksViewEventListener):
 
         rgn = self.view.extract_scope(s.a)
         text = self.view.substr(rgn)
-        match = re.match(r'@due(\([^@\n]*\))[\s$]*', text)
+        match = re.match(r'@due\(([^@\n]*)\)[\s$]*', text)
         # print(s, rgn, text)
 
         if not match:
@@ -418,14 +418,16 @@ class PlainTasksPreviewShortDate(PlainTasksViewEventListener):
         start = rgn.a + 5  # within parenthesis
         date, error, region = expand_short_date(self.view, start, start, datetime.now(), date_format)
 
+        if not error:
+            date = date.strftime(date_format).strip('()')
         if date == match.group(1).strip():
             return
 
         self.phantoms.update([sublime.Phantom(
             sublime.Region(region.b - 1),
-            date.strftime(date_format).strip('()') if date else
+            date or (
             '{0}:<br> days:\t{1}<br> hours:\t{2}<br> minutes:\t{3}<br>'.format(*error) if len(error) == 4 else
-            '{0}:<br> year:\t{1}<br> month:\t{2}<br> day:\t{3}<br> HH:\t{4}<br> MM:\t{5}<br>'.format(*error),
+            '{0}:<br> year:\t{1}<br> month:\t{2}<br> day:\t{3}<br> HH:\t{4}<br> MM:\t{5}<br>'.format(*error)),
             sublime.LAYOUT_INLINE)])
 
 
