@@ -448,6 +448,9 @@ class PlainTasksChooseDate(sublime_plugin.ViewEventListener):
 
 
 class PlainTasksCalendar(sublime_plugin.TextCommand):
+    def is_visible(self):
+        return ST3
+
     def run(self, edit, point=None):
         point = point or self.view.sel()[0].a
         self.region, tag = self.extract_tag(point)
