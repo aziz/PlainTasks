@@ -204,7 +204,7 @@ def format_delta(view, delta):
         delta = u'%s%s%s%s' % (days or '', ' day, ' if days == 1 else '', ' days, ' if days > 1 else '', '%.2f' % (delta.seconds / 3600.0) if delta.seconds else '')
     else:
         delta = str(delta)
-    if delta[~6:] == '0:00:00':  # strip meaningless time
+    if delta[~7:] == ' 0:00:00' or delta == '0:00:00':  # strip meaningless time
         delta = delta[:~6]
     elif delta[~2:] == ':00':  # strip meaningless seconds
         delta = delta[:~2]
@@ -578,9 +578,14 @@ class PlainTasksRemain(PlainTasksViewEventListener):
         if not phantoms:
             self.phantoms.update([])
             return
-        self.phantoms.update([
-            sublime.Phantom(
+        upd = []
+        for point, content in phantoms:
+            # XXX: sometimes sublime is None, so it has no Phantom
+            if sublime is None:
+                print(point, content)
+                continue
+            upd.append(sublime.Phantom(
                 sublime.Region(point),
                 '%s %s' % ('Overdue' if '-' in content else 'Remain', content.lstrip('-') or 'a little bit'),
-                sublime.LAYOUT_BELOW)
-            for point, content in phantoms])
+                sublime.LAYOUT_BELOW))
+        self.phantoms.update(upd)
