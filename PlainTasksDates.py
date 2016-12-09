@@ -20,6 +20,7 @@ else:
 
 try:  # unavailable dependencies shall not break basic functionality
     from dateutil import parser as dateutil_parser
+    from dateutil.relativedelta import relativedelta
 except:
     dateutil_parser = None
 
@@ -482,7 +483,8 @@ class PlainTasksCalendar(sublime_plugin.TextCommand):
         y, m, d, H, M = date.year, date.month, date.day, date.hour, date.minute
 
         content = ('<style> #today {{color: var(--background); background-color: var(--foreground)}}</style>'
-                   '<br> <center><big>{month}</big></center><br><br>'
+                   '<br> <center><big>{prev_month} {next_month} {month}'
+                   '    {prev_year} {next_year} {year}</big></center><br><br>'
                    '{table}<br> {time}<br><br><hr>'
                    '<br> Click day to insert date '
                    '<br> into view, click month or '
@@ -490,7 +492,12 @@ class PlainTasksCalendar(sublime_plugin.TextCommand):
                    )
 
         locale.setlocale(locale.LC_ALL, '')  # to get native month name
-        month = '<a href="month:{0}-{1}-{2}-{3}-{4}">{5} {0}</a>'.format(y, m, d, H, M, date.strftime('%B'))
+        month = '<a href="month:{0}-{1}-{2}-{3}-{4}">{5}</a>'.format(y, m, d, H, M, date.strftime('%B'))
+        prev_month = '<a href="prev_month:{0}-{1}-{2}-{3}-{4}">←</a>'.format(y, m, d, H, M)
+        next_month = '<a href="next_month:{0}-{1}-{2}-{3}-{4}">→</a>'.format(y, m, d, H, M)
+        prev_year = '<a href="prev_year:{0}-{1}-{2}-{3}-{4}">←</a>'.format(y, m, d, H, M)
+        next_year = '<a href="next_year:{0}-{1}-{2}-{3}-{4}">→</a>'.format(y, m, d, H, M)
+        year = '<a href="year:{0}-{1}-{2}-{3}-{4}">{0}</a>'.format(y, m, d, H, M)
 
         table = ''
         for week in calendar.Calendar().monthdayscalendar(y, m):
@@ -502,8 +509,10 @@ class PlainTasksCalendar(sublime_plugin.TextCommand):
             table += ' '.join(row + ['<br><br>'])
 
         time = '<a href="time:{0}-{1}-{2}-{3}-{4}">{5}</a>'.format(y, m, d, H, M, date.strftime('%H:%M'))
-
-        return content.format(month=month, time=time, table=table)
+        return content.format(
+            prev_month=prev_month, next_month=next_month, month=month,
+            prev_year=prev_year, next_year=next_year, year=year,
+            time=time, table=table)
 
     def action(self, payload):
         msg, stamp = payload.split(':')
@@ -556,12 +565,21 @@ class PlainTasksCalendar(sublime_plugin.TextCommand):
                 d = 30
             self.view.update_popup(self.generate_calendar(date=datetime(y, m, d, H, M, 0)))
 
+        def shift(stamp, month=0, year=0):
+            y, m, d, H, M = (int(i) for i in stamp.split('-'))
+            date = datetime(y, m, d, H, M, 0) + relativedelta(months=month, years=year)
+            self.view.update_popup(self.generate_calendar(date))
+
         case = {
             'day': insert,
             'month': generate_months,
             'year': generate_years,
             'time': generate_time,
-            'calendar': calendar
+            'calendar': calendar,
+            'prev_month': lambda s=stamp: shift(s, month=-1),
+            'next_month': lambda s=stamp: shift(s, month=1),
+            'prev_year': lambda s=stamp: shift(s, year=-1),
+            'next_year': lambda s=stamp: shift(s, year=1)
         }
         self.view.update_popup('Loading...')
         case[msg](stamp)
