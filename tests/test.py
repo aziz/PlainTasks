@@ -29,10 +29,11 @@ class TestFunctions(TestCase):
             # future
             ['1-1', default, datetime(2017, 1, 1, 23, 0, 0)],
             ['1 1:', default, datetime(2017, 1, 1, 1, 0, 0)],
+            ['23', datetime(2016, 12, 1, 23, 0, 0), datetime(2016, 12, 23, 23, 0, 0)],
         ]
         for (string, now, result) in cases:
-            date, error = PlainTasksDates.convert_date('', now)
-            self.assertEqual(date, now)
+            date, error = PlainTasksDates.convert_date(string, now)
+            self.assertEqual(date, result)
 
     def test_parse_date(self):
         default = datetime(2016, 12, 31, 23, 0, 0)
