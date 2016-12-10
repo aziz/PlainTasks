@@ -99,7 +99,7 @@ def increase_date(view, region, text, now, date_format):
         line_content = view.substr(line)
         created = re.search(r'(?mxu)@created\(([\d\w,\.:\-\/ @]*)\)', line_content)
         if created:
-            created_date, error = convert_date(created.group(1), now)
+            created_date, error = parse_date(created.group(1), date_format=date_format, yearfirst=date_format.startswith(('%y', '%Y')), default=now)
             if error:
                 ln = (view.rowcol(line.a)[0] + 1)
                 print(u'\nPlainTasks:\nError at line %d\n\t%s\ncaused by text:\n\t"%s"\n' % (ln, error, created.group(0)))
