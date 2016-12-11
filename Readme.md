@@ -191,6 +191,10 @@ Here is a list of PlainTasks’ specific settings:
 | **icon_past_due**              | `"circle"`       | Gutter icon¹                                                            |
 | **icon_due_soon**              | `"dot"`          | Gutter icon¹                                                            |
 | **icon_misformatted**          | `""`             | Gutter icon¹                                                            |
+| **icon_critical**              | `""`             | Gutter icon¹                                                            |
+| **icon_high**                  | `""`             | Gutter icon¹                                                            |
+| **icon_low**                   | `""`             | Gutter icon¹                                                            |
+| **icon_today**                 | `""`             | Gutter icon¹                                                            |
 | **show_remain_due**            | true             | In Sublime 3, show remain or overdue time under due tags                |
 | **show_calendar_on_tags**      | false            | In Sublime 3, if true, automatically show date picker when cursor is on tag (you can get date picker any time via context menu) |
 

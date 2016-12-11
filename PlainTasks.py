@@ -864,3 +864,41 @@ class PlainTasksFoldToTags(PlainTasksFold):
             if tag and tag not in tags:
                 tags.append(tag)
         return tags
+
+
+class PlainTasksAddGutterIconsForTags(sublime_plugin.EventListener):
+    def on_activated(self, view):
+        if not view.score_selector(0, "text.todo") > 0:
+            return
+        view.erase_regions('critical')
+        view.erase_regions('high')
+        view.erase_regions('low')
+        view.erase_regions('today')
+        icon_critical = view.settings().get('icon_critical', '')
+        icon_high = view.settings().get('icon_high', '')
+        icon_low = view.settings().get('icon_low', '')
+        icon_today = view.settings().get('icon_today', '')
+        if not any((icon_critical, icon_high, icon_low, icon_today)):
+            return
+
+        critical = 'string.other.tag.todo.critical'
+        high = 'string.other.tag.todo.high'
+        low = 'string.other.tag.todo.low'
+        today = 'string.other.tag.todo.today'
+        r_critical = view.find_by_selector(critical)
+        r_high = view.find_by_selector(high)
+        r_low = view.find_by_selector(low)
+        r_today = view.find_by_selector(today)
+
+        if not any((critical, high, low, today)):
+            return
+        view.add_regions('critical', r_critical, critical, icon_critical, sublime.HIDDEN)
+        view.add_regions('high', r_high, high, icon_high, sublime.HIDDEN)
+        view.add_regions('low', r_low, low, icon_low, sublime.HIDDEN)
+        view.add_regions('today', r_today, today, icon_today, sublime.HIDDEN)
+
+    def on_post_save(self, view):
+        self.on_activated(view)
+
+    def on_load(self, view):
+        self.on_activated(view)
