@@ -78,7 +78,7 @@ class TestFunctions(TestCase):
 
         region = None
         default = datetime(2016, 12, 31, 23, 0, 0)
-        default_format = '%y-%m-%d %H:%M'
+        default_format = '(%y-%m-%d %H:%M)'
 
         cases = [
             {'string': '+', 'result': datetime(2017, 1, 1, 23, 0), },
@@ -114,3 +114,16 @@ class TestFunctions(TestCase):
         for c in cases:
             string = PlainTasksDates.format_delta(c.get('view', View()), c['delta'])
             self.assertEqual(string, c['result'])
+
+    def test_is_yearfirst(self):
+        cases = [
+            ['(%y-%m-%d %H:%M)', True],
+            ['(%Y-%m-%d %H:%M)', True],
+            ['(%d-%m-%y %H:%M)', False],
+            ['(%b %d %Y %H:%M)', False],
+            ['( %y-%m-%d %H:%M )', True],
+            ['( %d.%m.%y %H:%M )', False],
+        ]
+        for (date_format, result) in cases:
+            yf = PlainTasksDates.is_yearfirst(date_format)
+            self.assertEqual(yf, result)

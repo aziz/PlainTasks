@@ -29,6 +29,10 @@ if ST3:
     locale.setlocale(locale.LC_ALL, '')
 
 
+def is_yearfirst(date_format):
+    return date_format.strip('( )').startswith(('%y', '%Y'))
+
+
 def _convert_date(matchstr, now):
     match_obj = re.search(r'''(?mxu)
         (?:\s*
@@ -99,7 +103,10 @@ def increase_date(view, region, text, now, date_format):
         line_content = view.substr(line)
         created = re.search(r'(?mxu)@created\(([\d\w,\.:\-\/ @]*)\)', line_content)
         if created:
-            created_date, error = parse_date(created.group(1), date_format=date_format, yearfirst=date_format.startswith(('%y', '%Y')), default=now)
+            created_date, error = parse_date(created.group(1),
+                                             date_format=date_format,
+                                             yearfirst=is_yearfirst(date_format),
+                                             default=now)
             if error:
                 ln = (view.rowcol(line.a)[0] + 1)
                 print(u'\nPlainTasks:\nError at line %d\n\t%s\ncaused by text:\n\t"%s"\n' % (ln, error, created.group(0)))
@@ -141,8 +148,6 @@ def increase_date(view, region, text, now, date_format):
 
 
 def expand_short_date(view, start, end, now, date_format):
-    date_format = date_format.strip('()')
-
     while view.substr(start) != '(':
         start -= 1
     while view.substr(end) != ')':
@@ -154,7 +159,7 @@ def expand_short_date(view, start, end, now, date_format):
     if '+' in text:
         date, error = increase_date(view, region, text, now, date_format)
     else:
-        date, error = parse_date(text, date_format, yearfirst=date_format.startswith(('%y', '%Y')), default=now)
+        date, error = parse_date(text, date_format, yearfirst=is_yearfirst(date_format), default=now)
 
     return date, error, sublime.Region(start, end + 1)
 
@@ -251,7 +256,7 @@ class PlainTasksToggleHighlightPastDue(PlainTasksEnabled):
     def group_due_tags(self, dates_strings, dates_regions):
         past_due, due_soon, misformatted, phantoms = [], [], [], []
         date_format = self.view.settings().get('date_format', '(%y-%m-%d %H:%M)')
-        yearfirst = date_format.startswith(('(%y', '(%Y'))
+        yearfirst = is_yearfirst(date_format)
         now = datetime.now()
         default = now - timedelta(seconds=now.second, microseconds=now.microsecond)  # for short dates w/o time
         due_soon_threshold = self.view.settings().get('highlight_due_soon', 24) * 60 * 60
@@ -262,6 +267,7 @@ class PlainTasksToggleHighlightPastDue(PlainTasksEnabled):
             text = dates_strings[i]
             if '+' in text:
                 date, error = increase_date(self.view, region, text, default, date_format)
+                # print(date, date_format)
             else:
                 date, error = parse_date(text, date_format=date_format, yearfirst=yearfirst, default=default)
                 # print(date, date_format, yearfirst)
