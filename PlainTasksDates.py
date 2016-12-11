@@ -7,6 +7,7 @@ import calendar
 from datetime import datetime
 from datetime import timedelta
 
+NT = sublime.platform() == 'windows'
 ST3 = int(sublime.version()) >= 3000
 if ST3:
     from .APlainTasksCommon import PlainTasksBase, PlainTasksEnabled, PlainTasksFold
@@ -195,6 +196,8 @@ def parse_date(date_string, date_format='(%y-%m-%d %H:%M)', yearfirst=True, defa
         date = dateutil_parser.parse(bare_date_string,
                                      yearfirst=yearfirst,
                                      default=default)
+        if NT and all((date.year < 1900, '%y' in date_format)):
+            return None, ('format %y requires year >= 1900 on Windows', date.year, date.month, date.day, date.hour, date.minute)
     except Exception as e:
         # print(e)
         date, error = convert_date(bare_date_string, default)

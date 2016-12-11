@@ -13,7 +13,7 @@ else:
     PlainTasksDates = sys.modules['PlainTasksDates']
 
 
-class TestFunctions(TestCase):
+class TestDatesFunctions(TestCase):
 
     def test_convert_date(self):
         default = datetime(2016, 12, 31, 23, 0, 0)
@@ -45,12 +45,15 @@ class TestFunctions(TestCase):
             {'string': '3', 'result': datetime(2017, 1, 3, 23, 0, 0), },
             # error
             {'string': '11111', 'result': None, },
+            {'string': '233', 'result': None, },
             # yearfirst
             {'string': '1.1.16', 'result': datetime(2001, 1, 16, 23, 0, 0), },
             # yearfirst not
             {'string': '1.1.16', 'result': datetime(2016, 1, 1, 23, 0, 0), 'date_format': '(%d-%m-%y %H:%M)', },
             # named month
             {'string': '2003-Sep-25', 'result': datetime(2003, 9, 25, 23, 0, 0), 'date_format': '(%d-%m-%y %H:%M)', },
+            # ancient
+            {'string': '233', 'result': datetime(233, 12, 31, 23, 0, 0), 'date_format': '(%Y-%m-%d %H:%M)', },
         ]
         for c in cases:
             fmt = c.get('date_format', default_format)
