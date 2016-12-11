@@ -346,13 +346,13 @@ class PlainTasksCalculateTotalTimeForProject(PlainTasksEnabled):
 
 
 class PlainTasksCalculateTimeForTask(PlainTasksEnabled):
-    def run(self, edit, started_matches, toggle_matches, done_line_end, eol, tag='lasted'):
+    def run(self, edit, started_matches, toggle_matches, now, eol, tag='lasted'):
         if not started_matches:
             return
 
         date_format = self.view.settings().get('date_format', '(%y-%m-%d %H:%M)')
         start = datetime.strptime(started_matches[0], date_format)
-        end = datetime.strptime(done_line_end.replace('@done', '').replace('@cancelled', '').strip(), date_format)
+        end = datetime.strptime(now, date_format)
 
         toggle_times = [datetime.strptime(toggle, date_format) for toggle in toggle_matches]
         all_times = [start] + toggle_times + [end]

@@ -41,6 +41,7 @@ class PlainTasksBase(sublime_plugin.TextCommand):
         else:
             self.done_tag = ""
             self.canc_tag = ""
+        self.done_date = settings.get('done_date', True)
 
         self.project_postfix = settings.get('project_tag', True)
         self.archive_name = settings.get('archive_name', 'Archive:')
@@ -51,6 +52,14 @@ class PlainTasksBase(sublime_plugin.TextCommand):
         if not ST3:
             self.sys_enc = locale.getpreferredencoding()
         self.runCommand(edit, **kwargs)
+
+    def format_line_end(self, tag, tznow):
+        try:
+            date = tznow.strftime(self.date_format).decode(self.sys_enc)
+        except:
+            date = tznow.strftime(self.date_format)
+        done_line_end = ' %s%s%s' % (tag, self.before_date_space, date if self.done_date else '')
+        return done_line_end.replace('  ', ' ').rstrip(), date
 
 
 class PlainTasksEnabled(sublime_plugin.TextCommand):
