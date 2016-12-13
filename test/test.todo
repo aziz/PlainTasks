@@ -8,7 +8,7 @@ Due tags highlighting:
   ☐ overdue     @due( 1-11-11)
     2001 year
 
-  ☐ overdue     @due( ) @due(yo) @due(0)
+  ☐ overdue     @due( ) @due(yo) @due(0)
     it is today by a second before a moment when highlighting is executed
 
   ☐ overdue     @due( ++) @created(11-11-18 16:32)

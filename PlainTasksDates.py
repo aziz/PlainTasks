@@ -251,7 +251,7 @@ class PlainTasksToggleHighlightPastDue(PlainTasksEnabled):
 
         if not ST3:
             return
-        if self.view.settings().get('show_remain_due', True):
+        if self.view.settings().get('show_remain_due', False):
             self.view.settings().set('plain_tasks_remain_time_phantoms', phantoms)
         else:
             self.view.settings().set('plain_tasks_remain_time_phantoms', [])
@@ -408,6 +408,21 @@ class PlainTasksPreviewShortDate(PlainTasksViewEventListener):
     def __init__(self, view):
         self.view = view
         self.phantoms = sublime.PhantomSet(view, 'plain_tasks_preview_short_date')
+        self.view.settings().add_on_change('due_prefiew_offset', self.set_offset)
+        self.view.settings().add_on_change('due_remain_format', self.set_remain)
+        self.view.settings().add_on_change('due_overdue_format', self.set_overdue)
+        self.set_offset()
+        self.set_remain()
+        self.set_overdue()
+
+    def set_offset(self):
+        self.preview_offset = self.view.settings().get('due_prefiew_offset', 0)
+
+    def set_remain(self):
+        self.remain_format = self.view.settings().get('due_remain_format', '{time} remaining')
+
+    def set_overdue(self):
+        self.overdue_format = self.view.settings().get('due_overdue_format', '{time} overdue')
 
     def on_selection_modified_async(self):
         self.phantoms.update([])  # https://github.com/SublimeTextIssues/Core/issues/1497
@@ -426,19 +441,33 @@ class PlainTasksPreviewShortDate(PlainTasksViewEventListener):
 
         date_format = self.view.settings().get('date_format', '(%y-%m-%d %H:%M)')
         start = rgn.a + 5  # within parenthesis
-        date, error, region = expand_short_date(self.view, start, start, datetime.now(), date_format)
+        now = datetime.now().replace(second=0, microsecond=0)
+        date, error, region = expand_short_date(self.view, start, start, now, date_format)
 
+        upd = []
         if not error:
+            if now >= date:
+                delta = '-' + format_delta(self.view, now - date)
+            else:
+                delta = format_delta(self.view, date - now)
+            content = (self.overdue_format if '-' in delta else self.remain_format).format(time=delta.lstrip('-') or 'a little bit')
+            if content:
+                upd.append(sublime.Phantom(
+                    sublime.Region(region.a - 4),
+                    content,
+                    sublime.LAYOUT_BELOW))
             date = date.strftime(date_format).strip('()')
         if date == match.group(1).strip():
+            self.phantoms.update(upd)
             return
 
-        self.phantoms.update([sublime.Phantom(
-            sublime.Region(region.b - 1),
+        upd.append(sublime.Phantom(
+            sublime.Region(region.b - self.preview_offset),
             date or (
             '{0}:<br> days:\t{1}<br> hours:\t{2}<br> minutes:\t{3}<br>'.format(*error) if len(error) == 4 else
             '{0}:<br> year:\t{1}<br> month:\t{2}<br> day:\t{3}<br> HH:\t{4}<br> MM:\t{5}<br>'.format(*error)),
-            sublime.LAYOUT_INLINE)])
+            sublime.LAYOUT_INLINE))
+        self.phantoms.update(upd)
 
 
 class PlainTasksChooseDate(sublime_plugin.ViewEventListener):
@@ -610,12 +639,17 @@ class PlainTasksRemain(PlainTasksViewEventListener):
             return
         upd = []
         for point, content in phantoms:
-            # XXX: sometimes sublime is None, so it has no Phantom
-            if sublime is None:
-                print(point, content)
-                continue
             upd.append(sublime.Phantom(
                 sublime.Region(point),
                 '%s %s' % ('Overdue' if '-' in content else 'Remain', content.lstrip('-') or 'a little bit'),
                 sublime.LAYOUT_BELOW))
         self.phantoms.update(upd)
+
+
+def plugin_unloaded():
+    for window in sublime.windows():
+        for view in window.views():
+            view.settings().clear_on_change('plain_tasks_remain_time_phantoms')
+            view.settings().clear_on_change('due_prefiew_offset')
+            view.settings().clear_on_change('due_remain_format')
+            view.settings().clear_on_change('due_overdue_format')
