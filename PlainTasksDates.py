@@ -408,7 +408,7 @@ class PlainTasksPreviewShortDate(PlainTasksViewEventListener):
     def __init__(self, view):
         self.view = view
         self.phantoms = sublime.PhantomSet(view, 'plain_tasks_preview_short_date')
-        self.view.settings().add_on_change('due_prefiew_offset', self.set_offset)
+        self.view.settings().add_on_change('due_preview_offset', self.set_offset)
         self.view.settings().add_on_change('due_remain_format', self.set_remain)
         self.view.settings().add_on_change('due_overdue_format', self.set_overdue)
         self.set_offset()
@@ -416,7 +416,7 @@ class PlainTasksPreviewShortDate(PlainTasksViewEventListener):
         self.set_overdue()
 
     def set_offset(self):
-        self.preview_offset = self.view.settings().get('due_prefiew_offset', 0)
+        self.preview_offset = self.view.settings().get('due_preview_offset', 0)
 
     def set_remain(self):
         self.remain_format = self.view.settings().get('due_remain_format', '{time} remaining')
@@ -650,6 +650,6 @@ def plugin_unloaded():
     for window in sublime.windows():
         for view in window.views():
             view.settings().clear_on_change('plain_tasks_remain_time_phantoms')
-            view.settings().clear_on_change('due_prefiew_offset')
+            view.settings().clear_on_change('due_preview_offset')
             view.settings().clear_on_change('due_remain_format')
             view.settings().clear_on_change('due_overdue_format')

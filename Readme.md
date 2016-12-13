@@ -198,7 +198,7 @@ Here is a list of PlainTasks’ specific settings:
 | **icon_today**                 | `""`             | Gutter icon¹                                                            |
 | **show_remain_due**            | false            | In Sublime 3, show remain or overdue time under due tags                |
 | **show_calendar_on_tags**      | false            | In Sublime 3, if true, automatically show date picker when cursor is on tag (you can get date picker any time via context menu) |
-| **due_prefiew_offset**         | 0                | Place preview date outside of parens of `@due()`, 1 — within            |
+| **due_preview_offset**         | 0                | Place preview date outside of parens of `@due()`, 1 — within            |
 | **due_remain_format**          | `"{time} remaining"` | `{time}` will be replaced with actual value                         |
 | **due_overdue_format**         | `"{time} overdue"` | `{time}` will be replaced with actual value                           |
 
