@@ -133,12 +133,18 @@ class PlainTasksNewWithDateCommand(PlainTasksBase):
         self.view.run_command('plain_tasks_new')
         sels = list(self.view.sel())
         suffix = ' @created%s' % tznow().strftime(self.date_format)
+        points = []
         for s in reversed(sels):
-            self.view.insert(edit, s.b, suffix)
+            if self.view.substr(sublime.Region(s.b - 2, s.b)) == '  ':
+                point = s.b - 2  # keep double whitespace at eol
+            else:
+                point = s.b
+            self.view.insert(edit, point, suffix)
+            points.append(point)
         self.view.sel().clear()
         offset = len(suffix)
         for i, sel in enumerate(sels):
-            self.view.sel().add(sublime.Region(sel.a + i*offset, sel.b + i*offset))
+            self.view.sel().add(sublime.Region(points[~i] + i*offset, points[~i] + i*offset))
 
 
 class PlainTasksCompleteCommand(PlainTasksBase):
@@ -169,12 +175,19 @@ class PlainTasksCompleteCommand(PlainTasksBase):
             started_matches = re.findall(started, line_contents, re.U)
             toggle_matches = re.findall(toggle, line_contents, re.U)
 
+            done_line_end = done_line_end.rstrip()
+            if line_contents.endswith('  '):
+                done_line_end += '  '  # keep double whitespace at eol
+                dblspc = '  '
+            else:
+                dblspc = ''
+
             current_scope = self.view.scope_name(line.a)
             if 'pending' in current_scope:
                 grps = open_matches.groups()
                 eol = self.view.insert(edit, line.end(), done_line_end)
                 replacement = u'%s%s%s' % (grps[0], self.done_tasks_bullet, grps[2])
-                self.view.replace(edit, line, replacement)
+                self.view.replace(edit, line, replacement.rstrip())
                 self.view.run_command(
                     'plain_tasks_calculate_time_for_task', {
                         'started_matches': started_matches,
@@ -198,7 +211,7 @@ class PlainTasksCompleteCommand(PlainTasksBase):
                 grps = done_matches.groups()
                 parentheses = check_parentheses(self.date_format, grps[4] or '')
                 replacement = u'%s%s%s%s' % (grps[0], self.open_tasks_bullet, grps[2], parentheses)
-                self.view.replace(edit, line, replacement.rstrip())
+                self.view.replace(edit, line, replacement.rstrip() + dblspc)
                 offset = -offset
             elif 'cancelled' in current_scope:
                 grps = canc_matches.groups()
@@ -243,12 +256,19 @@ class PlainTasksCancelCommand(PlainTasksBase):
             started_matches = re.findall(started, line_contents, re.U)
             toggle_matches = re.findall(toggle, line_contents, re.U)
 
+            canc_line_end = canc_line_end.rstrip()
+            if line_contents.endswith('  '):
+                canc_line_end += '  '  # keep double whitespace at eol
+                dblspc = '  '
+            else:
+                dblspc = ''
+
             current_scope = self.view.scope_name(line.a)
             if 'pending' in current_scope:
                 grps = open_matches.groups()
                 eol = self.view.insert(edit, line.end(), canc_line_end)
                 replacement = u'%s%s%s' % (grps[0], self.canc_tasks_bullet, grps[2])
-                self.view.replace(edit, line, replacement)
+                self.view.replace(edit, line, replacement.rstrip())
                 self.view.run_command(
                     'plain_tasks_calculate_time_for_task', {
                         'started_matches': started_matches,
@@ -281,7 +301,7 @@ class PlainTasksCancelCommand(PlainTasksBase):
                 grps = canc_matches.groups()
                 parentheses = check_parentheses(self.date_format, grps[4] or '')
                 replacement = u'%s%s%s%s' % (grps[0], self.open_tasks_bullet, grps[2], parentheses)
-                self.view.replace(edit, line, replacement.rstrip())
+                self.view.replace(edit, line, replacement.rstrip() + dblspc)
                 offset = -offset
         self.view.sel().clear()
         for ind, pt in enumerate(original):
@@ -320,22 +340,24 @@ class PlainTasksArchiveCommand(PlainTasksBase):
 
             # adding tasks to archive section
             for task in all_tasks:
-                match_task = re.match('^\s*(\[[x-]\]|.)(\s+.*$)', self.view.substr(task), re.U)
+                line_content = self.view.substr(task)
+                match_task = re.match(r'^\s*(\[[x-]\]|.)(\s+.*$)', line_content, re.U)
                 current_scope = self.view.scope_name(task.a)
                 if rds in current_scope or rcs in current_scope:
                     pr = self.get_task_project(task, projects)
                     if self.project_postfix:
-                        eol = (self.before_tasks_bullet_spaces + self.view.substr(task).lstrip() +
-                               (' @project(' if pr else '') + pr + (')' if pr else '') +
-                               '\n')
+                        eol = '{0}{1}{2}\n'.format(
+                            self.before_tasks_bullet_spaces,
+                            line_content.lstrip(),
+                            (' @project(%s)' % pr) if pr else '')
                     else:
-                        eol = (self.before_tasks_bullet_spaces +
-                               match_task.group(1) +  # bullet
-                               (self.tasks_bullet_space if pr else '') + pr + (':' if pr else '') +
-                               match_task.group(2) +  # very task
-                               '\n')
+                        eol = '{0}{1}{2}{3}\n'.format(
+                            self.before_tasks_bullet_spaces,
+                            match_task.group(1),  # bullet
+                            ('%s%s:' % (self.tasks_bullet_space, pr))  if pr else '',
+                            match_task.group(2))  # very task
                 else:
-                    eol = self.before_tasks_bullet_spaces * 2 + self.view.substr(task).lstrip() + '\n'
+                    eol = '{0}{1}\n'.format(self.before_tasks_bullet_spaces * 2, line_content.lstrip())
                 line += self.view.insert(edit, line, eol)
 
             # remove moved tasks (starting from the last one otherwise it screw up regions after the first delete)
