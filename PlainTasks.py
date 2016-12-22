@@ -332,7 +332,7 @@ class PlainTasksArchiveCommand(PlainTasksBase):
             if archive_pos and archive_pos.a > 0:
                 line = self.view.full_line(archive_pos).end()
             else:
-                create_archive = u'\n\n＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿\n' + self.archive_name + '\n'
+                create_archive = u'\n\n＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿\n%s\n' % self.archive_name
                 self.view.insert(edit, self.view.size(), create_archive)
                 line = self.view.size()
 
@@ -346,18 +346,19 @@ class PlainTasksArchiveCommand(PlainTasksBase):
                 if rds in current_scope or rcs in current_scope:
                     pr = self.get_task_project(task, projects)
                     if self.project_postfix:
-                        eol = '{0}{1}{2}\n'.format(
+                        eol = u'{0}{1}{2}{3}\n'.format(
                             self.before_tasks_bullet_spaces,
-                            line_content.lstrip(),
-                            (' @project(%s)' % pr) if pr else '')
+                            line_content.strip(),
+                            (u' @project(%s)' % pr) if pr else '',
+                            '  ' if line_content.endswith('  ') else '')
                     else:
-                        eol = '{0}{1}{2}{3}\n'.format(
+                        eol = u'{0}{1}{2}{3}\n'.format(
                             self.before_tasks_bullet_spaces,
                             match_task.group(1),  # bullet
-                            ('%s%s:' % (self.tasks_bullet_space, pr))  if pr else '',
+                            (u'%s%s:' % (self.tasks_bullet_space, pr)) if pr else '',
                             match_task.group(2))  # very task
                 else:
-                    eol = '{0}{1}\n'.format(self.before_tasks_bullet_spaces * 2, line_content.lstrip())
+                    eol = u'{0}{1}\n'.format(self.before_tasks_bullet_spaces * 2, line_content.lstrip())
                 line += self.view.insert(edit, line, eol)
 
             # remove moved tasks (starting from the last one otherwise it screw up regions after the first delete)
@@ -376,7 +377,7 @@ class PlainTasksArchiveCommand(PlainTasksBase):
         if index == -1:
             return ''
 
-        prog = re.compile('^\n*(\s*)(.+):(?=\s|$)\s*(\@[^\s]+(\(.*?\))?\s*)*')
+        prog = re.compile(r'^\n*(\s*)(.+):(?=\s|$)\s*(\@[^\s]+(\(.*?\))?\s*)*')
         hierarhProject = ''
 
         if index >= 0:
@@ -391,7 +392,7 @@ class PlainTasksArchiveCommand(PlainTasksBase):
                         if len(depth) == 0:
                             break
                 else:
-                    sep = re.compile('(^\s*)---.{3,5}---+$')
+                    sep = re.compile(r'(^\s*)---.{3,5}---+$')
                     spaces = sep.match(strProject).group(1)
                     if len(spaces) < len(depth):
                         depth = spaces
@@ -904,7 +905,7 @@ class PlainTasksAddGutterIconsForTags(sublime_plugin.EventListener):
         r_low = view.find_by_selector(low)
         r_today = view.find_by_selector(today)
 
-        if not any((critical, high, low, today)):
+        if not any((r_critical, r_high, r_low, r_today)):
             return
         view.add_regions('critical', r_critical, critical, icon_critical, sublime.HIDDEN)
         view.add_regions('high', r_high, high, icon_high, sublime.HIDDEN)
