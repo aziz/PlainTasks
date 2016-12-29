@@ -635,27 +635,40 @@ class PlainTasksOpenLinkCommand(sublime_plugin.TextCommand):
 
 class PlainTasksSortByDate(PlainTasksBase):
     def runCommand(self, edit):
+        if not re.search(r'(?su)%[Yy][-./ ]*%m[-./ ]*%d\s*%H.*%M', self.date_format):
+            # TODO: sort with dateutil so we wont depend on specific date_format
+            return
         archive_pos = self.view.find(self.archive_name, 0, sublime.LITERAL)
         if archive_pos:
-            have_date = '(^\s*[^\n]*?\s\@(?:done|cancelled)\s*(\([\d\w,\.:\-\/ ]*\))[^\n]*$)'
+            have_date = r'(^\s*[^\n]*?\s\@(?:done|cancelled)\s*(\([\d\w,\.:\-\/ ]*\))[^\n]*$)'
+            all_tasks_prefixed_date = []
+            all_tasks = self.view.find_all(have_date, 0, u"\\2\\1", all_tasks_prefixed_date)
+
             tasks_prefixed_date = []
-            tasks = self.view.find_all(have_date, archive_pos.b-1, "\\2\\1", tasks_prefixed_date)
+            tasks = []
+            for ind, task in enumerate(all_tasks):
+                if task.a > archive_pos.b:
+                    tasks.append(task)
+                    tasks_prefixed_date.append(all_tasks_prefixed_date[ind])
+
             notes = []
             for ind, task in enumerate(tasks):
                 note_line = task.end() + 1
                 while self.view.scope_name(note_line) == 'text.todo notes.todo ':
                     note = self.view.line(note_line)
                     notes.append(note)
-                    tasks_prefixed_date[ind] += '\n' + self.view.substr(note)
+                    tasks_prefixed_date[ind] += u'\n' + self.view.substr(note)
                     note_line = note.end() + 1
+
             to_remove = tasks+notes
             to_remove.sort()
             for i in reversed(to_remove):
                 self.view.erase(edit, self.view.full_line(i))
+
             tasks_prefixed_date.sort(reverse=self.view.settings().get('new_on_top', True))
             eol = archive_pos.end()
             for a in tasks_prefixed_date:
-                eol += self.view.insert(edit, eol, '\n' + re.sub('^\([\d\w,\.:\-\/ ]*\)([^\b]*$)', '\\1', a))
+                eol += self.view.insert(edit, eol, u'\n' + re.sub(r'^\([\d\w,\.:\-\/ ]*\)([^\b]*$)', u'\\1', a))
         else:
             sublime.status_message("Nothing to sort")
 
