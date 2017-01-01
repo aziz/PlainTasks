@@ -439,19 +439,8 @@ class PlainTasksArchiveCommand(PlainTasksBase):
 class PlainTasksNewTaskDocCommand(sublime_plugin.WindowCommand):
     def run(self):
         view = self.window.new_file()
-        view.settings().add_on_change('color_scheme', lambda: self.set_proper_scheme(view))
         view.set_syntax_file('Packages/PlainTasks/PlainTasks.sublime-syntax' if ST3 else
                              'Packages/PlainTasks/PlainTasks.tmLanguage')
-
-    def set_proper_scheme(self, view):
-        if view.id() != sublime.active_window().active_view().id():
-            return
-        pts = sublime.load_settings('PlainTasks.sublime-settings')
-        if view.settings().get('color_scheme') == pts.get('color_scheme'):
-            return
-        # Since we cannot create file with syntax, there is moment when view has no settings,
-        # but it is activated, so some plugins (e.g. Color Highlighter) set wrong color scheme
-        view.settings().set('color_scheme', pts.get('color_scheme'))
 
 
 class PlainTasksOpenUrlCommand(sublime_plugin.TextCommand):
@@ -930,3 +919,22 @@ class PlainTasksAddGutterIconsForTags(sublime_plugin.EventListener):
 
     def on_load(self, view):
         self.on_activated(view)
+
+class PlainTasksColorSchemr(sublime_plugin.EventListener):
+
+    def on_load(self, view):
+        if not view.settings().get('syntax') == 'Packages/PlainTasks/PlainTasks.sublime-syntax':
+            return
+        pts = sublime.load_settings('PlainTasks.sublime-settings')
+        color_scheme = pts.get('color_scheme')
+        if color_scheme is not None and view.settings().get('color_scheme') == color_scheme:
+            return
+        if color_scheme is None:
+            # take the default color scheme
+            color_scheme = sublime.load_settings('Preferences.sublime-settings').get('color_scheme')
+
+        view.settings().set('color_scheme', color_scheme)
+        print("PlainTasks.py:953", view.settings().get('color_scheme'))
+
+    def on_new(self, view):
+        return self.on_load(view)
