@@ -56,7 +56,6 @@ def tznow():
         )
     )
 
-
 def check_parentheses(date_format, regex_group, is_date=False):
     if is_date:
         try:
@@ -69,6 +68,17 @@ def check_parentheses(date_format, regex_group, is_date=False):
         except ValueError:
             parentheses = regex_group
     return parentheses
+
+def reset_color_scheme(view):
+    pts = sublime.load_settings('PlainTasks.sublime-settings')
+    color_scheme = pts.get('color_scheme')
+    if color_scheme is not None and view.settings().get('color_scheme') == color_scheme:
+        return
+    if color_scheme is None:
+        # take the default color scheme
+        color_scheme = sublime.load_settings('Preferences.sublime-settings').get('color_scheme')
+
+    view.settings().set('color_scheme', color_scheme)
 
 
 class PlainTasksNewCommand(PlainTasksBase):
@@ -441,6 +451,7 @@ class PlainTasksNewTaskDocCommand(sublime_plugin.WindowCommand):
         view = self.window.new_file()
         view.set_syntax_file('Packages/PlainTasks/PlainTasks.sublime-syntax' if ST3 else
                              'Packages/PlainTasks/PlainTasks.tmLanguage')
+        reset_color_scheme(view)
 
 
 class PlainTasksOpenUrlCommand(sublime_plugin.TextCommand):
@@ -920,21 +931,8 @@ class PlainTasksAddGutterIconsForTags(sublime_plugin.EventListener):
     def on_load(self, view):
         self.on_activated(view)
 
-class PlainTasksColorSchemr(sublime_plugin.EventListener):
+
+class PlainTasksColorSchemeRestr(sublime_plugin.EventListener):
 
     def on_load(self, view):
-        if not view.settings().get('syntax') == 'Packages/PlainTasks/PlainTasks.sublime-syntax':
-            return
-        pts = sublime.load_settings('PlainTasks.sublime-settings')
-        color_scheme = pts.get('color_scheme')
-        if color_scheme is not None and view.settings().get('color_scheme') == color_scheme:
-            return
-        if color_scheme is None:
-            # take the default color scheme
-            color_scheme = sublime.load_settings('Preferences.sublime-settings').get('color_scheme')
-
-        view.settings().set('color_scheme', color_scheme)
-        print("PlainTasks.py:953", view.settings().get('color_scheme'))
-
-    def on_new(self, view):
-        return self.on_load(view)
+        reset_color_scheme(view)
