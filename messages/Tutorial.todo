@@ -11,6 +11,7 @@ Tasks:
   Starting a new todo-list:
    ☐ Bring up the command palette (it's ⌘+shift+p in Mac and ctrl+shift+p in Windows)
    ☐ type `task` and select `Tasks: New document` command
+   You can also turn on the syntax highlighting (and keyboard shortcuts) by turning on the `tasks` syntax.
   New:
    ☐ ⌘+enter (ctrl+enter on Windows) adds a new task.
    ☐ ⌘+i (ctrl+i on Windows) also adds a new task
