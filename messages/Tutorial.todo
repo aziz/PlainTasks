@@ -76,6 +76,7 @@ Time Tracking:
   ☐ type s, press tab key twice — it’ll become @started(13-10-25 15:20)
     You’ll get a current date and time; When a task with such tag is completed/cancelled,
     PlainTasks will calculate the time spent on that task and append it to the archived task.
+    You can recalculate it for already completed/cancelled task: put cursor at tag and press tab key
   ☐ type tg, press tab key twice — @toggle(14-10-13 16:14)
     That way you can pause and resume started task, so result of calculation will be more correct.
     First, you need start task, then toggle means pause, next toggle — resume, etc.

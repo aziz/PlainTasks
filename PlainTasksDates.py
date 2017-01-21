@@ -4,6 +4,7 @@ import json
 import re
 import locale
 import calendar
+import itertools
 from datetime import datetime
 from datetime import timedelta
 
@@ -347,6 +348,18 @@ class PlainTasksCalculateTotalTimeForProject(PlainTasksEnabled):
 
 class PlainTasksCalculateTimeForTask(PlainTasksEnabled):
     def run(self, edit, started_matches, toggle_matches, now, eol, tag='lasted'):
+        '''
+        started_matches
+            list of Unicode objects
+        toggle_matches
+            list of Unicode objects
+        now
+            Unicode object, moment of completion or cancellation of a task
+        eol
+            int as str (abs. point of end of task line without line break)
+        tag
+            Unicode object (lasted for complete, wasted for cancelled)
+        '''
         if not started_matches:
             return
 
@@ -362,7 +375,49 @@ class PlainTasksCalculateTimeForTask(PlainTasksEnabled):
         delta = format_delta(self.view, sum(deltas, timedelta()))
 
         tag = ' @%s(%s)' % (tag, delta.rstrip(', ') if delta else ('a bit' if '%H' in date_format else 'less than day'))
-        self.view.insert(edit, int(eol), tag)
+        eol = int(eol)
+        if self.view.substr(sublime.Region(eol - 2, eol)) == '  ':
+            eol -= 2  # keep double whitespace at eol
+        self.view.insert(edit, eol, tag)
+
+
+class PlainTasksReCalculateTimeForTasks(PlainTasksEnabled):
+    def run(self, edit):
+        started = r'^\s*[^\b]*?\s*@started(\([\d\w,\.:\-\/ @]*\)).*$'
+        toggle = r'@toggle(\([\d\w,\.:\-\/ @]*\))'
+        calculated = r'([ \t]@[lw]asted\([\d\w,\.:\-\/ @]*\))'
+        done = r'^\s*[^\b]*?\s*@(done|cancell?ed)[ \t]*(\([\d\w,\.:\-\/ @]*\)).*$'
+
+        date_format = self.view.settings().get('date_format', '(%y-%m-%d %H:%M)')
+        default_now = datetime.now().strftime(date_format)
+
+        regions = itertools.chain(*(reversed(self.view.lines(region)) for region in reversed(list(self.view.sel()))))
+        for line in regions:
+            current_scope = self.view.scope_name(line.a)
+            if not any(s in current_scope for s in ('completed', 'cancelled')):
+                continue
+
+            line_contents = self.view.substr(line)
+
+            done_match = re.match(done, line_contents, re.U)
+            now = done_match.group(2) if done_match else default_now
+
+            started_matches = re.findall(started, line_contents, re.U)
+            toggle_matches = re.findall(toggle, line_contents, re.U)
+            calc_matches = re.findall(calculated, line_contents, re.U)
+
+            for match in calc_matches:
+                line_contents = line_contents.replace(match, '')
+
+            self.view.replace(edit, line, line_contents)
+            self.view.run_command(
+                'plain_tasks_calculate_time_for_task', {
+                    'started_matches': started_matches,
+                    'toggle_matches': toggle_matches,
+                    'now': now,
+                    'eol': line.begin() + len(line_contents),
+                    'tag': 'lasted' if 'completed' in current_scope else 'wasted'}
+            )
 
 
 class PlainTaskInsertDate(PlainTasksBase):
