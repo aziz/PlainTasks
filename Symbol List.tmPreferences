@@ -11,7 +11,7 @@
     <key>showInSymbolList</key>
     <integer>1</integer>
     <key>symbolTransformation</key>
-    <string>s/^(\s*.+)\s*:((\s+@\w+(\([^()]*\))?)*)\s*$/$1$2/</string>
+    <string>s/^(\s*.+)\s*:\s?((\s*?@\w+(\([^()]*\))?)*)\s*$/$1 $2/</string>
   </dict>
   <key>uuid</key>
   <string>46F06118-8CE4-4C95-A4C4-4507E056A597</string>
