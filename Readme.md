@@ -1,4 +1,4 @@
-## [PlainTasks](https://github.com/aziz/PlainTasks) 
+## [PlainTasks](https://github.com/aziz/PlainTasks)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/8d42f3e49d104ab8bf663392661b183b)](https://www.codacy.com/app/allen-bargi/PlainTasks?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=aziz/PlainTasks&amp;utm_campaign=Badge_Grade)
 
 An opinionated todo-list plugin for Sublime Text (2 & 3) editor
@@ -12,7 +12,7 @@ To install this plugin, you have two options:
 2. Clone source code to Sublime Text packages folder.
 
 ## Start a new todo-list
-Bring up the command palette (it’s <kbd>⌘ + shift + p</kbd> in OS X and <kbd>ctrl + shift + p</kbd> in Windows) and type `task` and select `Tasks: New document` command. 
+Bring up the command palette (it’s <kbd>⌘ + shift + p</kbd> in OS X and <kbd>ctrl + shift + p</kbd> in Windows) and type `task` and select `Tasks: New document` command.
 
 **NOTE:** Save your todo files with `todo`, `todolist`, `tasks` or `taskpaper` file extensions or just name them `TODO` with no extension.
 For more portability you can use `todolist.txt` either as a filename or as suffix for any arbitrary filename.
@@ -32,11 +32,11 @@ For more portability you can use `todolist.txt` either as a filename or as suffi
 
 ☐ <kbd>⌘ + shift + u</kbd> will open the url under the cursor in your default browser, other than http(s) schemes must be enclosed within `<>`, e.g. `<skype:nickname>`
 
-☐ Anything with colon at the end of the line is a project title, you can also nest projects by indenting them. 
+☐ Anything with colon at the end of the line is a project title, you can also nest projects by indenting them.
 
 ☐ You can write plain text as notes or descriptions wherever you want. Use `_` or `*` for italic and bold just like in Markdown.
 
-☐ You can add tags using **`@`** sign  
+☐ You can add tags using **`@`** sign
 You can place cursors on tags, click right mouse button and **Filter by tags under cursors**:
 pending tasks with selected tags will remain visible (and their notes and projects they belong to), but everything else will be hidden/folded; to unfold all press <kbd>⌘+k</kbd>, <kbd>⌘+j</kbd> or <kbd>⌘+k</kbd>, <kbd>⌘+0</kbd>
 
@@ -44,7 +44,7 @@ pending tasks with selected tags will remain visible (and their notes and projec
 
 `--` and then <kbd>tab</kbd> will give you this: `--- ✄ -----------------------`
 
-☐ Completion rules (<kbd>ctrl+space</kbd> or <kbd>alt+/</kbd> to see list of them):  
+☐ Completion rules (<kbd>ctrl+space</kbd> or <kbd>alt+/</kbd> to see list of them):
 
 - type `t`, press <kbd>tab</kbd> — it’ll become `@today` — this one is highlighted differently than other tags;
 - `c`, <kbd>tab</kbd> — `@critical`;
@@ -53,10 +53,10 @@ pending tasks with selected tags will remain visible (and their notes and projec
 - `s`, <kbd>tab</kbd> — `@started` — press <kbd>tab</kbd> again and current date will be inserted, when you’ll complete or cancel a task with such tag, you’ll know how many time has passed since start; if you have to change done/cancelled/started time, then you can recalculate the time spent on task by pressing <kbd>tab</kbd> while cursor is placed on a tag;
 - `tg`, <kbd>tab</kbd>, <kbd>tab</kbd> work in the same manner as `s`, but inserts `@toggle(current date)` — so you can pause and resume to get more correct result when done/cancel; each toggle tag is either pause or resume depending on its place in sequence;
 - `cr`, <kbd>tab</kbd>, <kbd>tab</kbd> — `@created(current date)` (<kbd>⌘ + shift + enter</kbd> creates a new task with this tag);
-- `d`, <kbd>tab</kbd> — `@due( )`  
-  If you press <kbd>tab</kbd> again, it’ll insert current date, same for `@due( 0)`.  
-  You can type short date (similar to [OrgMode’s date prompt](http://orgmode.org/manual/The-date_002ftime-prompt.html), but not the same) and then press <kbd>tab</kbd> to expand it into default format.  
-  Short date should be __`@due(year-month-day hour:minute)`__  
+- `d`, <kbd>tab</kbd> — `@due( )`
+  If you press <kbd>tab</kbd> again, it’ll insert current date, same for `@due( 0)`.
+  You can type short date (similar to [OrgMode’s date prompt](http://orgmode.org/manual/The-date_002ftime-prompt.html), but not the same) and then press <kbd>tab</kbd> to expand it into default format.
+  Short date should be __`@due(year-month-day hour:minute)`__
   Dot can be used instead of hyphen, but should be consistent _`year.month.day`_
 
     - year, month, minute, hour can be omitted:
@@ -91,7 +91,7 @@ pending tasks with selected tags will remain visible (and their notes and projec
          </tr>
         </table>
 
-    - relative period of time starts with a plus sign or two  
+    - relative period of time starts with a plus sign or two
       __`+[+][number][DdWw][h:m]`__ — number is optional as well as letter `d` for days or letter `w` for weeks.
 
         <table>
@@ -128,12 +128,12 @@ pending tasks with selected tags will remain visible (and their notes and projec
          </tr>
         </table>
 
-☐ You can create a link to a file within your project by prefixing the file name with a dot and (back)slash like: `.\filename\` or `./another filename/`.  
-  The line and column can be specified by colons: `.\filename:11:8`.  
-  In SublimeText 3 you can specify a symbol inside that file by using \> character like: `.\filename>symbol`.  
-  In SublimeText 2 you can specify a text inside that file by using inch characters like: `.\filename"any text"`.  
-  Pressing <kbd>ctrl + o</kbd> (<kbd>alt + o</kbd> on Windows/Linux) will open the file in Sublime and scroll to specific position if any.  
-  Also in SublimeText 3 link may point to directory, open such link will add the directory to current project (sidebar).  
+☐ You can create a link to a file within your project by prefixing the file name with a dot and (back)slash like: `.\filename\` or `./another filename/`.
+  The line and column can be specified by colons: `.\filename:11:8`.
+  In SublimeText 3 you can specify a symbol inside that file by using \> character like: `.\filename>symbol`.
+  In SublimeText 2 you can specify a text inside that file by using inch characters like: `.\filename"any text"`.
+  Pressing <kbd>ctrl + o</kbd> (<kbd>alt + o</kbd> on Windows/Linux) will open the file in Sublime and scroll to specific position if any.
+  Also in SublimeText 3 link may point to directory, open such link will add the directory to current project (sidebar).
   In addition, Markdown and “wiki” (Org-Mode, NV, etc.) styles are supported as well, examples:
 
 ```
@@ -150,7 +150,7 @@ pending tasks with selected tags will remain visible (and their notes and projec
 [[path]] "any text"
 ```
 
-☐ To convert current document to HTML, bring up the command palette <kbd>⌘ + shift + p</kbd> and type `Tasks: View as HTML` — it will be opened in default webbrowser, so you can view and save it.  
+☐ To convert current document to HTML, bring up the command palette <kbd>⌘ + shift + p</kbd> and type `Tasks: View as HTML` — it will be opened in default webbrowser, so you can view and save it.
 `Tasks: Save as HTML…` ask if you want to save and if yes, allow to choose directory and filename (but won’t open it in webbrowser).
 
 ### Editor Useful Tools:
@@ -163,7 +163,7 @@ pending tasks with selected tags will remain visible (and their notes and projec
 ★ See the [Tutorial](https://github.com/aziz/PlainTasks/blob/master/messages/Tutorial.todo) for more detailed information.
 
 ## Settings
-PlainTasks is an opinionated plugin, which means that it is highly configured to look in a specific way, but this does not mean that you can not customize it. If you feel that something does not look right and you want to change it, you can easily do it in your user settings file. 
+PlainTasks is an opinionated plugin, which means that it is highly configured to look in a specific way, but this does not mean that you can not customize it. If you feel that something does not look right and you want to change it, you can easily do it in your user settings file.
 
 Go to `Preferences → Package Settings → PlainTasks` and open `Settings - User`, there you can override all the default settings, to get an idea you can take a look at `Settings - Default`.
 
@@ -202,24 +202,28 @@ Here is a list of PlainTasks’ specific settings:
 | **due_remain_format**          | `"{time} remaining"` | `{time}` will be replaced with actual value                         |
 | **due_overdue_format**         | `"{time} overdue"` | `{time}` will be replaced with actual value                           |
 
+
 <b>¹</b> Icon value can be  `"dot"`, `"circle"`, `"bookmark"`, `"cross"`, `""`, or custom relative path to existing png file,
 e.g. `"Packages/User/my-icon.png"`.
 
 ### Changing color scheme
-If you don't like colors used in bundled schemes just copy any `.hidden-tmTheme` from PlainTasks to 
+
+If you don't like colors used in bundled schemes just copy any `.hidden-tmTheme` from PlainTasks to
 your User directory, change colors and paste the code below in your user settings file:
 
 ``` json
 { "color_scheme": "Path to your custom color scheme file. e.g. Packages/User/custom_plaintasks.hidden-tmTheme" }
 ```
 
+If you set it `null`, it will use your current color scheme.
+
 **N.B.**, sometimes you have to restart Sublime Text to apply changes made in tmTheme file.
 
-**N.B.**, `scope_past_due`, `scope_due_soon`, and `scope_misformatted` settings can assign any scopes defined in tmTheme file, e.g. 
+**N.B.**, `scope_past_due`, `scope_due_soon`, and `scope_misformatted` settings can assign any scopes defined in tmTheme file, e.g.
 you can set `"scope_past_due": "my.own.super.expired.whatever"` and then just add style definition in tmTheme for this scope.
 
 ### Taskpaper Compatibility
-If you need to keep your files compatible with Taskpaper, go to 
+If you need to keep your files compatible with Taskpaper, go to
 `Preferences → Package Settings → PlainTasks` and open `Settings - User`, then
 add these settings to the json file:
 
@@ -232,7 +236,7 @@ add these settings to the json file:
 ```
 
 ### Spell check
-It is build-in feature of Sublime, you can toggle spell check with <kbd>F6</kbd>.  
+It is build-in feature of Sublime, you can toggle spell check with <kbd>F6</kbd>.
 For convinience, you may add bullets in list of ignored words into **`Preferences → Settings - User`**, e.g.
 
 ```json
@@ -316,7 +320,7 @@ You can contribute on [github](https://github.com/aziz/PlainTasks)
 
 
 ## Inspiration
-- Thanks to Chagel for the [iTodo plugin](https://github.com/chagel/itodo).  
+- Thanks to Chagel for the [iTodo plugin](https://github.com/chagel/itodo).
 - Thanks to [Taskmate for TextMate](https://github.com/svenfuchs/taskmate).
 - Thanks to [TaskPaper Mac application from hogbaysoftware.com](http://www.hogbaysoftware.com/products/taskpaper)
 
