@@ -15,6 +15,7 @@ if ST3:
     from .APlainTasksCommon import PlainTasksBase, PlainTasksFold, get_all_projects_and_separators
 else:
     from APlainTasksCommon import PlainTasksBase, PlainTasksFold, get_all_projects_and_separators
+    sublime_plugin.ViewEventListener = object
 
 # io is not operable in ST2 on Linux, but in all other cases io is better
 # https://github.com/SublimeTextIssues/Core/issues/254
@@ -930,3 +931,71 @@ class PlainTasksAddGutterIconsForTags(sublime_plugin.EventListener):
 
     def on_load(self, view):
         self.on_activated(view)
+
+
+class PlainTasksHover(sublime_plugin.ViewEventListener):
+    '''Show popup with actions when hover over bullet'''
+
+    msg = ('<style>'  # four curly braces because it will be modified with format method twice
+            'html {{{{background-color: color(var(--background) blenda(white 75%))}}}}'
+            'body {{{{margin: .1em .3em}}}}'
+            'p {{{{margin: .5em 0}}}}'
+            'a {{{{text-decoration: none}}}}'
+            'span.icon {{{{font-weight: bold; font-size: 1.3em}}}}'
+            '#icon-done {{{{color: var(--greenish)}}}}'
+            '#icon-cancel {{{{color: var(--redish)}}}}'
+            '#icon-archive {{{{color: var(--bluish)}}}}'
+            '#icon-outside {{{{color: var(--purplish)}}}}'
+            '#done {{{{color: var(--greenish)}}}}'
+            '#cancel {{{{color: var(--redish)}}}}'
+            '#archive {{{{color: var(--bluish)}}}}'
+            '#outside {{{{color: var(--purplish)}}}}'
+           '</style><body>'
+           '{actions}'
+           )
+
+    complete = '<a href="complete\v{point}"><span class="icon" id="icon-done">✔</span> <span id="done">Toggle complete</span></a>'
+    cancel = '<a href="cancel\v{point}"><span class="icon" id="icon-cancel">✘</span> <span id="cancel">Toggle cancel</span></a>'
+    archive = '<a href="archive\v{point}"><span class="icon" id="icon-archive">📚</span> <span id="archive">Archive</span></a>'
+    archivetofile = '<a href="tofile\v{point}"><span class="icon" id="icon-outside">📤</span> <span id="outside">Archive to file</span></a>'
+
+    actions = {
+        'text.todo meta.item.todo.pending': '<p>{complete}</p><p>{cancel}</p>'.format(complete=complete, cancel=cancel),
+        'text.todo meta.item.todo.completed': '<p>{archive}</p><p>{archivetofile}</p><p>{complete}</p>'.format(archive=archive, archivetofile=archivetofile, complete=complete),
+        'text.todo meta.item.todo.cancelled': '<p>{archive}</p><p>{archivetofile}</p><p>{complete}</p><p>{cancel}</p>'.format(archive=archive, archivetofile=archivetofile, complete=complete, cancel=cancel)
+    }
+
+    @classmethod
+    def is_applicable(cls, settings):
+        return settings.get('syntax') == 'Packages/PlainTasks/PlainTasks.sublime-syntax'
+
+    def on_hover(self, point, hover_zone):
+        self.view.hide_popup()
+        if hover_zone != sublime.HOVER_TEXT:
+            return
+
+        line = self.view.line(point)
+        line_scope_name = self.view.scope_name(line.a).strip()
+        if 'meta.item.todo' not in line_scope_name:
+            return
+
+        bullet = any(('bullet' in self.view.scope_name(p) for p in (point, point - 1)))
+        if not bullet:
+            return
+
+        width, height = self.view.viewport_extent()
+        self.view.show_popup(self.msg.format(actions=self.actions.get(line_scope_name)).format(point=point), 0, point or self.view.sel()[0].begin() or 1, width, height / 2, self.exec_action)
+
+    def exec_action(self, msg):
+        action, at = msg.split('\v')
+
+        case = {
+            'complete': lambda: self.view.run_command('plain_tasks_complete'),
+            'cancel': lambda: self.view.run_command('plain_tasks_cancel'),
+            'archive': lambda: self.view.run_command("plain_tasks_archive", {"partial": True}),
+            'tofile': lambda: self.view.run_command('plain_tasks_org_archive'),
+        }
+        self.view.sel().clear()
+        self.view.sel().add(sublime.Region(int(at)))
+        case[action]()
+        self.view.hide_popup()
