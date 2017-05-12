@@ -551,8 +551,8 @@ class PlainTasksCalendar(sublime_plugin.TextCommand):
         tag = ''
         if 'tag.todo' in self.view.scope_name(point):
             reg = self.view.extract_scope(point)
-            text = self.view.substr(reg)            # The full tag, including parenthesis      
-            match = re.search(r'(\@\w*)(\(.*\)|)', text)                
+            text = self.view.substr(reg)
+            match = re.search(r'(\@\w*)(\(.*\)|)', text)
             start, end = reg.b, reg.b
             if match:
                 if len(match.group(2)) > 0:
