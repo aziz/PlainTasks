@@ -2,6 +2,7 @@
 import sublime, sublime_plugin
 import json
 import re
+import regex
 import locale
 import calendar
 import itertools
@@ -230,7 +231,7 @@ class PlainTasksToggleHighlightPastDue(PlainTasksEnabled):
         if not highlight_on:
             return
 
-        pattern = r'@due(\([^@\n]*\))'
+        pattern = r'@due(\((?>[^()]|(?R))*\))'
         dates_strings = []
         dates_regions = self.view.find_all(pattern, 0, '\\1', dates_strings)
         if not dates_regions:
@@ -472,7 +473,7 @@ class PlainTasksPreviewShortDate(PlainTasksViewEventListener):
 
         rgn = self.view.extract_scope(s.a)
         text = self.view.substr(rgn)
-        match = re.match(r'@due\(([^@\n]*)\)[\s$]*', text)
+        match = regex.match(r'@due(\((?>[^()]|(?R))*\))[\s$]*', text)
         # print(s, rgn, text)
 
         if not match:
