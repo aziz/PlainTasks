@@ -252,7 +252,7 @@
 		<key>tag</key>
 		<dict>
 			<key>match</key>
-			<string>(?&lt;=\s)\@(?!(?:high|today|critical|low|completed|done)[\s\(])\w+(\((?&gt;[^()]|(\g&lt;1&gt;))*+\))*+</string>
+			<string>(?&lt;=\s)\@(?!(?:high|today|critical|low|completed|done)[\s\(])\w+(\((?&gt;[^()]|\g&lt;1&gt;)*+\))*+</string>
 			<key>name</key>
 			<string>meta.tag.todo</string>
 		</dict>
