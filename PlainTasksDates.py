@@ -562,19 +562,6 @@ class PlainTasksCalendar(sublime_plugin.TextCommand):
 
                 tag = match.group(1)
 
-        # start = end = point
-        # tag_pattern = r'(?<=\s)(\@[^\(\) ,\.]+)([\w\d\.\(\)\-!? :\+]*)'
-        # line = self.view.line(point)
-        # matches = re.finditer(tag_pattern, self.view.substr(line))
-        # for match in matches:
-        #     m_start = line.a + match.start(1)
-        #     m_end   = line.a + match.end(2)
-        #     if m_start <= point <= m_end:
-        #         start = line.a + match.start(2)
-        #         end   = m_end
-        #         break
-        # else:
-        #     match = None
         return sublime.Region(start, end), tag
 
     def generate_calendar(self, date=None):
