@@ -230,9 +230,10 @@ class PlainTasksToggleHighlightPastDue(PlainTasksEnabled):
         if not highlight_on:
             return
 
-        pattern = r'@due(\([^@\n]*\))'
+        pattern = r'@due(\((?>[^()\/]|(?1))*+\))++'
         dates_strings = []
         dates_regions = self.view.find_all(pattern, 0, '\\1', dates_strings)
+        print(dates_strings)
         if not dates_regions:
             if ST3:
                 self.view.settings().set('plain_tasks_remain_time_phantoms', [])
@@ -549,15 +550,16 @@ class PlainTasksCalendar(sublime_plugin.TextCommand):
         '''
         start = end = point
         tag = ''
-        if self.view.match_selector(point, 'meta.tag.todo'):
+        if 'tag.todo' in self.view.scope_name(point):
             reg = self.view.extract_scope(point)
             text = self.view.substr(reg)            # The full tag, including parenthesis      
             match = re.search(r'(\@\w*)(\(.*\)|)', text)                
-            if not match:
-                start, end = reg.b, reg.b
-            else:
-                start = reg.a + match.start(2)
-                end = reg.a + match.end(2)
+            start, end = reg.b, reg.b
+            if match:
+                if len(match.group(2)) > 0:
+                    start = reg.a + match.start(2)
+                    end = reg.a + match.end(2)
+
                 tag = match.group(1)
 
         # start = end = point
