@@ -87,7 +87,7 @@ contexts:
     - match: (?<=\s)\@low|✭low
       scope: string.other.tag.todo.low
   tag:
-    - match: '(?<=\s)\@(?!(high|today|critical|low|completed|done)[\s\(])[\w\d\.\(\)\-!? :\+]+[ \t]*'
+    - match: '(?<=\s)\@(?!(high|today|critical|low|completed|done)[\s\(])\w*(\((?>[^()]|(\g<1>))*+\))++[ \t]*'
       scope: meta.tag.todo
   today:
     - match: (?<=\s)\@today|✭ᴛᴏᴅᴀʏ
