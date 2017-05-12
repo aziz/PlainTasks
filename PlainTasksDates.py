@@ -230,10 +230,9 @@ class PlainTasksToggleHighlightPastDue(PlainTasksEnabled):
         if not highlight_on:
             return
 
-        pattern = r'@due(\((?>[^()\/]|(?1))*+\))++'
+        pattern = r'@due(\((?>[^()]|(?1))*+\))'
         dates_strings = []
         dates_regions = self.view.find_all(pattern, 0, '\\1', dates_strings)
-        print(dates_strings)
         if not dates_regions:
             if ST3:
                 self.view.settings().set('plain_tasks_remain_time_phantoms', [])
