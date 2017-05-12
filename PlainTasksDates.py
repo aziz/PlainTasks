@@ -548,10 +548,17 @@ class PlainTasksCalendar(sublime_plugin.TextCommand):
             tag under cursor (i.e. point)
         '''
         start = end = point
+        tag = ''
         if self.view.match_selector(point, 'meta.tag.todo'):
             reg = self.view.extract_scope(point)
-            text = self.view.substr(reg)            # The full tag, including parenthesis           
-
+            text = self.view.substr(reg)            # The full tag, including parenthesis      
+            match = re.search(r'(\@\w*)(\(.*\)|)', text)                
+            if not match:
+                start, end = reg.b, reg.b
+            else:
+                start = reg.a + match.start(2)
+                end = reg.a + match.end(2)
+                tag = match.group(1)
 
         # start = end = point
         # tag_pattern = r'(?<=\s)(\@[^\(\) ,\.]+)([\w\d\.\(\)\-!? :\+]*)'
@@ -566,7 +573,6 @@ class PlainTasksCalendar(sublime_plugin.TextCommand):
         #         break
         # else:
         #     match = None
-        # tag = match.group(0) if match else ''
         return sublime.Region(start, end), tag
 
     def generate_calendar(self, date=None):
