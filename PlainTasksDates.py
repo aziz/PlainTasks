@@ -13,10 +13,11 @@ ST3 = int(sublime.version()) >= 3000
 if ST3:
     from .APlainTasksCommon import PlainTasksBase, PlainTasksEnabled, PlainTasksFold
     MARK_SOON = sublime.DRAW_NO_FILL
+    MARK_NEXT = sublime.DRAW_NO_FILL | sublime.DRAW_SQUIGGLY_UNDERLINE
     MARK_INVALID = sublime.DRAW_NO_FILL | sublime.DRAW_NO_OUTLINE | sublime.DRAW_SQUIGGLY_UNDERLINE
 else:
     from APlainTasksCommon import PlainTasksBase, PlainTasksEnabled, PlainTasksFold
-    MARK_SOON = MARK_INVALID = 0
+    MARK_SOON = MARK_INVALID = MARK_NEXT = 0
     sublime_plugin.ViewEventListener = object
 
 
@@ -238,16 +239,19 @@ class PlainTasksToggleHighlightPastDue(PlainTasksEnabled):
                 self.view.settings().set('plain_tasks_remain_time_phantoms', [])
             return
 
-        past_due, due_soon, misformatted, phantoms = self.group_due_tags(dates_strings, dates_regions)
+        past_due, due_soon, misformatted, phantoms, due_next = self.group_due_tags(dates_strings, dates_regions)
 
         scope_past_due = self.view.settings().get('scope_past_due', 'string.other.tag.todo.critical')
         scope_due_soon = self.view.settings().get('scope_due_soon', 'string.other.tag.todo.high')
+        scope_due_next = self.view.settings().get('scope_due_next', scope_due_soon)
         scope_misformatted = self.view.settings().get('scope_misformatted', 'string.other.tag.todo.low')
         icon_past_due = self.view.settings().get('icon_past_due', 'circle')
         icon_due_soon = self.view.settings().get('icon_due_soon', 'dot')
+        icon_due_next = self.view.settings().get('icon_due_next', icon_due_soon)
         icon_misformatted = self.view.settings().get('icon_misformatted', '')
         self.view.add_regions('past_due', past_due, scope_past_due, icon_past_due)
         self.view.add_regions('due_soon', due_soon, scope_due_soon, icon_due_soon, MARK_SOON)
+        self.view.add_regions('due_next', due_next, scope_due_next, icon_due_next, MARK_NEXT)
         self.view.add_regions('misformatted', misformatted, scope_misformatted, icon_misformatted, MARK_INVALID)
 
         if not ST3:
@@ -258,12 +262,14 @@ class PlainTasksToggleHighlightPastDue(PlainTasksEnabled):
             self.view.settings().set('plain_tasks_remain_time_phantoms', [])
 
     def group_due_tags(self, dates_strings, dates_regions):
-        past_due, due_soon, misformatted, phantoms = [], [], [], []
+        past_due, due_soon, misformatted, phantoms, parsed_icons = [], [], [], [], []
         date_format = self.view.settings().get('date_format', '(%y-%m-%d %H:%M)')
         yearfirst = is_yearfirst(date_format)
         now = datetime.now()
         default = now - timedelta(seconds=now.second, microseconds=now.microsecond)  # for short dates w/o time
         due_soon_threshold = self.view.settings().get('highlight_due_soon', 24) * 60 * 60
+        # TODO: setup this default/sample value?
+        minimum_next_threshold = self.view.settings().get('highlight_num_next', 10)
 
         for i, region in enumerate(dates_regions):
             if any(s in self.view.scope_name(region.a) for s in ('completed', 'cancelled')):
@@ -284,13 +290,16 @@ class PlainTasksToggleHighlightPastDue(PlainTasksEnabled):
                     phantoms.append((region.a, '-' + format_delta(self.view, default - date)))
                 else:
                     phantoms.append((region.a, format_delta(self.view, date - default)))
-                    if due_soon_threshold:
-                        td = (date - now)
-                        # timedelta.total_seconds() is not available in 2.6.x
-                        time_left = (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10.0**6
-                        if time_left < due_soon_threshold:
+                    td = (date - now)
+                    # timedelta.total_seconds() is not available in 2.6.x
+                    time_left = (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10.0**6
+                    parsed_icons.append((time_left, region))
+                    if due_soon_threshold and time_left < due_soon_threshold:
                             due_soon.append(region)
-        return past_due, due_soon, misformatted, phantoms
+
+        interesting_tuples = sorted(parsed_icons, key=lambda i: i[0])[:minimum_next_threshold]
+        due_next = [x[1] for x in sorted_tasks]
+        return past_due, due_soon, misformatted, phantoms, due_next
 
 
 class PlainTasksHLDue(sublime_plugin.EventListener):
@@ -314,6 +323,16 @@ class PlainTasksFoldToDueTags(PlainTasksFold):
         dues = sorted(self.view.line(r) for r in (self.view.get_regions('past_due') + self.view.get_regions('due_soon')))
         if not dues:
             return sublime.message_dialog('No overdue tasks.\nCongrats!')
+        self.exec_folding(self.add_projects_and_notes(dues))
+
+class PlainTasksFoldDueNextTags(PlainTasksFold):
+    def run(self, edit):
+        if not self.view.settings().get('highlight_fold_due_next', True):
+            return sublime.message_dialog('highlight_fold_due_next setting must be true')
+        self.view.run_command('plain_tasks_toggle_highlight_past_due')
+        dues = sorted(self.view.line(r) for r in (self.view.get_regions('past_due') + self.view.get_regions('due_soon') + self.view.get_regions('due_next')))
+        if not dues:
+            return sublime.message_dialog('No tasks due anytime soon.\nCongrats!')
         self.exec_folding(self.add_projects_and_notes(dues))
 
 
