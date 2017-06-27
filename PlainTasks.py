@@ -188,14 +188,14 @@ class PlainTasksCompleteCommand(PlainTasksBase):
             if 'pending' in current_scope:
                 grps = open_matches.groups()
                 eol = self.view.insert(edit, line.end(), done_line_end)
-                replacement = u'%s%s%s' % (grps[0], self.done_tasks_bullet, grps[2])
-                self.view.replace(edit, line, replacement.rstrip())
+                replacement = u'%s%s%s' % (grps[0], self.done_tasks_bullet, grps[2].rstrip())
+                self.view.replace(edit, line, replacement)
                 self.view.run_command(
                     'plain_tasks_calculate_time_for_task', {
                         'started_matches': started_matches,
                         'toggle_matches': toggle_matches,
                         'now': now,
-                        'eol': line.end() + eol - (len(grps[1]) - len(self.done_tasks_bullet))}
+                        'eol': len(replacement) + eol - (len(grps[1]) - len(self.done_tasks_bullet))}
                 )
             elif 'header' in current_scope:
                 eol = self.view.insert(edit, line.end(), done_line_end)
@@ -269,14 +269,14 @@ class PlainTasksCancelCommand(PlainTasksBase):
             if 'pending' in current_scope:
                 grps = open_matches.groups()
                 eol = self.view.insert(edit, line.end(), canc_line_end)
-                replacement = u'%s%s%s' % (grps[0], self.canc_tasks_bullet, grps[2])
-                self.view.replace(edit, line, replacement.rstrip())
+                replacement = u'%s%s%s' % (grps[0], self.canc_tasks_bullet, grps[2].rstrip())
+                self.view.replace(edit, line, replacement)
                 self.view.run_command(
                     'plain_tasks_calculate_time_for_task', {
                         'started_matches': started_matches,
                         'toggle_matches': toggle_matches,
                         'now': now,
-                        'eol': line.end() + eol - (len(grps[1]) - len(self.canc_tasks_bullet)),
+                        'eol': len(replacement) + eol - (len(grps[1]) - len(self.canc_tasks_bullet)),
                         'tag': 'wasted'}
                 )
             elif 'header' in current_scope:
