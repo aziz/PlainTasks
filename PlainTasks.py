@@ -187,7 +187,7 @@ class PlainTasksCompleteCommand(PlainTasksBase):
             current_scope = self.view.scope_name(line.a)
             if 'pending' in current_scope:
                 grps = open_matches.groups()
-                eol = self.view.insert(edit, line.end(), done_line_end)
+                len_dle = self.view.insert(edit, line.end(), done_line_end)
                 replacement = u'%s%s%s' % (grps[0], self.done_tasks_bullet, grps[2].rstrip())
                 self.view.replace(edit, line, replacement)
                 self.view.run_command(
@@ -195,7 +195,7 @@ class PlainTasksCompleteCommand(PlainTasksBase):
                         'started_matches': started_matches,
                         'toggle_matches': toggle_matches,
                         'now': now,
-                        'eol': len(replacement) + eol - (len(grps[1]) - len(self.done_tasks_bullet))}
+                        'eol': line.a + len(replacement) + len_dle}
                 )
             elif 'header' in current_scope:
                 eol = self.view.insert(edit, line.end(), done_line_end)
@@ -217,7 +217,7 @@ class PlainTasksCompleteCommand(PlainTasksBase):
                 offset = -offset
             elif 'cancelled' in current_scope:
                 grps = canc_matches.groups()
-                self.view.insert(edit, line.end(), done_line_end)
+                len_dle = self.view.insert(edit, line.end(), done_line_end)
                 parentheses = check_parentheses(self.date_format, grps[4] or '')
                 replacement = u'%s%s%s%s' % (grps[0], self.done_tasks_bullet, grps[2], parentheses)
                 self.view.replace(edit, line, replacement.rstrip())
@@ -227,7 +227,7 @@ class PlainTasksCompleteCommand(PlainTasksBase):
                         'started_matches': started_matches,
                         'toggle_matches': toggle_matches,
                         'now': now,
-                        'eol': self.view.line(line.begin()).end()}
+                        'eol': line.a + len(replacement) + len_dle}
                 )
         self.view.sel().clear()
         for ind, pt in enumerate(original):
@@ -268,7 +268,7 @@ class PlainTasksCancelCommand(PlainTasksBase):
             current_scope = self.view.scope_name(line.a)
             if 'pending' in current_scope:
                 grps = open_matches.groups()
-                eol = self.view.insert(edit, line.end(), canc_line_end)
+                len_cle = self.view.insert(edit, line.end(), canc_line_end)
                 replacement = u'%s%s%s' % (grps[0], self.canc_tasks_bullet, grps[2].rstrip())
                 self.view.replace(edit, line, replacement)
                 self.view.run_command(
@@ -276,7 +276,7 @@ class PlainTasksCancelCommand(PlainTasksBase):
                         'started_matches': started_matches,
                         'toggle_matches': toggle_matches,
                         'now': now,
-                        'eol': len(replacement) + eol - (len(grps[1]) - len(self.canc_tasks_bullet)),
+                        'eol': line.a + len(replacement) + len_cle,
                         'tag': 'wasted'}
                 )
             elif 'header' in current_scope:
