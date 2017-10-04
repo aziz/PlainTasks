@@ -501,7 +501,7 @@ class PlainTasksPreviewShortDate(PlainTasksViewEventListener):
                     phantoms = self.view.settings().get('plain_tasks_remain_time_phantoms', [])
                     for index, (point, _) in enumerate(phantoms):
                         if point == region.a - 4:
-                            phantoms[index] = [point, str(delta).lstrip('-')]
+                            phantoms[index] = [point, str(delta)]
                             self.view.settings().set('plain_tasks_remain_time_phantoms', phantoms)
                             break
                 else:
