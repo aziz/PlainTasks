@@ -496,10 +496,19 @@ class PlainTasksPreviewShortDate(PlainTasksViewEventListener):
                 delta = format_delta(self.view, date - now)
             content = (overdue_format if '-' in delta else remain_format).format(time=delta.lstrip('-') or 'a little bit')
             if content:
-                upd.append(sublime.Phantom(
-                    sublime.Region(region.a - 4),
-                    content,
-                    sublime.LAYOUT_BELOW))
+                if self.view.settings().get('show_remain_due', False):
+                    # replace existing remain/overdue phantom
+                    phantoms = self.view.settings().get('plain_tasks_remain_time_phantoms', [])
+                    for index, (point, _) in enumerate(phantoms):
+                        if point == region.a - 4:
+                            phantoms[index] = [point, str(delta).lstrip('-')]
+                            self.view.settings().set('plain_tasks_remain_time_phantoms', phantoms)
+                            break
+                else:
+                    upd.append(sublime.Phantom(
+                        sublime.Region(region.a - 4),
+                        content,
+                        sublime.LAYOUT_BELOW))
             date = date.strftime(date_format).strip('()')
         if date == match.group(1).strip():
             self.phantoms.update(upd)
@@ -690,11 +699,14 @@ class PlainTasksRemain(PlainTasksViewEventListener):
         if not self.phantoms:
             self.phantom_set.update([])
             return
+        remain_format = self.view.settings().get('due_remain_format', '{time} remaining')
+        overdue_format = self.view.settings().get('due_overdue_format', '{time} overdue')
+
         upd = []
         for point, content in self.phantoms:
             upd.append(sublime.Phantom(
                 sublime.Region(point),
-                '%s %s' % ('Overdue' if '-' in content else 'Remain', content.lstrip('-') or 'a little bit'),
+                (overdue_format if '-' in content else remain_format).format(time=content.lstrip('-') or 'a little bit'),
                 sublime.LAYOUT_BELOW))
         self.phantom_set.update(upd)
 
