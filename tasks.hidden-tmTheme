@@ -112,6 +112,19 @@
 		</dict>
 		<dict>
 			<key>name</key>
+			<string>Pending task</string>
+			<key>scope</key>
+			<string>meta.item.todo.pending</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#000000</string>
+				<key>fontStyle</key>
+				<string>italic</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
 			<string>Cancelled task</string>
 			<key>scope</key>
 			<string>meta.item.todo.cancelled</string>
