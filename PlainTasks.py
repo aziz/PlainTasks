@@ -8,6 +8,7 @@ import webbrowser
 import itertools
 import threading
 from datetime import datetime, tzinfo, timedelta
+import time
 
 platform = sublime.platform()
 ST3 = int(sublime.version()) >= 3000
@@ -52,11 +53,10 @@ else:
 
 
 def tznow():
-    return datetime.now().replace(
-        tzinfo=timezone(
-            datetime.fromtimestamp(0) - datetime.utcfromtimestamp(0)
-        )
-    )
+    t = time.time()
+    d = datetime.fromtimestamp(t)
+    u = datetime.utcfromtimestamp(t)
+    return d.replace(tzinfo=timezone(d - u))
 
 
 def check_parentheses(date_format, regex_group, is_date=False):
