@@ -295,6 +295,7 @@ NOTE: These are separate projects, maintained by some awesome developers other t
 - [Atom: Tasks plugin](https://atom.io/packages/tasks)
 - [Vim: Plaintasks.vim](https://github.com/elentok/plaintasks.vim)
 - [Visual Studio Code: To Do Tasks](https://github.com/sandy081/vscode-todotasks)
+- [Visual Studio Code: Todo+](https://marketplace.visualstudio.com/items?itemName=fabiospampinato.vscode-todo-plus)
 
 
 ## Contributors
