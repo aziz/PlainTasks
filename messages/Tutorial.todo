@@ -25,6 +25,7 @@ Tasks:
      Pending tasks with selected tags will remain visible (and their notes and projects they belong to),
      but everything else will be hidden/folded
      To unfold all press ⌘+k, ⌘+j or ⌘+k, ⌘+0
+   ☐ You can navigate tags in current document via ⌘+shift+r (ctrl+shift+r on Windows)
   URLs:
    ☐ ⌘+shift+U (ctrl+shift+U on Windows) opens the URL under the cursor in your default browser
      www.github.com or <skype:nickname>

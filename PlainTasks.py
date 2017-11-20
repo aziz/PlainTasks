@@ -1073,3 +1073,47 @@ class PlainTasksHover(sublime_plugin.ViewEventListener):
         self.view.sel().add(sublime.Region(int(at)))
         case[action]()
         self.view.hide_popup()
+
+
+class PlainTasksGotoTag(sublime_plugin.TextCommand):
+    def run(self, edit):
+        self.initial_viewport = self.view.viewport_position()
+        self.initial_sels = list(self.view.sel())
+
+        self.tags = sorted(
+            [r for r in self.view.find_by_selector('meta.tag.todo')
+             if not any(s in self.view.scope_name(r.a) for s in ('completed', 'cancelled'))
+             ] +
+            self.view.find_by_selector('string.other.tag.todo.critical') +
+            self.view.find_by_selector('string.other.tag.todo.high') +
+            self.view.find_by_selector('string.other.tag.todo.low') +
+            self.view.find_by_selector('string.other.tag.todo.today')
+            )
+        window = self.view.window() or sublime.active_window()
+        items = [[self.view.substr(t), u'{0}: {1}'.format(self.view.rowcol(t.a)[0], self.view.substr(self.view.line(t)).strip())] for t in self.tags]
+
+        if ST3:
+            from bisect import bisect_left
+            # find the closest tag after current position of viewport, to avoid scrolling
+            closest_index = bisect_left([r.a for r in self.tags], self.view.layout_to_text(self.initial_viewport))
+            llen = len(self.tags)
+            selected_index = closest_index if closest_index < llen else llen - 1
+            window.show_quick_panel(items, self.on_done, 0, selected_index, self.on_highlighted)
+        else:
+            window.show_quick_panel(items, self.on_done)
+
+    def on_done(self, index):
+        if index < 0:
+            self.view.sel().clear()
+            self.view.sel().add_all(self.initial_sels)
+            self.view.set_viewport_position(self.initial_viewport)
+            return
+
+        self.view.sel().clear()
+        self.view.sel().add(sublime.Region(self.tags[index].a))
+        self.view.show_at_center(self.tags[index])
+
+    def on_highlighted(self, index):
+        self.view.sel().clear()
+        self.view.sel().add(self.tags[index])
+        self.view.show(self.tags[index], True)
