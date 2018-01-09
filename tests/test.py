@@ -50,6 +50,10 @@ class TestDatesFunctions(TestCase):
             {'string': '1.1.16', 'result': datetime(2001, 1, 16, 23, 0, 0), },
             # yearfirst not
             {'string': '1.1.16', 'result': datetime(2016, 1, 1, 23, 0, 0), 'date_format': '(%d-%m-%y %H:%M)', },
+            # dayfirst
+            {'string': '4-1-16', 'result': datetime(2016, 1, 4, 23, 0, 0), 'date_format': '(%d-%m-%y %H:%M)', },
+            # dayfirst, but pair is m-d, because dateutil will set 2016, but we expect 2017 (future)
+            {'string': '4-1', 'result': datetime(2017, 4, 1, 23, 0, 0), 'date_format': '(%d-%m-%y %H:%M)', },
             # named month
             {'string': '2003-Sep-25', 'result': datetime(2003, 9, 25, 23, 0, 0), 'date_format': '(%d-%m-%y %H:%M)', },
             # ancient
@@ -58,9 +62,11 @@ class TestDatesFunctions(TestCase):
         for c in cases:
             fmt = c.get('date_format', default_format)
             yearfirst = fmt.startswith(('(%y', '(%Y'))
+            dayfirst = fmt.startswith('(%d')
             date, error = PlainTasksDates.parse_date(c['string'],
                                                      date_format=fmt,
                                                      yearfirst=yearfirst,
+                                                     dayfirst=dayfirst,
                                                      default=c.get('default', default))
             self.assertEqual(date, c['result'])
 
@@ -130,3 +136,16 @@ class TestDatesFunctions(TestCase):
         for (date_format, result) in cases:
             yf = PlainTasksDates.is_yearfirst(date_format)
             self.assertEqual(yf, result)
+
+    def test_is_dayfirst(self):
+        cases = [
+            ['(%y-%m-%d %H:%M)', False],
+            ['(%Y-%m-%d %H:%M)', False],
+            ['(%d-%m-%y %H:%M)', True],
+            ['(%b %d %Y %H:%M)', False],
+            ['( %y-%m-%d %H:%M )', False],
+            ['( %d.%m.%y %H:%M )', True],
+        ]
+        for (date_format, result) in cases:
+            df = PlainTasksDates.is_dayfirst(date_format)
+            self.assertEqual(df, result)
