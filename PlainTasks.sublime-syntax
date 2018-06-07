@@ -19,7 +19,7 @@ contexts:
         4: punctuation.definition.bullet.completed.todo
         5: comment.line.completed.todo
         6: meta.tag.todo.completed
-    - match: '^\s*(?:(✘|x|\[-\])(\s+(?:[^\@\n]|(?<!\s)\@|\@(?=\s))*)(.*))|^\s*(?:(-)(\s+(?:[^\@]|(?<!\s)\@|\@(?=\s))*)(.*\@cancelled(?=\s|\(|$)[^\n]*))'
+    - match: '^\s*(?:(✘|x|🗙|\[-\])(\s+(?:[^\@\n]|(?<!\s)\@|\@(?=\s))*)(.*))|^\s*(?:(-)(\s+(?:[^\@]|(?<!\s)\@|\@(?=\s))*)(.*\@cancelled(?=\s|\(|$)[^\n]*))'
       scope: meta.item.todo.cancelled
       captures:
         1: punctuation.definition.bullet.cancelled.todo
