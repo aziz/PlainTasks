@@ -35,8 +35,8 @@
 				<key>scope</key><string>meta.tag.todo</string>
 				<key>settings</key>
 				<dict>
-					<key>foreground</key><string>#f99157</string>
-					<key>fontStyle</key><string>bold</string>
+					<key>foreground</key><string>#FFD72F</string>
+					<key>fontStyle</key><string></string>
 				</dict>
 			</dict>
 			<dict>
@@ -52,7 +52,7 @@
 				<key>scope</key><string>meta</string>
 				<key>settings</key>
 				<dict>
-					<key>fontStyle</key><string>italic</string>
+					<key>fontStyle</key><string></string>
 				</dict>
 			</dict>
 			<dict>
@@ -97,7 +97,7 @@
 				<key>settings</key>
 				<dict>
 					<key>foreground</key><string>#d3d0c850</string>
-					<key>fontStyle</key><string></string>
+					<key>fontStyle</key><string>italic</string>
 				</dict>
 			</dict>
 			<dict>
@@ -353,9 +353,9 @@
 				<key>scope</key><string>string.other.tag.todo.today</string>
 				<key>settings</key>
 				<dict>
-					<key>background</key><string>#f2f0ce</string>
-					<key>foreground</key><string>#ffcc66</string>
-					<key>fontStyle</key><string>bold</string>
+					<key>background</key><string>#99cc99</string>
+					<key>foreground</key><string>#2d2d2d</string>
+					<key>fontStyle</key><string></string>
 				</dict>
 			</dict>
 			<dict>
@@ -363,9 +363,9 @@
 				<key>scope</key><string>string.other.tag.todo.high</string>
 				<key>settings</key>
 				<dict>
-					<key>background</key><string>#FF7F00</string>
-					<key>foreground</key><string>#000000</string>
-					<key>fontStyle</key><string>bold</string>
+					<key>background</key><string>#f99157</string>
+					<key>foreground</key><string>#2d2d2d</string>
+					<key>fontStyle</key><string></string>
 				</dict>
 			</dict>
 			<dict>
@@ -373,9 +373,9 @@
 				<key>scope</key><string>string.other.tag.todo.low</string>
 				<key>settings</key>
 				<dict>
-					<key>background</key><string>#ffffff</string>
-					<key>foreground</key><string>#000000</string>
-					<key>fontStyle</key><string>bold</string>
+					<key>background</key><string>#d3d0c8</string>
+					<key>foreground</key><string>#2d2d2d</string>
+					<key>fontStyle</key><string></string>
 				</dict>
 			</dict>
 			<dict>
@@ -383,9 +383,9 @@
 				<key>scope</key><string>string.other.tag.todo.critical</string>
 				<key>settings</key>
 				<dict>
-					<key>background</key><string>#FF0000</string>
-					<key>foreground</key><string>#000000</string>
-					<key>fontStyle</key><string>bold</string>
+					<key>background</key><string>#EB7875</string>
+					<key>foreground</key><string>#2d2d2d</string>
+					<key>fontStyle</key><string></string>
 				</dict>
 			</dict>
 		</array>
