@@ -10,7 +10,7 @@ contexts:
   main:
     - match: '^\s*(\w+.*?:\s*?(\@[^\s]+(\(.*?\))?\s*?)*$\n?)'
       scope: keyword.control.header.todo
-    - match: '^\s*(?:(\+|✓|✔|☑|√|\[x\])(\s+(?:[^\@\n]|(?<!\s)\@|\@(?=\s))*)([^\n]*))|^\s*(?:(-)(\s+(?:[^\@]|(?<!\s)\@|\@(?=\s))*)(.*\@done(?=\s|\(|$)[^\n]*))'
+    - match: '^\s*(?:(\+|✓|✔|☑|√|\*?\s?\[x\])(\s+(?:[^\@\n]|(?<!\s)\@|\@(?=\s))*)([^\n]*))|^\s*(?:(-)(\s+(?:[^\@]|(?<!\s)\@|\@(?=\s))*)(.*\@done(?=\s|\(|$)[^\n]*))'
       scope: meta.item.todo.completed
       captures:
         1: punctuation.definition.bullet.completed.todo
@@ -19,7 +19,7 @@ contexts:
         4: punctuation.definition.bullet.completed.todo
         5: comment.line.completed.todo
         6: meta.tag.todo.completed
-    - match: '^\s*(?:(✘|x|\[-\])(\s+(?:[^\@\n]|(?<!\s)\@|\@(?=\s))*)(.*))|^\s*(?:(-)(\s+(?:[^\@]|(?<!\s)\@|\@(?=\s))*)(.*\@cancelled(?=\s|\(|$)[^\n]*))'
+    - match: '^\s*(?:(✘|x|\*?\s?\[-\])(\s+(?:[^\@\n]|(?<!\s)\@|\@(?=\s))*)(.*))|^\s*(?:(-)(\s+(?:[^\@]|(?<!\s)\@|\@(?=\s))*)(.*\@cancelled(?=\s|\(|$)[^\n]*))'
       scope: meta.item.todo.cancelled
       captures:
         1: punctuation.definition.bullet.cancelled.todo
@@ -28,7 +28,7 @@ contexts:
         4: punctuation.definition.bullet.cancelled.todo
         5: text.cancelled.todo
         6: meta.tag.todo.cancelled
-    - match: '^\s*(?!-|\+|✓|✔|√|❍|❑|■|□|☐|▪|▫|–|—|≡|→|›|\[[\sx-]\]|＿|✘|(x\s+))(?=\S)'
+    - match: '^\s*(?!-|\+|✓|✔|√|❍|❑|■|□|☐|▪|▫|–|—|≡|→|›|\*?\s?\[[\sx-]\]|＿|✘|(x\s+))(?=\S)'
       push:
         - meta_scope: notes.todo
         - match: $\n?
@@ -36,7 +36,7 @@ contexts:
         - include: italic
         - include: bold
         - include: url
-    - match: '^\s*(-|❍|❑|■|□|☐|▪|▫|–|—|≡|→|›|\[\s\])(?=(\s+(?:[^\@\n]|(?<![ \t])\@)*)(?!([^\n]*)?(\@done|\@cancelled)[\s\(]))'
+    - match: '^\s*(-|❍|❑|■|□|☐|▪|▫|–|—|≡|→|›|\*?\s?\[\s\])(?=(\s+(?:[^\@\n]|(?<![ \t])\@)*)(?!([^\n]*)?(\@done|\@cancelled)[\s\(]))'
       captures:
         1: punctuation.definition.bullet.pending.todo
       push:

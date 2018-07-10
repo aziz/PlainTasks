@@ -154,9 +154,9 @@ class PlainTasksCompleteCommand(PlainTasksBase):
         original = [r for r in self.view.sel()]
         done_line_end, now = self.format_line_end(self.done_tag, tznow())
         offset = len(done_line_end)
-        rom = r'^(\s*)(\[\s\]|.)(\s*.*)$'
+        rom = r'^(\s*)(\*?\s?\[\s\]|.)(\s*.*)$'
         rdm = r'''
-            (?x)^(\s*)(\[x\]|.)                           # 0,1 indent & bullet
+            (?x)^(\s*)(\*?\s?\[x\]|.)                           # 0,1 indent & bullet
             (\s*[^\b]*?(?:[^\@]|(?<!\s)\@|\@(?=\s))*?\s*) #   2 very task
             (?=
               ((?:\s@done|@project|@[wl]asted|$).*)   # 3 ending either w/ done or w/o it & no date
@@ -164,7 +164,7 @@ class PlainTasksCompleteCommand(PlainTasksBase):
               (?:[ \t](\([^()]*\))\s*([^@]*|(?:@project|@[wl]asted).*))?$ # 4 date & possible project tag after
             )
             '''  # rcm is the same, except bullet & ending
-        rcm = r'^(\s*)(\[\-\]|.)(\s*[^\b]*?(?:[^\@]|(?<!\s)\@|\@(?=\s))*?\s*)(?=((?:\s@cancelled|@project|@[wl]asted|$).*)|(?:[ \t](\([^()]*\))\s*([^@]*|(?:@project|@[wl]asted).*))?$)'
+        rcm = r'^(\s*)(\*?\s?\[\-\]|.)(\s*[^\b]*?(?:[^\@]|(?<!\s)\@|\@(?=\s))*?\s*)(?=((?:\s@cancelled|@project|@[wl]asted|$).*)|(?:[ \t](\([^()]*\))\s*([^@]*|(?:@project|@[wl]asted).*))?$)'
         started = r'^\s*[^\b]*?\s*@started(\([\d\w,\.:\-\/ @]*\)).*$'
         toggle = r'@toggle(\([\d\w,\.:\-\/ @]*\))'
 
@@ -244,9 +244,9 @@ class PlainTasksCancelCommand(PlainTasksBase):
         original = [r for r in self.view.sel()]
         canc_line_end, now = self.format_line_end(self.canc_tag, tznow())
         offset = len(canc_line_end)
-        rom = r'^(\s*)(\[\s\]|.)(\s*.*)$'
-        rdm = r'^(\s*)(\[x\]|.)(\s*[^\b]*?(?:[^\@]|(?<!\s)\@|\@(?=\s))*?\s*)(?=((?:\s@done|@project|@[wl]asted|$).*)|(?:[ \t](\([^()]*\))\s*([^@]*|(?:@project|@[wl]asted).*))?$)'
-        rcm = r'^(\s*)(\[\-\]|.)(\s*[^\b]*?(?:[^\@]|(?<!\s)\@|\@(?=\s))*?\s*)(?=((?:\s@cancelled|@project|@[wl]asted|$).*)|(?:[ \t](\([^()]*\))\s*([^@]*|(?:@project|@[wl]asted).*))?$)'
+        rom = r'^(\s*)(\*?\s?\[\s\]|.)(\s*.*)$'
+        rdm = r'^(\s*)(\*?\s?\[x\]|.)(\s*[^\b]*?(?:[^\@]|(?<!\s)\@|\@(?=\s))*?\s*)(?=((?:\s@done|@project|@[wl]asted|$).*)|(?:[ \t](\([^()]*\))\s*([^@]*|(?:@project|@[wl]asted).*))?$)'
+        rcm = r'^(\s*)(\*?\s?\[\-\]|.)(\s*[^\b]*?(?:[^\@]|(?<!\s)\@|\@(?=\s))*?\s*)(?=((?:\s@cancelled|@project|@[wl]asted|$).*)|(?:[ \t](\([^()]*\))\s*([^@]*|(?:@project|@[wl]asted).*))?$)'
         started = r'^\s*[^\b]*?\s*@started(\([\d\w,\.:\-\/ @]*\)).*$'
         toggle = r'@toggle(\([\d\w,\.:\-\/ @]*\))'
         regions = itertools.chain(*(reversed(self.view.lines(region)) for region in reversed(list(self.view.sel()))))
@@ -343,7 +343,7 @@ class PlainTasksArchiveCommand(PlainTasksBase):
             # adding tasks to archive section
             for task in all_tasks:
                 line_content = self.view.substr(task)
-                match_task = re.match(r'^\s*(\[[x-]\]|.)(\s+.*$)', line_content, re.U)
+                match_task = re.match(r'^\s*(\*?\s?\[[x-]\]|.)(\s+.*$)', line_content, re.U)
                 current_scope = self.view.scope_name(task.a)
                 if rds in current_scope or rcs in current_scope:
                     pr = self.get_task_project(task, projects)
