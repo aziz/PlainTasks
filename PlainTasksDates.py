@@ -187,10 +187,11 @@ def parse_date(date_string, date_format='(%y-%m-%d %H:%M)', yearfirst=True, dayf
     default
         datetime object (now)
     '''
+    #print("date_string", date_string, "format: ", date_format)
     try:
         return datetime.strptime(date_string, date_format), None
     except ValueError as e:
-        # print(e)
+        # print("[ValueError]:", e)
         pass
     bare_date_string = date_string.strip('( )')
     items = len(bare_date_string.split('-' if '-' in bare_date_string else '.'))
@@ -207,10 +208,10 @@ def parse_date(date_string, date_format='(%y-%m-%d %H:%M)', yearfirst=True, dayf
                                      yearfirst=yearfirst,
                                      dayfirst=dayfirst,
                                      default=default)
-        if NT and all((date.year < 1900, '%y' in date_format)):
-            return None, ('format %y requires year >= 1900 on Windows', date.year, date.month, date.day, date.hour, date.minute)
+        if all((date.year < 1900, '%y' in date_format)):
+            return None, ('format %y requires year >= 1900', date.year, date.month, date.day, date.hour, date.minute)
     except Exception as e:
-        # print(e)
+        # print("[Excetion]:", e, "[date_string]:", date_string)
         date, error = convert_date(bare_date_string, default)
     else:
         error = None

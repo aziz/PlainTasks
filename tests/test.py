@@ -45,9 +45,7 @@ class TestDatesFunctions(TestCase):
             {'string': '3', 'result': datetime(2017, 1, 3, 23, 0, 0), },
             # error
             {'string': '11111', 'result': None, },
-            # FIXME: [Feb 11, 2020] The following case fails. It returns "0233-12-31 23:00:00". Expected "None"
-            # Commented out for now
-            #{'string': '233', 'result': None, },
+            {'string': '233', 'result': None, },
             # yearfirst
             {'string': '1.1.16', 'result': datetime(2001, 1, 16, 23, 0, 0), },
             # yearfirst not
