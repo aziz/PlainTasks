@@ -24,7 +24,7 @@
                             {
                                 "command": "open_file",
                                 "args": {
-                                    "file": "${packages}/PlainTasks/PlainTasks (OSX).sublime-settings",
+                                    "file": "${packages}/PlainTasks/settings/PlainTasks (OSX).sublime-settings",
                                     "platform": "OSX"
                                 },
                                 "caption": "Settings – Default"
@@ -32,7 +32,7 @@
                             {
                                 "command": "open_file",
                                 "args": {
-                                    "file": "${packages}/PlainTasks/PlainTasks (Linux).sublime-settings",
+                                    "file": "${packages}/PlainTasks/settings/PlainTasks (Linux).sublime-settings",
                                     "platform": "Linux"
                                 },
                                 "caption": "Settings – Default"
@@ -40,7 +40,7 @@
                             {
                                 "command": "open_file",
                                 "args": {
-                                    "file": "${packages}/PlainTasks/PlainTasks (Windows).sublime-settings",
+                                    "file": "${packages}/PlainTasks/settings/PlainTasks (Windows).sublime-settings",
                                     "platform": "Windows"
                                 },
                                 "caption": "Settings – Default"
@@ -54,7 +54,7 @@
                             {
                                 "command": "open_file",
                                 "args": {
-                                    "file": "${packages}/PlainTasks/Default (OSX).sublime-keymap",
+                                    "file": "${packages}/PlainTasks/keymaps/Default (OSX).sublime-keymap",
                                     "platform": "OSX"
                                 },
                                 "caption": "Key Bindings – Default"
@@ -62,7 +62,7 @@
                             {
                                 "command": "open_file",
                                 "args": {
-                                    "file": "${packages}/PlainTasks/Default (Linux).sublime-keymap",
+                                    "file": "${packages}/PlainTasks/keymaps/Default (Linux).sublime-keymap",
                                     "platform": "Linux"
                                 },
                                 "caption": "Key Bindings – Default"
@@ -70,7 +70,7 @@
                             {
                                 "command": "open_file",
                                 "args": {
-                                    "file": "${packages}/PlainTasks/Default (Windows).sublime-keymap",
+                                    "file": "${packages}/PlainTasks/keymaps/Default (Windows).sublime-keymap",
                                     "platform": "Windows"
                                 },
                                 "caption": "Key Bindings – Default"

@@ -12,15 +12,15 @@
 
   "bar_empty": "☐", // empty cell for progress-bar in status-bar, for more details see Custom Statistics in README
 
-  "color_scheme": "Packages/PlainTasks/tasks.hidden-tmTheme",
+  "color_scheme": "Packages/PlainTasks/themes/tasks.hidden-tmTheme",
     // other bundled schemes:
-    //   Packages/PlainTasks/tasks-dark.hidden-tmTheme
-    //   Packages/PlainTasks/tasks-eighties-colored.hidden-tmTheme
-    //   Packages/PlainTasks/tasks-eighties-dark.hidden-tmTheme
-    //   Packages/PlainTasks/tasks-gray.hidden-tmTheme
-    //   Packages/PlainTasks/tasks-monokai.hidden-tmTheme
-    //   Packages/PlainTasks/tasks-solarized-dark.hidden-tmTheme
-    //   Packages/PlainTasks/tasks-solarized-light.hidden-tmTheme
+    //   Packages/PlainTasks/themes/tasks-dark.hidden-tmTheme
+    //   Packages/PlainTasks/themes/tasks-eighties-colored.hidden-tmTheme
+    //   Packages/PlainTasks/themes/tasks-eighties-dark.hidden-tmTheme
+    //   Packages/PlainTasks/themes/tasks-gray.hidden-tmTheme
+    //   Packages/PlainTasks/themes/tasks-monokai.hidden-tmTheme
+    //   Packages/PlainTasks/themes/tasks-solarized-dark.hidden-tmTheme
+    //   Packages/PlainTasks/themes/tasks-solarized-light.hidden-tmTheme
   // "font_size": 11,
   // "font_face": "Consolas",
   "draw_indent_guides": false,
