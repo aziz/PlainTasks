@@ -187,7 +187,7 @@ def parse_date(date_string, date_format='(%y-%m-%d %H:%M)', yearfirst=True, dayf
     default
         datetime object (now)
     '''
-    #print("date_string", date_string, "format: ", date_format)
+    #print("[date_string]", date_string, "[format] ", date_format)
     try:
         return datetime.strptime(date_string, date_format), None
     except ValueError as e:
@@ -196,7 +196,11 @@ def parse_date(date_string, date_format='(%y-%m-%d %H:%M)', yearfirst=True, dayf
     bare_date_string = date_string.strip('( )')
     items = len(bare_date_string.split('-' if '-' in bare_date_string else '.'))
     try:
-        if items < 2 and len(bare_date_string) < 3:
+        #[HKC] Initially it was < 3, but date_string of "233" will be converted to 
+        # year of 0233, which is silly
+        if items == 1 and len(bare_date_string) <= 3:  
+            raise Exception("Invalid date_string:", date_string)
+        if items < 2 and len(bare_date_string) < 3:  
             # e.g. @due(1) is always first day of next month,
             # but dateutil consider it 1st day of current month
             raise Exception("Special case of short date: less than 2 numbers")
@@ -208,10 +212,11 @@ def parse_date(date_string, date_format='(%y-%m-%d %H:%M)', yearfirst=True, dayf
                                      yearfirst=yearfirst,
                                      dayfirst=dayfirst,
                                      default=default)
+        #print("[Parsed Date]", date)
         if all((date.year < 1900, '%y' in date_format)):
             return None, ('format %y requires year >= 1900', date.year, date.month, date.day, date.hour, date.minute)
     except Exception as e:
-        # print("[Excetion]:", e, "[date_string]:", date_string)
+        #print("[Exception]:", e, "[date_string]:", date_string)
         date, error = convert_date(bare_date_string, default)
     else:
         error = None
