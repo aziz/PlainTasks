@@ -3,7 +3,7 @@
 ### [HKC] NOTE: The following documents need updates to match the codes I changed. Please get the code from the original repo.
 
 #### [HKC] What's New?
-* Ability to add below or above the cursor
+* Ability to add new task below or above the cursor
 
 Code has been tested under the follow set-up:
 - macOS Catalina (Version 10.15.3)
