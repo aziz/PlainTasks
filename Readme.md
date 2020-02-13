@@ -3,15 +3,17 @@
 
 ### [HKC] NOTE: The following documents need updates to match the codes I changed. Please get the code from the original repo.
 
+### [HKC] NOTE: The code and features are different. The following document reflects that. Code is tested under the follow set-up
+- Mac (running Catalina)
+- Sublime 3 (Build 3211)
+
 An opinionated todo-list plugin for Sublime Text (2 & 3) editor
 ![](http://cl.ly/image/1q100Q212o2Q/ss.png)
 
 ## Installation
-To install this plugin, you have two options:
+To install this plugin, you will need to clone this repo and put it under your Sublime package directory. The version in Package Central is of Aziz's.
 
-1. If you have Package Control installed, simply search for `PlainTasks` to install.
-
-2. Clone source code to Sublime Text packages folder.
+1. Clone source code to Sublime Text packages folder.
 
 ## Start a new todo-list
 Bring up the command palette (it’s <kbd>⌘ + shift + p</kbd> in OS X and <kbd>ctrl + shift + p</kbd> in Windows) and type `task` and select `Tasks: New document` command. 
@@ -22,7 +24,9 @@ For more portability you can use `todolist.txt` either as a filename or as suffi
 ## Usage
 **NOTE:** In Windows or Linux use <kbd>ctrl</kbd> instead of <kbd>⌘</kbd>
 
-☐ <kbd>⌘ + enter</kbd> or <kbd>⌘ + i</kbd>: new task
+☐ *NEW* <kbd>⌘ + enter</kbd>: add new task below cursor
+
+☐ *NEW* <kbd>⌘ + i</kbd>: add new task above cursor
 
 ☐ <kbd>⌘ + d</kbd>: toggle task as completed.
 

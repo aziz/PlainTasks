@@ -3,6 +3,7 @@
     { "caption": "Tasks: Complete", "command": "plain_tasks_complete" },
     { "caption": "Tasks: Cancel", "command": "plain_tasks_cancel" },
     { "caption": "Tasks: New", "command": "plain_tasks_new" },
+    { "caption": "Tasks: New (Above)", "command": "plain_tasks_new", "args": {"is_above": true}  },
     { "caption": "Tasks: Archive", "command": "plain_tasks_archive" },
     { "caption": "Tasks: Archive within selection(s)", "command": "plain_tasks_archive", "args": {"partial": true} },
     { "caption": "Tasks: Archive (Org-Mode Style)", "command": "plain_tasks_org_archive" },

@@ -74,32 +74,55 @@ def check_parentheses(date_format, regex_group, is_date=False):
 
 
 class PlainTasksNewCommand(PlainTasksBase):
-    def runCommand(self, edit):
+    def runCommand(self, edit, is_above = False):        
         # list for ST3 support;
         # reversed because with multiple selections regions would be messed up after first iteration
+        # [HKC] if not reversed, first iteration will mess up the initial region measures
         regions = itertools.chain(*(reversed(self.view.lines(region)) for region in reversed(list(self.view.sel()))))
         header_to_task = self.view.settings().get('header_to_task', False)
         # ST3 (3080) moves sel when call view.replace only by delta between original and
         # new regions, so if sel is not in eol and we replace line with two lines,
         # then cursor won’t be on next line as it should
         sels = self.view.sel()
+        for region in sels:
+            print("\n\n------\n[for] Region in sels:", region, "total_lines:", len(self.view.lines(region)), "sel_size:", len(sels), 
+                "header_to_task:", header_to_task)
+
         eol  = None
-        for i, line in enumerate(regions):
+        for i, line in enumerate(regions):            
             line_contents  = self.view.substr(line).rstrip()
             not_empty_line = re.match('^(\s*)(\S.*)$', self.view.substr(line))
             empty_line     = re.match('^(\s+)$', self.view.substr(line))
             current_scope  = self.view.scope_name(line.a)
-            eol = line.b  # need for ST3 when new content has line break
-            if 'item' in current_scope:
-                grps = not_empty_line.groups()
-                line_contents = self.view.substr(line) + '\n' + grps[0] + self.open_tasks_bullet + self.tasks_bullet_space
+            eol = line.b  # need for ST3 when new content has line break   
+
+            print("\n\t[Enumerating regions] i:", i, "line:", line, "current_scope:", current_scope)          
+            if 'item' in current_scope:                                
+                # [HKC]'item' means an existing task                
+                grps = not_empty_line.groups() if not_empty_line != None else None
+                print("\t[item] grps:(", grps[0],")")
+                if is_above:
+                    line_contents = grps[0] + self.open_tasks_bullet + self.tasks_bullet_space + '\n' + self.view.substr(line)    
+                else:
+                    line_contents = self.view.substr(line) + '\n' + grps[0] + self.open_tasks_bullet + self.tasks_bullet_space                
             elif 'header' in current_scope and line_contents and not header_to_task:
+                # [HKC]'header' refers to a project: line
                 grps = not_empty_line.groups()
-                line_contents = self.view.substr(line) + '\n' + grps[0] + self.before_tasks_bullet_spaces + self.open_tasks_bullet + self.tasks_bullet_space
+                print("\t[header] grps:(", grps[0],")")
+                if is_above:
+                    line_contents = grps[0] + self.before_tasks_bullet_spaces + self.open_tasks_bullet + self.tasks_bullet_space + '\n' + self.view.substr(line)
+                else:
+                    line_contents = self.view.substr(line) + '\n' + grps[0] + self.before_tasks_bullet_spaces + self.open_tasks_bullet + self.tasks_bullet_space
             elif 'separator' in current_scope:
+                # [HKC] a separator line
                 grps = not_empty_line.groups()
-                line_contents = self.view.substr(line) + '\n' + grps[0] + self.before_tasks_bullet_spaces + self.open_tasks_bullet + self.tasks_bullet_space
+                print("\t[separator] grps:(", grps[0],")")
+                if is_above:
+                    line_contents = grps[0] + self.before_tasks_bullet_spaces + self.open_tasks_bullet + self.tasks_bullet_space + '\n' + self.view.substr(line) 
+                else:
+                    line_contents = self.view.substr(line) + '\n' + grps[0] + self.before_tasks_bullet_spaces + self.open_tasks_bullet + self.tasks_bullet_space
             elif not ('header' and 'separator') in current_scope or header_to_task:
+                print("\t[Regular line]")
                 eol = None
                 if not_empty_line:
                     grps = not_empty_line.groups()
@@ -111,10 +134,17 @@ class PlainTasksNewCommand(PlainTasksBase):
                     line_contents = self.before_tasks_bullet_spaces + self.open_tasks_bullet + self.tasks_bullet_space
             else:
                 print('oops, need to improve PlainTasksNewCommand')
+
             if eol:
                 # move cursor to eol of original line, workaround for ST3
-                sels.subtract(sels[~i])
-                sels.add(sublime.Region(eol, eol))
+                print("\t[eol]", "begin:", line.begin(), "end:", line.end(), "i:", i, "~i:", ~i)  
+                if is_above:
+                    sels.subtract(sels[~i])
+                    sels.add(sublime.Region(eol, eol))
+                else:
+                    sels.subtract(sels[~i])
+                    sels.add(sublime.Region(eol, eol))
+
             self.view.replace(edit, line, line_contents)
 
         # convert each selection to single cursor, ready to type
@@ -123,15 +153,19 @@ class PlainTasksNewCommand(PlainTasksBase):
             eol = self.view.line(sel).b
             new_selections.append(sublime.Region(eol, eol))
         self.view.sel().clear()
+
         for sel in new_selections:
+            print("\tin new_selections:", sel)
             self.view.sel().add(sel)
 
         PlainTasksStatsStatus.set_stats(self.view)
         self.view.run_command('plain_tasks_toggle_highlight_past_due')
+        print("End of PlainTasksNewCommand")
 
 
 class PlainTasksNewWithDateCommand(PlainTasksBase):
     def runCommand(self, edit):
+        #print("Invoking PlainTasksNewWithDateCommand")
         self.view.run_command('plain_tasks_new')
         sels = list(self.view.sel())
         suffix = ' @created%s' % tznow().strftime(self.date_format)
