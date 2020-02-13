@@ -3,17 +3,16 @@
 
 ### [HKC] NOTE: The following documents need updates to match the codes I changed. Please get the code from the original repo.
 
-### [HKC] NOTE: The code and features are different. The following document reflects that. Code is tested under the follow set-up
-- Mac (running Catalina)
+#### [HKC] NOTE: The code and features are different. 
+Code has been tested under the follow set-up:
+- macOS Catalina (Version 10.15.3)
 - Sublime 3 (Build 3211)
 
 An opinionated todo-list plugin for Sublime Text (2 & 3) editor
 ![](http://cl.ly/image/1q100Q212o2Q/ss.png)
 
 ## Installation
-To install this plugin, you will need to clone this repo and put it under your Sublime package directory. The version in Package Central is of Aziz's.
-
-1. Clone source code to Sublime Text packages folder.
+To install this plugin, you will need to clone this repo and put it under your Sublime `Packages` directory. The version in Package Control is of Aziz's.
 
 ## Start a new todo-list
 Bring up the command palette (it’s <kbd>⌘ + shift + p</kbd> in OS X and <kbd>ctrl + shift + p</kbd> in Windows) and type `task` and select `Tasks: New document` command. 
