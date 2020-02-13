@@ -139,12 +139,12 @@ class PlainTasksNewCommand(PlainTasksBase):
             if eol:
                 # move cursor to eol of original line, workaround for ST3
                 print("\t[eol]", "begin:", line.begin(), "end:", line.end(), "i:", i, "~i:", ~i)  
-                if is_above:
-                    sels.subtract(sels[~i])
-                    sels.add(sublime.Region(eol, eol))
-                else:
-                    sels.subtract(sels[~i])
-                    sels.add(sublime.Region(eol, eol))            
+                # if is_above:
+                #     sels.subtract(sels[~i])
+                #     sels.add(sublime.Region(eol, eol))
+                # else:
+                #     sels.subtract(sels[~i])
+                #     sels.add(sublime.Region(eol, eol))            
             self.view.replace(edit, line, line_contents)
             #print("\t[End of for] Updated", "begin:", line.begin(), "end:", line.end(), "i:", i, "~i:", ~i)  
 

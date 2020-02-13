@@ -1,5 +1,4 @@
 ## [PlainTasks](https://github.com/hkchai/PlainTasks) 
-*Credit*: Forked from [PlainTasks](https://github.com/aziz/PlainTasks). 
 
 ### [HKC] NOTE: The following documents need updates to match the codes I changed. Please get the code from the original repo.
 
@@ -11,20 +10,23 @@ An opinionated todo-list plugin for Sublime Text (2 & 3) editor
 ![](http://cl.ly/image/1q100Q212o2Q/ss.png)
 
 ## Installation
-To install this plugin, you will need to clone this repo and put it under your Sublime `Packages` directory. The version in Package Control is of Aziz's.
+To install this plugin, you will need to clone this repo and put it under your Sublime `Packages` directory. The version in Package Control is of the original author's.
 
 ## Start a new todo-list
-Bring up the command palette (it’s <kbd>⌘ + shift + p</kbd> in OS X and <kbd>ctrl + shift + p</kbd> in Windows) and type `task` and select `Tasks: New document` command. 
+!Important! 
+First of all, create a todo file with `todo`, `todolist`, `tasks` or `taskpaper` file extensions or just name them `TODO` with no extension.
+For more portability you can use `todolist.txt` either as a filename or as suffix for any arbitrary filename. 
 
-**NOTE:** Save your todo files with `todo`, `todolist`, `tasks` or `taskpaper` file extensions or just name them `TODO` with no extension.
-For more portability you can use `todolist.txt` either as a filename or as suffix for any arbitrary filename.
+The key-bindings only work on the above mentioned file extensions!
+
+Next, bring up the command palette (it’s <kbd>⌘ + shift + p</kbd> in OS X and <kbd>ctrl + shift + p</kbd> in Windows) and type `task` and select `Tasks: New document` command. 
 
 ## Usage
 **NOTE:** In Windows or Linux use <kbd>ctrl</kbd> instead of <kbd>⌘</kbd>
 
 ☐ *NEW* <kbd>⌘ + enter</kbd>: add new task _below_ the cursor and position the cursor to the newly created task
 
-☐ *NEW* <kbd>⌘ + i</kbd>: add new task _above_ cursor and position the cursor to the newly created task
+☐ *NEW* <kbd>⌘ + i</kbd>: add new task _above_ the cursor and position the cursor to the newly created task
 
 ☐ <kbd>⌘ + d</kbd>: toggle task as completed.
 
