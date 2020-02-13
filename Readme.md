@@ -14,7 +14,7 @@ To install this plugin, you will need to clone this repo and put it under your S
 
 ## Start a new todo-list
 !Important! 
-First of all, create a todo file with `todo`, `todolist`, `tasks` or `taskpaper` file extensions or just name them `TODO` with no extension.
+First of all, create a file with `todo`, `todolist`, `tasks` or `taskpaper` file extension, or just name it `TODO` with no extension.
 For more portability you can use `todolist.txt` either as a filename or as suffix for any arbitrary filename. 
 
 The key-bindings only work on the above mentioned file extensions!
