@@ -9,11 +9,11 @@ Tasks:
   You can write plain text as _notes_ or descriptions wherever you want;
   It’s **totally** fine!
   New:
-   ☐ ⌘+enter (ctrl+enter on Windows) adds a new task.
-   ☐ ⌘+i (ctrl+i on Windows) also adds a new task
-   ☐ If you’re on a new line PlainTasks creates a new task on the current line
-   ☐ If you’re on a line with a task pressing new task shortcut adds a task after it
+   ☐ If you’re on a new line, PlainTasks creates a new task on the current line
    ☐ If you’re on a line with some normal text pressing new task shortcut converts it to a task
+   ☐ If you’re on a line with a task: 
+     ☐ ⌘ + enter (Ctrl + enter on Windows) adds a new task next line
+     ☐ ⌘ + i (Ctrl + i on Windows) adds a new task at the previous line
    ☐ New tasks are nested as much as the task on the previous line
   Done:
    ☐ ⌘+d (ctrl+d on Windows) marks a task as done

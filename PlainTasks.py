@@ -51,7 +51,6 @@ else:
         def dst(self, dt):
             return timedelta(0)
 
-
 def tznow():
     t = time.time()
     d = datetime.fromtimestamp(t)
@@ -87,7 +86,7 @@ class PlainTasksNewCommand(PlainTasksBase):
         item_size = len(self.before_tasks_bullet_spaces + self.open_tasks_bullet + self.tasks_bullet_space)
         for region in sels:
             print("\n\n------\n[for] Region in sels:", region, "region_size:", region.size(), "total_lines:", len(self.view.lines(region)), "sel_size:", len(sels), 
-                "header_to_task:", header_to_task, "item_size:", item_size)
+                "is_above:", is_above, "item_size:", item_size)
 
         eol  = None
         for i, line in enumerate(regions):            
@@ -139,20 +138,17 @@ class PlainTasksNewCommand(PlainTasksBase):
             if eol:
                 # move cursor to eol of original line, workaround for ST3
                 print("\t[eol]", "begin:", line.begin(), "end:", line.end(), "i:", i, "~i:", ~i)  
-                # if is_above:
-                #     sels.subtract(sels[~i])
-                #     sels.add(sublime.Region(eol, eol))
-                # else:
-                #     sels.subtract(sels[~i])
-                #     sels.add(sublime.Region(eol, eol))            
+                sels.add(sublime.Region(eol, eol))            
+
             self.view.replace(edit, line, line_contents)
             #print("\t[End of for] Updated", "begin:", line.begin(), "end:", line.end(), "i:", i, "~i:", ~i)  
 
         # convert each selection to single cursor, ready to type
         new_selections = []
         for sel in list(self.view.sel()):
+            print("\t[sel dump]", sel)
             if is_above:
-                begin = self.view.line(sel).begin() - 1 # [HKC] at the start of line and minus one to move up
+                begin = self.view.line(sel).begin() - 1 # [HKC] line.begin() - 1 will move to prev line
                 new_selections.append(sublime.Region(begin, begin))
             else:
                 eol = self.view.line(sel).b
