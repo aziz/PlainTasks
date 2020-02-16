@@ -57,7 +57,7 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#93a1a1</string><!-- base1 -->
+				<string>#626d6d</string><!-- base1 --> <!-- [HKC] Old value was #93a1a1 which I find too light -->
 			</dict>
 		</dict>
 		<dict>
