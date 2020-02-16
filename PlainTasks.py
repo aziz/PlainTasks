@@ -9,6 +9,9 @@ import itertools
 import threading
 from datetime import datetime, tzinfo, timedelta
 import time
+import logging, sys  # [HKC] For debugging
+
+logging.basicConfig(format='\n\n----\n%(levelname)-8s| %(message)s', level=logging.DEBUG)
 
 platform = sublime.platform()
 ST3 = int(sublime.version()) >= 3000
@@ -71,7 +74,6 @@ def check_parentheses(date_format, regex_group, is_date=False):
             parentheses = regex_group
     return parentheses
 
-
 class PlainTasksNewCommand(PlainTasksBase):
     def runCommand(self, edit, is_above = False):        
         # list for ST3 support;
@@ -85,8 +87,10 @@ class PlainTasksNewCommand(PlainTasksBase):
         sels = self.view.sel()
         item_size = len(self.before_tasks_bullet_spaces + self.open_tasks_bullet + self.tasks_bullet_space)
         for region in sels:
-            print("\n\n------\n[for] Region in sels:", region, "region_size:", region.size(), "total_lines:", len(self.view.lines(region)), "sel_size:", len(sels), 
-                "is_above:", is_above, "item_size:", item_size)
+            _myfolds = self.view.folded_regions()
+
+            logging.debug("[for] Region in sels:{} region_size: {} total_lines: {} sel_size: {} is_above: {} item_size: {} folded_regions:{}".
+                format(region, region.size(), len(self.view.lines(region)), len(sels), is_above, item_size, _myfolds))
 
         eol  = None
         for i, line in enumerate(regions):            

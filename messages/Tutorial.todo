@@ -9,25 +9,24 @@ Tasks:
   You can write plain text as _notes_ or descriptions wherever you want;
   It’s **totally** fine!
   New:
-   ☐ If you’re on a new line, PlainTasks creates a new task on the current line
-   ☐ If you’re on a line with some normal text pressing new task shortcut converts it to a task
+   ☐ ⌘ + enter (ctrl + enter on Windows) or ⌘ + i (ctrl + i on Windows) will create a new task on a new line or a line with normal texts
    ☐ If you’re on a line with a task: 
-     ☐ ⌘ + enter (Ctrl + enter on Windows) adds a new task next line
-     ☐ ⌘ + i (Ctrl + i on Windows) adds a new task at the previous line
+     ☐ ⌘ + enter (ctrl + enter on Windows) adds a new task next line
+     ☐ ⌘ + i (ctrl + i on Windows) adds a new task at the previous line
    ☐ New tasks are nested as much as the task on the previous line
   Done:
-   ☐ ⌘+d (ctrl+d on Windows) marks a task as done
-   ☐ Pressing ⌘+d (ctrl+d on Windows) again puts it back in pending mode
-   ☐ ctrl+c (alt+c on Windows) marks the task as cancelled
+   ☐ ⌘+d (ctrl + d on Windows) marks a task as done
+   ☐ Pressing ⌘+d (ctrl + d on Windows) again puts it back in pending mode
+   ☐ ctrl + c (alt + c on Windows) marks the task as cancelled
   Tagging:
    ☐ You can add tags using @ sign, like this @tag
      You can place cursors on tags, click right mouse button and **Filter by tags under cursors**
      Pending tasks with selected tags will remain visible (and their notes and projects they belong to),
      but everything else will be hidden/folded
      To unfold all press ⌘+k, ⌘+j or ⌘+k, ⌘+0
-   ☐ You can navigate tags in current document via ⌘+shift+r (ctrl+shift+r on Windows)
+   ☐ You can navigate tags in current document via ⌘+shift + r (ctrl + shift + r on Windows)
   URLs:
-   ☐ ⌘+shift+U (ctrl+shift+U on Windows) opens the URL under the cursor in your default browser
+   ☐ ⌘+shift + U (ctrl + shift + U on Windows) opens the URL under the cursor in your default browser
      www.github.com or <skype:nickname>
   File links:
    ☐ You can create a link to a file by prefixing the file name with a dot and (back)slash sign
@@ -37,7 +36,7 @@ Tasks:
    ☐ The line and column numbers can be specified by colons after the filename: .\filename:11:8
    ☐ In SublimeText 3 you can specify a symbol inside the file by using > character like: .\filename>symbol
    ☐ In SublimeText 2 you can specify a text inside that file by using double quotes like: .\filename"any text"
-   ☐ ctrl+o (alt+o on Windows) opens the file in Sublime: try to open .\install.txt\
+   ☐ ctrl + o (alt + o on Windows) opens the file in Sublime: try to open .\install.txt\
    ☐ In SublimeText 3 link may point to directory, open such link will add the directory to current project (sidebar), e.g. .\..\PlainTasks\
    ☐ Other ways to create file links:
       [](install.txt)  ← try to open it
@@ -53,15 +52,15 @@ Tasks:
       [[path]] "any text"
 
   Archiving:
-   ☐ ⌘+shift+A (ctrl+shift+A on Windows) archives tasks in done mode.
+   ☐ ⌘+shift + A (ctrl + shift + A on Windows) archives tasks in done mode.
       It does it by removing them from your list and appending them to the bottom of the file under Archive project.
       The archive project is separated from the other list of projects with a line. See bottom of this file.
-   ☐ ⌘+shift+O (ctrl+shift+O) will archive in Org-Mode style.
+   ☐ ⌘+shift + O (ctrl + shift + O) will archive in Org-Mode style.
       Removing the entire subtree after cursor and appending it to new file next to original one,
       e.g. filename.TODO → filename_archive.TODO
 
   Starting a new todo-list:
-   ☐ Bring up the command palette (it's ⌘+shift+p in Mac and ctrl+shift+p in Windows)
+   ☐ Bring up the command palette (it's ⌘+shift + p in Mac and ctrl + shift + p in Windows)
    ☐ type `task` and select `Tasks: New document` command
 
 --- ✄ -----------------------
@@ -82,7 +81,7 @@ Time Tracking:
     That way you can pause and resume started task, so result of calculation will be more correct.
     First, you need start task, then toggle means pause, next toggle — resume, etc.
   ☐ type cr, press tab key twice — @created(14-12-24 15:57)
-    ⌘+shift+enter (ctrl+shift+enter) creates a new task with this tag
+    ⌘+shift + enter (ctrl + shift + enter) creates a new task with this tag
   ☐ type d, press tab key — @due( )
     If you press tab key again — it’ll insert current date, same for @due( 0).
     You can type short date and then press tab to expand it into default format.
@@ -110,7 +109,7 @@ Time Tracking:
     You can search 'Tasks: Fold to due tasks' in command palette to fold/hide everything except
     pending tasks with past or soon due tag, their notes, and projects or separators they belong to.
 
-☐ ctrl+space (alt+/ on Linux) shows list of those tags
+☐ ctrl + space (alt+/ on Linux) shows list of those tags
 
 FileType Support:
  PlainTasks support these file types out of the box
@@ -133,8 +132,8 @@ You can customize:
  or in Sublime ./../Readme.md"## Settings"
 
 Editor Useful Tools:
- ☐ Use ⌘+control+up/down (ctrl+shift+up/down on Windows) to move tasks up and down.
- ☐ Use ⌘+R (ctrl+R on Windows) to see a list of projects and quickly jump between them
+ ☐ Use ⌘+control + up/down (ctrl + shift + up/down on Windows) to move tasks up and down.
+ ☐ Use ⌘+R (ctrl + R on Windows) to see a list of projects and quickly jump between them
  ☐ F6 toggles spell check
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
