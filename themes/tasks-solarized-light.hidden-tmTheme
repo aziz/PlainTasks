@@ -33,7 +33,7 @@
 				<key>fontStyle</key>
 				<string>italic</string>
 				<key>foreground</key>
-				<string>#839496</string><!-- base0 -->
+				<string>#839496</string><!-- base0 [HKC] grayish-blue -->
 			</dict>
 		</dict>
 		<dict>
@@ -44,7 +44,7 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#CB4B16</string><!-- orange -->
+				<string>#0d0fa3</string><!-- [HKC] was orange #CB4B16 -->
 				<key>fontStyle</key>
 				<string>bold</string>
 			</dict>
@@ -131,7 +131,7 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#93a1a150</string><!-- base1 - 50% opacity - nonstandard -->
+				<string>#93a1a180</string><!-- base1 - 50% opacity - nonstandard [HKC] was 93a1a150, increased opacity to 80% -->
 				<key>fontStyle</key>
 				<string></string>
 			</dict>
@@ -144,16 +144,17 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#93a1a150</string><!-- base1 - 50% opacity - nonstandard -->
+				<string>#93a1a180</string><!-- base1 - 50% opacity - nonstandard [HKC] was 93a1a150, increased opacity to 80% -->
 				<key>fontStyle</key>
 				<string></string>
 			</dict>
 		</dict>
+		<!-- [HKC] used to be 'Keyword' -->
 		<dict>
 			<key>name</key>
-			<string>Keyword</string>
+			<string>Header</string>
 			<key>scope</key>
-			<string>keyword</string>
+			<string>keyword.control.header.todo</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -164,6 +165,22 @@
 				<string>bold underline</string>
 			</dict>
 		</dict>
+		<!-- [HKC] NEW entry -->
+		<dict>
+			<key>name</key>
+			<string>SubHeader</string>
+			<key>scope</key>
+			<string>keyword.control.subheader.todo</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#5e635b</string> <!-- [HKC] dark gray #5e635b -->	
+				<key>background</key>
+				<string>#c4f0a850</string>		<!-- [HKC] light green #c4f0a8 50% transparency -->		
+				<key>fontStyle</key>
+				<string>bold</string>
+			</dict>
+		</dict>		
 		<dict>
 			<key>name</key>
 			<string>Archive Separator</string>
@@ -194,7 +211,7 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#93a1a150</string><!-- base1 - 50% opacity - nonstandard -->
+				<string>#93a1a180</string><!-- base1 - 50% opacity - nonstandard [HKC] was 93a1a150, increased opacity to 80% -->
 			</dict>
 		</dict>
 		<dict>
@@ -216,7 +233,7 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#93a1a150</string><!-- base1 - 50% opacity - nonstandard -->
+				<string>#93a1a180</string><!-- base1 - 50% opacity - nonstandard [HKC] was 93a1a150, increased opacity to 80% -->
 				<key>fontStyle</key>
 				<string>normal</string>
 			</dict>
@@ -497,7 +514,7 @@
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>#FDF6E3</string><!-- base3 - background -->
+				<string>#FDF6E3</string><!-- base3 - background [HKC] light yellow -->
 				<key>foreground</key>
 				<string>#b58900</string><!-- yellow -->
 				<key>fontStyle</key>
@@ -549,6 +566,37 @@
 				<string>bold</string>
 			</dict>
 		</dict>
+		<!-- [HKC] NEW entry -->
+		<dict>
+			<key>name</key>
+			<string>Created</string>
+			<key>scope</key>
+			<string>string.other.tag.created</string>
+			<key>settings</key>
+			<dict>
+				<key>background</key>
+				<string>#FDF6E3</string>				
+				<key>foreground</key>
+				<string>#CB4B16</string><!-- [HKC] Orange -->
+				<key>fontStyle</key>
+				<string>bold</string>
+			</dict>
+		</dict>
+		<!-- [HKC] NEW entry -->
+		<dict>
+			<key>name</key>
+			<string>Due</string>
+			<key>scope</key>
+			<string>string.other.tag.due</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#CB4B16</string><!-- [HKC] Orange -->
+				<key>fontStyle</key>
+				<string>bold</string>
+			</dict>
+		</dict>
+
 	</array>
 	<key>uuid</key>
 	<string>FE674D9A-27B3-4A5A-84F7-1CC67BD29531</string>

@@ -10,6 +10,8 @@ contexts:
   main:
     - match: '^\s*(\#?\s?\w+.*?:\s*?(\@[^\s]+(\(.*?\))?\s*?)*$\n?)'
       scope: keyword.control.header.todo
+    - match: '^\s*(\#?\s?[*-]\s?\w+.*?:\s*?(\@[^\s]+(\(.*?\))?\s*?)*$)'
+      scope: keyword.control.subheader.todo      
     - match: '^\s*(?:(\+|✓|✔|☑|√|\[x\])(\s+(?:[^\@\n]|(?<!\s)\@|\@(?=\s))*)([^\n]*))|^\s*(?:(-)(\s+(?:[^\@]|(?<!\s)\@|\@(?=\s))*)(.*\@done(?=\s|\(|$)[^\n]*))'
       scope: meta.item.todo.completed
       captures:
@@ -53,6 +55,8 @@ contexts:
         - include: low
         - include: high
         - include: critical
+        - include: created
+        - include: due        
     - match: ^＿+$
       scope: meta.punctuation.archive.todo
     - match: '^\s*---.{3,5}---+$'
@@ -87,11 +91,17 @@ contexts:
     - match: (?<=\s)\@low|✭low
       scope: string.other.tag.todo.low
   tag:
-    - match: '(?<=\s)\@(?!(high|today|critical|low|completed|done)[\s\(])[\w\d\.\(\)\-!? :\+]+[ \t]*'
+    - match: '(?<=\s)\@(?!(high|today|critical|low|completed|created|due|done)[\s\(])[\w\d\.\(\)\-!? :\+]+[ \t]*'
       scope: meta.tag.todo
   today:
     - match: (?<=\s)\@today|✭ᴛᴏᴅᴀʏ
       scope: string.other.tag.todo.today
+  created:
+    - match: (?<=\s)\@created
+      scope: string.other.tag.created      
+  due:
+    - match: (?<=\s)\@due
+      scope: string.other.tag.due            
   url:
     - match: '(?<!\S)(<)\w+?(?!\s)(\.|:)(?!\s)[^\n]+?(>)'
       scope: todo.url
