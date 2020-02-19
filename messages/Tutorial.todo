@@ -1,10 +1,13 @@
 How to Use PlainTasks:
-
 Projects:
  ☐ Anything with colon at the end of the line is a project title
  ☐ Projects can be nested inside each other
  ☐ Projects can be folded (a built-in editor feature)
 
+ - This is a Sub-Project:
+   ☐ Due item high-light @due(20 Feb 2020 15:36)
+   ☐ Regular tag for categorisation @tag
+   ☐ Creation tag @created(19 Feb 2020 15:37)
 Tasks:
   You can write plain text as _notes_ or descriptions wherever you want;
   It’s **totally** fine!
