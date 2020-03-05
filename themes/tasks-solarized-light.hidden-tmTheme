@@ -575,9 +575,9 @@
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>#FDF6E3</string>				
+				<string>#04158b</string>	<!-- [HKC] Dark Blue -->			
 				<key>foreground</key>
-				<string>#CB4B16</string><!-- [HKC] Orange -->
+				<string>#e5591f</string><!-- [HKC] Orange -->
 				<key>fontStyle</key>
 				<string>bold</string>
 			</dict>
