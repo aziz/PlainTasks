@@ -764,6 +764,9 @@ class PlainTasksShortenURL(sublime_plugin.EventListener):
         self.fold_all_urls(view)
 
     def fold_all_urls(self, view):
+        if not view.settings().get('shorten_urls', False):
+            return
+
         URL_REGEX = "https?://[^\\s\"')]+"
         result = view.find_all(URL_REGEX, sublime.IGNORECASE)
         
