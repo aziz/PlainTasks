@@ -141,7 +141,7 @@ def increase_date(view, region, text, now, date_format):
     hour   = int(match_obj.group('hour') or 0)
     minute = int(match_obj.group('minute') or 0)
     if not (number or hour or minute) or (not number and (days or weeks)):
-        # set 1 if number is ommited, i.e.
+        # set 1 if number is omitted, i.e.
         #   @due(+) == @due(+1) == @due(+1d)
         #   @due(+w) == @due(+1w)
         number = 1
