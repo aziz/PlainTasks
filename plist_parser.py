@@ -79,7 +79,7 @@ class XmlPropertyListParser(object):
     def endDocument(self):
         self._assert(self.__plist is not None, "A top level element must be <plist>.")
         self._assert(
-            len(self.__stack) is 0,
+            len(self.__stack) == 0,
             "multiple objects at top level.")
 
     def startElement(self, name, attributes):
