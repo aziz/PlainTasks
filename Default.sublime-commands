@@ -12,5 +12,8 @@
     { "caption": "Tasks: Save as HTML…", "command": "plain_tasks_convert_to_html", "args": {"ask": true} },
     { "caption": "Tasks: Copy Statistics", "command": "plain_tasks_copy_stats" },
     { "caption": "Tasks: Fold to due tasks", "command": "plain_tasks_fold_to_due_tags" },
-    { "caption": "Tasks: Filter by tags under cursors", "command": "plain_tasks_fold_to_tags" }
+    { "caption": "Tasks: Filter by tags under cursors", "command": "plain_tasks_fold_to_tags" },
+    { "caption": "Tasks: Add due date tag", "command": "plain_tasks_inject_due_date" },
+    { "caption": "Tasks: Sort items in the list under cursor by due date and priority", "command": "plain_tasks_sort_by_due_date_and_priority" },
+    { "caption": "Tasks: Reverse sort items in the list under cursor by due date and priority", "command": "plain_tasks_sort_by_due_date_and_priority", "args": {"descending": true} }
 ]

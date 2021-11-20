@@ -239,6 +239,97 @@ class PlainTasksCompleteCommand(PlainTasksBase):
         self.view.run_command('plain_tasks_toggle_highlight_past_due')
 
 
+class PlainTasksInjectDueDateCommand(PlainTasksBase):
+    def is_visible(self):
+        return self.view.score_selector(0, "text.todo") > 0
+
+    def runCommand(self, edit):
+        due_re = r'^\s*[^\b]*?\s*@due\([\d\w,\.:\-\/ @]*\).*$'
+        regions = itertools.chain(*(reversed(self.view.lines(region)) for region in reversed(list(self.view.sel()))))
+        point = -1
+        for line in regions:
+            line_contents = self.view.substr(line)
+            current_scope = self.view.scope_name(line.begin())
+            due_matches = re.match(due_re, line_contents, re.U)
+            if ('item' in current_scope or 'header' in current_scope) and not due_matches:
+                self.view.insert(edit, line.end(), ' @due()')
+                point = line.end() + 6
+        if point != -1:
+            self.view.sel().clear()
+            self.view.sel().add(point)
+
+
+class PlainTasksSortByDueDateAndPriorityCommand(PlainTasksBase):
+    class Task:
+        pass
+
+    def is_visible(self):
+        return self.view.score_selector(0, "text.todo") > 0
+
+    def runCommand(self, edit, descending=False):
+        due_re = r'^\s*[^\b]*?\s*@due\(([\d\w,\.:\-\/ @]*)\).*$'
+        critical_re = r'^\s*[^\b]*?\s*@critical\b.*$'
+        high_re = r'^\s*[^\b]*?\s*high\b.*$'
+        low_re = r'^\s*[^\b]*?\s*@low\b.*$'
+        regions = itertools.chain(*(reversed(self.view.lines(region)) for region in reversed(list(self.view.sel()))))
+
+        for project in regions:
+            project_scope = self.view.scope_name(project.begin())
+            if not 'header' in project_scope:
+                continue
+            project_block = self.view.indented_region(project.end() + 1)
+            if project_block.empty():
+                continue
+            tasks = []
+            task = None
+            pos = project_block.begin()
+            first_task_pos = None
+            first_task_indentation = None
+
+            while pos < project_block.end():
+                line = self.view.line(pos)
+                line_contents = self.view.substr(line)
+                scope = self.view.scope_name(pos)
+                indentation = self.view.indentation_level(pos)
+
+                if scope == 'text.todo notes.todo ' and task is None:
+                    pass
+                elif ('item' in scope or 'header' in scope) and (task is None or first_task_indentation == indentation):
+                    task = self.Task()
+                    task.region = line
+                    if first_task_pos is None:
+                        first_task_pos = pos
+                        first_task_indentation = indentation
+
+                    task.due = '99-01-01 00:00'
+                    due_match = re.match(due_re, line_contents, re.U)
+                    if due_match is not None:
+                        task.due = due_match.groups()[0]
+
+                    task.priority = '3normal'
+                    critical_match = re.match(critical_re, line_contents, re.U)
+                    high_match = re.match(high_re, line_contents, re.U)
+                    low_match = re.match(low_re, line_contents, re.U)
+                    if critical_match is not None:
+                        task.priority = '1critical'
+                    elif high_match is not None:
+                        task.priority = '2high'
+                    elif low_match is not None:
+                        task.priority = '4low'
+
+                    tasks.append(task)
+                elif task is not None:
+                    task.region = sublime.Region(task.region.begin(), line.end())
+                pos = line.end() + 1
+            tasks.sort(key=lambda t: (t.due, t.priority), reverse=descending)
+            project_block = sublime.Region(first_task_pos, project_block.end())
+            new_content = '\n'.join([self.view.substr(t.region).rstrip() for t in tasks]) + '\n'
+            self.view.replace(edit, project_block, new_content)
+
+        PlainTasksStatsStatus.set_stats(self.view)
+        self.view.run_command('plain_tasks_toggle_highlight_past_due')
+
+
 class PlainTasksCancelCommand(PlainTasksBase):
     def runCommand(self, edit):
         original = [r for r in self.view.sel()]

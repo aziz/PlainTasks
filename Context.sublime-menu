@@ -1,4 +1,7 @@
 [
     { "caption": "Tasks: Filter by tags under cursors", "command": "plain_tasks_fold_to_tags" },
-    { "caption": "Tasks: Show date picker", "command": "plain_tasks_calendar" }
+    { "caption": "Tasks: Show date picker", "command": "plain_tasks_calendar" },
+    { "caption": "Tasks: Add due date tag", "command": "plain_tasks_inject_due_date" },
+    { "caption": "Tasks: Sort items in the list under cursor by due date and priority", "command": "plain_tasks_sort_by_due_date_and_priority" },
+    { "caption": "Tasks: Reverse sort items in the list under cursor by due date and priority", "command": "plain_tasks_sort_by_due_date_and_priority", "args": {"descending": true} }
 ]

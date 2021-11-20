@@ -9,6 +9,9 @@
   { "keys": ["super+shift+u"], "command": "plain_tasks_open_url","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },
   { "keys": ["ctrl+o"], "command": "plain_tasks_open_link","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },
   { "keys": ["super+shift+r"], "command": "plain_tasks_goto_tag", "context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },
+  { "keys": ["f4"], "command": "plain_tasks_inject_due_date","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },
+  { "keys": ["f5"], "command": "plain_tasks_sort_by_due_date_and_priority","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }] },
+  { "keys": ["f7"], "command": "plain_tasks_sort_by_due_date_and_priority","context": [{ "key": "selector", "operator": "equal", "operand": "text.todo" }], "args": {"descending": true} },
   { "keys": ["tab"], "command": "plain_task_insert_date", "context":
     [
       { "key": "selection_empty", "operator": "equal", "operand": true, "match_all": true },
