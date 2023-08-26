@@ -707,7 +707,7 @@ class PlainTasksOpenLinkCommand(sublime_plugin.TextCommand):
         if not self._current_res:
             return sublime.error_message('File was not found\n\n\t%s' % fn)
         if len(self._current_res) == 1:
-            sublime.set_timeout(lambda: self._on_panel_selection(0), 1)
+            sublime.set_timeout(lambda: self._on_panel_selection(0, text=text, line=line), 1)
         else:
             entries = [self._format_res(res) for res in self._current_res]
             sublime.set_timeout(lambda: self.window.show_quick_panel(entries, lambda i: self._on_panel_selection(i, text=text, line=line)), 1)
