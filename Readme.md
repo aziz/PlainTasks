@@ -203,6 +203,7 @@ Here is a list of PlainTasks’ specific settings:
 | **due_preview_offset**         | 0                | Place preview date outside of parens of `@due()`, 1 — within            |
 | **due_remain_format**          | `"{time} remaining"` | `{time}` will be replaced with actual value                         |
 | **due_overdue_format**         | `"{time} overdue"` | `{time}` will be replaced with actual value                           |
+| **shorten_urls**               | false    | If true, URLs are rendered as collapsed sections (`...`) after the domain name. |
 
 <b>¹</b> Icon value can be  `"dot"`, `"circle"`, `"bookmark"`, `"cross"`, `""`, or custom relative path to existing png file,
 e.g. `"Packages/User/my-icon.png"`.
