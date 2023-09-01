@@ -3,7 +3,7 @@
   "done_tasks_bullet": "✔", // options: + | ✓ | ✔ | √ | [x]
   "cancelled_tasks_bullet": "✘", // options: x | ✘ | [-]
   "before_tasks_bullet_margin": 1,
-  "date_format": "(%y-%m-%d %H:%M)",
+  "date_format": "(%y-%m-%d %H:%M)", // (%m-%d-%y %I:%M) or (%m-%d-%y %I:%M %p)
   "done_tag": true, // related to @cancelled as well
   "project_tag": true, // if true - postfix archived task with project tag, if false - prefix
   "archive_name": "Archive:", // make sure it is the unique project name within your todo files
