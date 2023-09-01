@@ -240,7 +240,7 @@ class PlainTasksToggleHighlightPastDue(PlainTasksEnabled):
         if not highlight_on:
             return
 
-        pattern = r'@due(\([^@\n]*\))'
+        pattern = r'@due(\((?>[^()]|(?1))*+\))'
         dates_strings = []
         dates_regions = self.view.find_all(pattern, 0, '\\1', dates_strings)
         if not dates_regions:
@@ -571,19 +571,19 @@ class PlainTasksCalendar(sublime_plugin.TextCommand):
             tag under cursor (i.e. point)
         '''
         start = end = point
-        tag_pattern = r'(?<=\s)(\@[^\(\) ,\.]+)([\w\d\.\(\)\-!? :\+]*)'
-        line = self.view.line(point)
-        matches = re.finditer(tag_pattern, self.view.substr(line))
-        for match in matches:
-            m_start = line.a + match.start(1)
-            m_end   = line.a + match.end(2)
-            if m_start <= point <= m_end:
-                start = line.a + match.start(2)
-                end   = m_end
-                break
-        else:
-            match = None
-        tag = match.group(0) if match else ''
+        tag = ''
+        if 'tag.todo' in self.view.scope_name(point):
+            reg = self.view.extract_scope(point)
+            text = self.view.substr(reg)
+            match = re.search(r'(\@\w*)(\(.*\)|)', text)
+            start, end = reg.b, reg.b
+            if match:
+                if len(match.group(2)) > 0:
+                    start = reg.a + match.start(2)
+                    end = reg.a + match.end(2)
+
+                tag = match.group(1)
+
         return sublime.Region(start, end), tag
 
     def generate_calendar(self, date=None):
