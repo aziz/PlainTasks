@@ -176,7 +176,9 @@ Here is a list of PlainTasks’ specific settings:
 | **open_tasks_bullet**          | `☐`              | `-` `❍` `❑` `■` `□` `☐` `▪` `▫` `–` `—` `≡` `→` `›` `[ ]`             |
 | **done_tasks_bullet**          | `✔`              | `✓` `☑` `+` `[x]`                                                      |
 | **cancelled_tasks_bullet**     | `✘`              | `x` `[-]`                                                               |
-| **date_format**                | `(%y-%m-%d %H:%M)` | See [strfti.me](http://www.strfti.me/) for quick reference; detailed documentation: [ST2](https://docs.python.org/2.6/library/datetime.html#strftime-and-strptime-behavior), [ST3](https://docs.python.org/3.3/library/datetime.html#strftime-and-strptime-behavior) |
+| **24 HR date_format**                | `(%y-%m-%d %H:%M)` | See [strfti.me](http://www.strfti.me/) for quick reference; detailed documentation: [ST2](https://docs.python.org/2.6/library/datetime.html#strftime-and-strptime-behavior), [ST3](https://docs.python.org/3.3/library/datetime.html#strftime-and-strptime-behavior) |
+| **12 HR date_format**              | `(%m-%d-%y %I:%M)` | @done (01-09-19 07:18) Use this in settings for non military time. |
+| **12 HR date_format with AM PM**   | `(%m-%d-%y %I:%M %p)` | @done (01-09-19 07:18 PM) Use this in settings for non military time. |
 | **done_tag**                   | true             | Determines whether done tasks should gain a `@done` tag or not          |
 | **done_date**                  | true             | Determines whether done tasks should gain a date or not                 |
 | **before_tasks_bullet_margin** | 1                | Determines the number of spaces (default indent) before the task bullet |
