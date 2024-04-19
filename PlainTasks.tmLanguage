@@ -96,14 +96,14 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^\s*(?:(✘|x|\[-\])(\s+(?:[^\@\n]|(?&lt;!\s)\@|\@(?=\s))*)(.*))|^\s*(?:(-)(\s+(?:[^\@]|(?&lt;!\s)\@|\@(?=\s))*)(.*\@cancelled(?=\s|\(|$)[^\n]*))</string>
+			<string>^\s*(?:(✘|❌|x|\[-\])(\s+(?:[^\@\n]|(?&lt;!\s)\@|\@(?=\s))*)(.*))|^\s*(?:(-)(\s+(?:[^\@]|(?&lt;!\s)\@|\@(?=\s))*)(.*\@cancelled(?=\s|\(|$)[^\n]*))</string>
 			<key>name</key>
 			<string>meta.item.todo.cancelled</string>
 		</dict>
 
 		<dict>
 		  <key>begin</key>
-		  <string>^\s*(?!-|\+|✓|✔|√|❍|❑|■|□|☐|▪|▫|–|—|≡|→|›|\[[\sx-]\]|＿|✘|(x\s+))(?=\S)</string>
+		  <string>^\s*(?!-|\+|✓|✔|√|❍|❑|■|□|☐|▪|▫|–|—|≡|→|›|\[[\sx-]\]|＿|✘|❌|(x\s+))(?=\S)</string>
 		  <key>end</key>
 		  <string>$\n?</string>
 		  <key>name</key>
