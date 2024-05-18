@@ -847,6 +847,32 @@ class PlainTasksRemoveBold(sublime_plugin.TextCommand):
                 self.view.erase(edit, r)
 
 
+class PlainTasksShortenURL(sublime_plugin.EventListener):
+    def on_activated(self, view):
+        self.fold_all_urls(view)
+
+    def on_save(self, view):
+        self.fold_all_urls(view)
+
+    def fold_all_urls(self, view):
+        if not view.settings().get('shorten_urls', False):
+            return
+
+        URL_REGEX = "https?://[^\\s\"')]+"
+        result = view.find_all(URL_REGEX, sublime.IGNORECASE)
+        
+        def only_appendix_region(url_region):
+            url = view.substr(url_region)
+            offset_match = re.search("^https?://[^/]+/", url)
+            if offset_match:
+                print(offset_match.span()[1])
+                return sublime.Region(url_region.a + offset_match.span()[1], url_region.b)
+            return url_region
+
+        without_domain = [only_appendix_region(region) for region in result]
+        view.fold(without_domain)
+
+
 class PlainTasksStatsStatus(sublime_plugin.EventListener):
     def on_activated(self, view):
         if not view.score_selector(0, "text.todo") > 0:
