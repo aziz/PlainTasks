@@ -8,6 +8,10 @@ Projects:
 Tasks:
   You can write plain text as _notes_ or descriptions wherever you want;
   It’s **totally** fine!
+  Starting a new todo-list:
+   ☐ Bring up the command palette (it's ⌘+shift+p in Mac and ctrl+shift+p in Windows)
+   ☐ type `task` and select `Tasks: New document` command
+   You can also turn on the syntax highlighting (and keyboard shortcuts) by turning on the `tasks` syntax.
   New:
    ☐ ⌘+enter (ctrl+enter on Windows) adds a new task.
    ☐ ⌘+i (ctrl+i on Windows) also adds a new task
@@ -59,10 +63,6 @@ Tasks:
    ☐ ⌘+shift+O (ctrl+shift+O) will archive in Org-Mode style.
       Removing the entire subtree after cursor and appending it to new file next to original one,
       e.g. filename.TODO → filename_archive.TODO
-
-  Starting a new todo-list:
-   ☐ Bring up the command palette (it's ⌘+shift+p in Mac and ctrl+shift+p in Windows)
-   ☐ type `task` and select `Tasks: New document` command
 
 --- ✄ -----------------------
 You can use separator snippet to separate your todo lists, type -- and press tab
